@@ -1,0 +1,7 @@
+This package contains several plugins for AMFPHP. Each plugin has its own README and documentation file that should be checked.
+
+Below is a summary of the available plugins :
+
+ServiceAccess : a plugin to secure access to PHP services easily.
+
+ServicePropertySetter : a plugin to centralize the setting of shared properties between services.

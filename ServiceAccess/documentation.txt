@@ -1,0 +1,433 @@
+
+ServiceAccess, Bastien Aracil 2011 (femtoparsec.net)
+
+
+*************
+* Copyright *
+*************
+
+    Copyright (c) 2011, Bastien Aracil
+    All rights reserved.
+    New BSD license. See http://en.wikipedia.org/wiki/Bsd_license
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+       * Redistributions of source code must retain the above copyright
+         notice, this list of conditions and the following disclaimer.
+       * Redistributions in binary form must reproduce the above copyright
+         notice, this list of conditions and the following disclaimer in the
+         documentation and/or other materials provided with the distribution.
+       * The name of Bastien Aracil may not be used to endorse or promote products
+         derived from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL SILEX LABS BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+************
+* Versions *
+************
+
+V1.0  - 10/2011 current - Creation of the document.
+
+
+************
+* Overview *
+************
+
+ServiceAccess is an AMFPHP plugin that manages security access to services easily. For instance with a minimal configuration a method can be secured like this :
+
+    /**
+      * @rolesAllowed USER_WRITE, GROUP_WRITE
+      *
+      * This function is allowed to users that have the role
+      * USER_WRITE or GROUP_WRITE.
+      */
+     public function myFunction() {
+        ...
+     }
+
+If the access is granted, the method is called, otherwise an ServiceAccessException exception is thrown.
+
+*****************
+* Compatibility *
+*****************
+
+Plugin Version    |     AMFPHP Version
+------------------+-------------------
+v1.0              |     v2.0
+
+****************
+* Installation *
+****************
+
+The installation consists in copying to the plugin directory of AMFPHP the directory 'ServiceAccess' at the same level than this file (not the directory including this file).
+
+*****************
+* Configuration *
+*****************
+
+To work properly the plugin needs a way to obtain the id (called login in the plugin) and the roles of the current user. This is done by setting the mandatory configuration parameter 'serviceAccessUser' with an implementation of the interface 'FPC_IServiceAccessUser' This interface defines the two methods 'getLogin' and 'getRoles'.
+
+The ServiceAccess plugin comes with an implementation of this interface that gets current user information from the current SESSION (see 'FPC_SessionServiceAccessUser').
+
+There is another configuration parameter that has a default value. However, how to use this parameter to customize the plugin will be described in the section "How it works and how to customize it". For the moment the default behavior will be described.
+
+
+********************
+* Default behavior *
+********************
+
+By default, the plugin uses annotations in the documentation of a method (the comments of the form /** ... */) to secure a method. The plugin handles 4 annotations that can have parameters. Below is the syntax of each of them :
+
+ - @rolesAllowed ROLE[,ROLE]* : the access is granted if the current user has at least one of the listed roles ;
+
+ - @isCurrentUserLogin [index[,loginProperty]] : the access is granted if the property
+                named 'loginProperty' of the 'index'th parameter of the secured method
+                is equal to the login of the current user. By default, index=0 and
+                loginProperty='login'. If 'loginProperty' is set to 'null' then the
+           	'index'th parameter is directly compared to the login of the current
+                user ;
+
+ - @checkMethod checkMethod : the access is granted if the method named 'checkMethod'
+                returns 'true'. The signature of the 'checkMethod' method must be :
+
+                function myCheckMethod($serviceName,
+                                       $methodName,
+                                       $parameters, 
+                                       FPC_IServiceAccessUser $user) {...}
+
+                where $serviceName, $methodName are the names of the service and
+                the secured method, $parameters the parameters of the secured method
+                as an array and $user the current user information ;
+
+ - @comityMode (ALL|VETO|MAJORITY) : if a mixed of the previous annotations is found
+                in the method documentation, this annotation defines how the results
+                of each of them must be combined to finally grant access. With ALL,
+                all must grant access, with VETO, only one must, with MAJORITY, the
+                majority must grant access (rarely used). By default (if the @comityMode
+                annotation is not found) VETO mode is used. For instance :
+
+            /**
+             * the next annotation can be removed since it is the default behavior
+             * @comityMode VETO
+             * @rolesAllowed USER_WRITE, GROUP_READ_ONLY
+             * @isCurrentUserLogin 1, login
+             * @checkMethod complexCheck
+             *
+             * The access is granted if
+             * the current user has the role USER_WRITE or GROUP_READ_ONLY
+             * OR
+             * the value of $userInfo->login is equal to the current user login
+             * OR
+             * the method 'complexCheck' returns true
+             */
+            public function myMethod1($dataInfo, $userInfo) {...}
+
+            /**
+             * @comityMode ALL
+             * @rolesAllowed USER_WRITE, GROUP_READ_ONLY
+             * @isCurrentUserLogin 1, login
+             * @checkMethod complexCheck
+             *
+             * The access is granted if
+             * the current user has the role USER_WRITE or GROUP_READ_ONLY
+             * AND
+             * the value of $userInfo->login is equal to the current user login
+             * AND
+             * the method 'complexCheck' returns true
+             */
+            public function myMethod2($dataInfo, $userInfo) {...}
+
+
+If an annotation is repeated in the method documentation, then only the first one is used except for the @rolesAllowed annotation for which the listed roles are merged, i.e. :
+
+    /**
+     * @rolesAllowed ROLE1, ROLE2
+     * @rolesAllowed ROLE3, ROLE4
+     */
+
+    is equivalent to
+
+    /**
+     * @rolesAllowed ROLE1, ROLE2, ROLE3, ROLE4
+     */
+
+
+****************************************
+* How it works and how to customize it *
+****************************************
+
+Here is a quick description of how it works. I will not detailed much since the default behavior should be enough. But if you want to add your own annotations for instance, then you should read the following and also the documentation in the code.
+
+The plugin uses voters to grant or denied access to a method. A voter must implements the interface 'FPC_IServiceAccessVoter' that defines one function : 'accessGranted'.
+
+Before calling a secured method, the plugin gets the voter associated with the secured method and it calls its function 'accessGranted'. If the function returns true, access to the secured method is granted, otherwise access is denied.
+
+Now, the plugin uses a voter-provider to get the voter of a secured method. A voter-provider must implements the interface 'FPC_IServiceAccessVoterProvider' that defines one function : 'getVoter'. The plugin calls the 'getVoter' function with the information about the service and secured method. The function 'getVoter' returns a 'voter' that then will be used to grant or to deny access to the secured method as described previously.
+
+By default, the voter-provider used by the plugin handles annotations in the method documentation has described in the previous section (see the class FPC_DefaultVoterProvider). You can change the default voter-provider with the configuration parameter 'serviceAccessVoterProvider'.
+
+Below is a list of existing voters and voter-providers included in the plugin :
+
+List of Voters
+
+ - FPC_AlloverSAVoter : voter that always grants access ;
+
+ - FPC_DenierSAVoter : voter that always denies access ;
+
+ - FPC_CurrentUserLoginSAVoter : voter that grants access if a property of a
+                                parameter is equal to the current user login ;
+
+ - FPC_RolesSAVoter : voter that grants access if one of the roles of the current
+                      user is in a given list of roles ;
+
+ - FPC_MethodSAVoter : voter that delegates the vote to a method of the called service ;
+
+ - FPC_ComitySAVoters : voter that combines the results of several voters
+                        to grant of deny access.
+
+List of Voter Provider
+
+ - FPC_ReflectionRolesSAVoterProvider : provides a FPC_RolesSAVoter that uses the @rolesAllowed
+                                        annotation to get the list of allowed roles ;
+
+ - FPC_MethodRolesSAVoterProvider : provides a FPC_RolesSAVoter that uses the return value of
+                                    a function in the service as the list of allowed roles ;
+
+ - FPC_ReflectionMethodSAVoterProvider : provides a FPC_MethodSAVoter that uses the @checkMethod
+                                         annotation to get the name of the checking method ;
+
+ - FPC_CurrentUserLoginSAVoterProvider : provides a FPC_CurrentUserLoginSAVoter initialized
+                                        with the parameters of the @isCurrentUserLogin annotation ;
+
+ - FPC_ComitySAVoterProvider : provides a FPC_ComitySAVoters with combined voters obtained from
+                               a given list of voter-providers ;
+
+ - FPC_CachedSAVoterProvider : provider that delegates the work to another voter-provider
+                               but caches the result in the SESSION. This assumes that the
+                               provided voter depends only on the service name and method name.
+                               This is useful since the provider based on annotations can be
+                               time consuming.
+
+ - FPC_DefaultVoterProvider : the default provider if none is set by the user (see previous section).
+
+
+If you want to create a voter-provider that provide an existing voter you must implements the interface 'FPC_IServiceAccessVoterProvider'. On the other hand if you want to create your own voter, then you must implements the interface 'FPC_IServiceAccessVoter' and also the voter-provider for this voter.
+
+
+*******************************************
+* Example of creation of a voter-provider *
+*******************************************
+
+Let's create a voter-provider that will provide a FPC_MethodSAVoter that will use the method with the name of the secured method append with 'Check'. For instance, if the called method is 'getUser' then the method called by the voter will be 'getUserCheck'.
+
+So let's implements the 'FPC_IServiceAccessVoterProvider', here is the skeleton of a voter-provider
+
+    <?php
+
+    class FPC_AppendMethodSAVoterProvider implements FPC_IServiceAccessVoterProvider {
+
+        /**
+         * @param $serviceObject the instance of the service
+         * @param $serviceName the service name
+         * @param $methodName the secured method name
+         * @return FPC_IServiceAccessVoter the voter used to determine the access
+         *         right to the secured method of the given service.
+         */
+        function getVoter($serviceObject, $serviceName, $methodName)
+        {
+            // TODO: Implement getVoter() method.
+        }
+
+    }
+    ?>
+
+Let's have a look at the FPC_MethodSAVoter constructor :
+
+    /**
+     * @param String $serviceName the name of the service
+     * @param String $methodName the name of the secured method
+     * @param String $checkMethodName the name of the method that will be called to determine the access right
+     * @param bool $grantedIfNoMethod the value return if the checkMethod is not found (false by default)
+     */
+    public function __construct($serviceName, $methodName, $checkMethodName, $grantedIfNoMethod = false) {
+
+We have the first two parameters from the provider and we will set to 'true' the last parameter (access will be granted if we do not defined the checking method). So we need the value of $checkMethodName. Let's implements 'getVoter()' :
+
+    <?php
+
+    class FPC_AppendMethodSAVoterProvider implements FPC_IServiceAccessVoterProvider {
+
+        /**
+         * @param $serviceObject the instance of the service
+         * @param $serviceName the service name
+         * @param $methodName the secured method name
+         * @return FPC_IServiceAccessVoter the voter used to determine the access right to the secured method of the given service.
+         */
+        function getVoter($serviceObject, $serviceName, $methodName)
+        {
+            return new FPC_MethodSAVoter($serviceName, $methodName, "${$methodName}Check", true);
+        }
+
+
+    }
+    ?>
+
+That's it. Now, to use this voter-provider with the plugin just set the configuration property '' with this voter-provider :
+
+    $serviceAccessConfig['serviceAccessVoterProvider'] = new FPC_AppendMethodSAVoterProvider();
+
+By doing so you will only be able to use this mechanism to check access to secured method. If you also want to use the @rolesAllowed annotation or other provider you need to use a FPC_ComitySAVoterProvider like this :
+
+    $serviceAccessConfig['serviceAccessVoterProvider'] = new FPC_ComitySAVoterProvider(
+                array(
+                     new FPC_ReflectionRolesSAVoterProvider(),
+                     new FPC_AppendMethodSAVoterProvider(),
+            ));
+
+Moreover, after debugging the provider, it might be useful in production to cache the voters. You can use a 'FPC_CachedSAVoterProvider' like this :
+
+    $notCachedProvider = new FPC_ComitySAVoterProvider(
+                array(
+                     new FPC_ReflectionRolesSAVoterProvider(),
+                     new FPC_AppendMethodSAVoterProvider(),
+            ));
+    $serviceAccessConfig['serviceAccessVoterProvider'] = new FPC_CachedSAVoterProvider($notCachedProvider);
+
+
+***************************************************
+* Example of creation of a voter and its provider *
+***************************************************
+
+Let's create a voter and a provider that will allow something like this :
+
+    /*
+     * @rolesDenied USER_WRITE, GROUP_WRITE
+     *
+     * users with the role USER_WRITE or GROUP_WILL are not allowed to call this method.
+     */
+    public function securedMethod() {...}
+
+So, first let's create a voter skeleton :
+
+    <?php
+
+    class DeniedRolesSAVoter implements FPC_IServiceAccessVoter {
+
+        /**
+         * @param FPC_IServiceAccessUser $user the current user information
+         * @param $serviceObject the instance of the service
+         * @param array $parameters the parameters that will be passed to the secured method
+         * @return bool true if access is granted, false otherwise
+         */
+        function accessGranted(FPC_IServiceAccessUser $user, $serviceObject, array $parameters)
+        {
+            // TODO: Implement accessGranted() method.
+        }
+
+    }
+    ?>
+
+We need an array of denied roles. It will be provided by the voter-provider since it depends on the secured method only. So this will be a property of the voter set at construction :
+
+    <?php
+
+    class DeniedRolesSAVoter implements FPC_IServiceAccessVoter {
+
+        private $_deniedRoles;
+
+        public function __construct(array $deniedRoles) {
+            //we could create an associative array to avoid the double loop
+            //in the accessGranted method but let's keep things simple
+            $this->_deniedRoles = $deniedRoles;
+        }
+
+        ...
+
+    }
+    ?>
+
+Not let's implements the accessGranted method :
+
+    <?php
+
+    class DeniedRolesSAVoter implements FPC_IServiceAccessVoter {
+
+        ...
+
+        function accessGranted(FPC_IServiceAccessUser $user, $serviceObject, array $parameters)
+        {
+            $userRoles = $user->getRoles();
+            foreach ($userRoles as $userRole) {
+                foreach ($this->_deniedRoles as $deniedRole) {
+                    if ($userRole === $deniedRole) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
+Ok, we are done with the voter, let's create the provider. Since this is a provider that will use annotations, it might be useful to extends the abstract class 'FPC_AbstractReflectionSAVoterProvider' :
+
+    <?php
+
+    class DeniedRolesSAVoterProvider extends FPC_AbstractReflectionSAVoterProvider {
+
+        public function __construct() {
+            parent::__construct("rolesDenied");
+        }
+
+        /**
+         * @param $serviceObject the object representing the service
+         * @param $serviceName the name of the service
+         * @param $methodName the name of the method
+         * @param array $values list of values after the $tag in the method comment
+         * @return FPC_IServiceAccessVoter a voter for this service/method
+         */
+        protected function handleValues($serviceObject, $serviceName, $methodName, array $values)
+        {
+            // TODO: Implement handleValues() method.
+        }
+    }
+
+At construct we have to define the annotation tag, FPC_AbstractReflectionSAVoterProvider will then do all the work (parsing the documentation) and then call the abstract method 'handleValues'. The parameters $values are the roles listed after the @rolesDenied annotation. So let's finish the provider :
+
+    <?php
+
+    class DeniedRolesSAVoterProvider extends FPC_AbstractReflectionSAVoterProvider {
+
+        public function __construct() {
+            parent::__construct("rolesDenied");
+        }
+
+        /**
+         * @param $serviceObject the object representing the service
+         * @param $serviceName the name of the service
+         * @param $methodName the name of the method
+         * @param array $values list of values after the $tag in the method comment
+         * @return FPC_IServiceAccessVoter a voter for this service/method
+         */
+        protected function handleValues($serviceObject, $serviceName, $methodName, array $values)
+        {
+            if (count($values) > 0) {
+                return new DeniedRolesSAVoter($values);
+            }
+
+            //no denied roles, so return a voter that always grants access.
+            return new FPC_AlloverSAVoter();
+        }
+    }
+    ?>
+
+And that's it.

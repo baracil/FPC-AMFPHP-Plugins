@@ -1,0 +1,152 @@
+
+ServicePropertySetter, Bastien Aracil 2011 (femtoparsec.net)
+
+
+*************
+* Copyright *
+*************
+
+    Copyright (c) 2011, Bastien Aracil
+    All rights reserved.
+    New BSD license. See http://en.wikipedia.org/wiki/Bsd_license
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+       * Redistributions of source code must retain the above copyright
+         notice, this list of conditions and the following disclaimer.
+       * Redistributions in binary form must reproduce the above copyright
+         notice, this list of conditions and the following disclaimer in the
+         documentation and/or other materials provided with the distribution.
+       * The name of Bastien Aracil may not be used to endorse or promote products
+         derived from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL SILEX LABS BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+************
+* Versions *
+************
+
+V1.0  - 10/2011 current - Creation of the document.
+
+
+************
+* Overview *
+************
+
+Since service classes are created internally by AMFPHP it is not possible to pass (at construction or with setters) parameters to services.
+
+With ServicePropertySetter, it is now possible. This plugin can be used to centralize configuration parameters and dispatch them to the services.
+
+For instance, if services need a connection to a database by using a PDO object, instead of creating one in each services, only one can be created in a configuration file and passed to the services with this plugin : no need to have a database configuration (or an include file) in each services.
+
+
+*****************
+* Compatibility *
+*****************
+
+Plugin Version    |     Compatible AMFPHP Version(s)
+------------------+---------------------------------
+v1.0              |     v2.0
+
+
+****************
+* Installation *
+****************
+
+The installation consists in copying to the plugin directory of AMFPHP the directory 'ServicePropertySetter' at the same level than this file (not the directory including this file).
+
+
+*****************
+* Configuration *
+*****************
+
+The plugin has one configuration parameter (if not specified, the plugin does nothing). The configuration parameter key is 'config' and the value must be a 'FPC_ServicePropertySetterConfig' object. Basically, the plugin configuration should be something like that :
+
+    $SPSConfig = new FPC_ServicePropertySetterConfig();
+
+    $amfphpConfig = new Amfphp_Core_Config();
+    $amfphpConfig->pluginsConfig['ServicePropertySetter'] = array('config' => $SPSConfig);
+
+    .... // some configurations
+
+    $gateway = Amfphp_Core_HttpRequestGatewayFactory::createGateway($amfphpConfig);
+    $gateway->service();
+    $gateway->output();
+
+
+For instance, if the services uses PDO to connect to a database, the connection can be configured in one place and then dispatches to all the services that needs it :
+
+    $SPSConfig = new FPC_ServicePropertySetterConfig();
+
+    //initialize the PDO object
+    $pdo = new PDO("mysql:host=localhost;port=3306;dbname=MYDB","LOGIN","PASSWORD");
+
+    //configure the plugin to dispatch the PDO object to two services
+    $SPSConfig->getServiceSetting("MyService1")
+                 ->addPropertyValue("pdo",$pdo);
+    $SPSConfig->getServiceSetting("MyService2")
+                 ->addPropertyValue("pdo",$pdo);
+
+
+    $amfphpConfig = new Amfphp_Core_Config();
+    //initialize the plugin configuration
+    $amfphpConfig->pluginsConfig['ServicePropertySetter'] = array('config' => $SPSConfig);
+
+    .... // some other configuration
+
+    $gateway = Amfphp_Core_HttpRequestGatewayFactory::createGateway($amfphpConfig);
+    $gateway->service();
+    $gateway->output();
+
+
+MyService1 and MyService2 should have a setter for the property 'pdo' : a method with one parameter called 'setPdo' (the first letter of the property is capitalized), i.e. something like that :
+
+    private $_pdo;
+    public function setPdo($pdo) {
+     $this->_pdo = $pdo
+    }
+
+Then, before a method of the service MyService1 (or 2) is executed the 'pdo' setter will be called and then the property $this->_pdo will be set to be used in the called method.
+
+
+Moreover, after all properties set by this plugin for a service, the plugin will call the method 'afterPropertiesSet' if it exists in the service. That can be useful to perform rendez-vous between properties.
+
+
+*********
+* Trick *
+*********
+
+If you have several properties to configure for a service then here is a little trick :
+
+Instead of doing this
+
+        $SPSConfig = new FPC_ServicePropertySetterConfig();
+        $SPSConfig->getServiceSetting("MyService")->addPropertyValue("prop1",$value1);
+        $SPSConfig->getServiceSetting("MyService")->addPropertyValue("prop2",$value2);
+        $SPSConfig->getServiceSetting("MyService")->addPropertyValue("prop3",$value3);
+
+or this
+
+        $SPSConfig = new FPC_ServicePropertySetterConfig();
+        $subConfig = $SPSConfig->getServiceSetting("MyService");
+        $subConfig->addPropertyValue("prop1",$value1);
+        $subConfig->addPropertyValue("prop2",$value2);
+        $subConfig->addPropertyValue("prop3",$value3);
+
+you can do this
+
+        $SPSConfig = new FPC_ServicePropertySetterConfig();
+        $SPSConfig->getServiceSetting("MyService")
+                ->withPropertyValue("prop1",$value1)
+                ->withPropertyValue("prop2",$value2)
+                ->withPropertyValue("prop3",$value3);
