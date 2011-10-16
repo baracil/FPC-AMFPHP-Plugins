@@ -1,0 +1,60 @@
+---------------
+What needs what
+---------------
+
+FPCCustomClassConverter : needs modification #1 and #2
+TransactionManager : needs modification #1
+
+---------------
+Modification #1
+---------------
+
+needed for AMFPHP version : v2.0
+included in AMFPHP version : v2.0.1 (not released yet)
+modified file: amfphp/Core/Gateway.php
+starting line : 201
+
+The following lines :
+
+201:  //filter deserialized response
+202:  $deserializedResponse = $filterManager->callFilters(self::FILTER_DESERIALIZED_RESPONSE, $deserializedResponse);
+
+must be moved after the catch {}. So the modified code must be :
+
+…
+            //handle request
+            $deserializedResponse = $deserializedRequestHandler->handleDeserializedRequest($deserializedRequest, $serviceRouter);
+
+        }catch(Exception $exception){
+            //filter exception handler
+            $exceptionHandler = $filterManager->callFilters(self::FILTER_EXCEPTION_HANDLER, $defaultHandler, $this->contentType);
+
+            //handle exception
+            $deserializedResponse = $exceptionHandler->handleException($exception);
+
+        }
+
+        //filter deserialized response
+        $deserializedResponse = $filterManager->callFilters(self::FILTER_DESERIALIZED_RESPONSE, $deserializedResponse);
+
+        //filter serializer
+        $serializer = $filterManager->callFilters(self::FILTER_SERIALIZER, $defaultHandler, $this->contentType);
+
+…
+
+This modification modify the AMFPHP behavior only if an exception is thrown by one of the service. This allows the deserialized message constructed from the exception to benefit from several plugins that are applied to the deserialized message (like adding the _explicitType property if none exists or dealing with the charset encoding). This is specially useful if you tend to use custom exception.
+
+Moreover, with this modification, the hook 'self:: FILTER_DESERIALIZED_RESPONSE' is now a 'END OF TREATMENT' hook (this was the case but only if no exception where thrown). This is useful, for instance, for managing database transactions.
+
+
+---------------
+Modification #2
+---------------
+needed for AMFPHP version : v2.0
+included in AMFPHP version : v2.0.1 (not released yet)
+modified file: amfphp/Core/Amf/Serialize.php
+modified lines :  44 and 768
+
+Modify the visibility of the property 'Amf0StoredObjects' and the method 'handleReference' from 'private' to 'protected'
+
+This modification simplify the extension of the 'Amfphp_Core_Amf_Serializer' class.
