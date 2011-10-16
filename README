@@ -6,4 +6,4 @@ ServiceAccess : a plugin to secure access to PHP services easily.
 
 ServicePropertySetter : a plugin to centralize the setting of shared properties between services.
 
-The plugins in the 'incubator' directory are compatible with a future version of AMFPHP or they need to modify the latest version of AMFPHP to work. So you should use them if you are OK with changing some line of codes in the AMFPHP code. The needed changes are listed in the file 'incubator/needed_changes.txt'.
+The plugins found in the 'incubator' directory are compatible with a future version of AMFPHP or they need a modified version of AMFPHP to work. So you should use them if you are OK with changing some lines in the AMFPHP code. The needed changes are listed in the file 'incubator/needed_changes.txt'.
