@@ -3,3 +3,8 @@ ServiceAccess, Bastien Aracil 2011 (femtoparsec.net)
 
 ------------ V1.0
 v1.0 - 08/2011 - first release
+
+------------ V1.0.1
+v1.0.1 - 10/2011 - correction of bugs
+
+Correct unknown constant in FPC_CurrentUserLoginSAVoterProvider.
