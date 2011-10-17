@@ -129,8 +129,8 @@ class FPC_PropertyManagersExtractor implements FPC_IPropertyManagersExtractor {
      * Remove from the list $methodNames any setter and getter of a property
      * that is listed in the array $propertyNames
      *
-     * @param $methodNames an associative array with key the name of methods
-     * @param $propertyNames an array of property names
+     * @param array $methodNames an associative array with key the name of methods
+     * @param array $propertyNames an array of property names
      * @return void
      */
     private function filterMethodNames(&$methodNames, $propertyNames) {

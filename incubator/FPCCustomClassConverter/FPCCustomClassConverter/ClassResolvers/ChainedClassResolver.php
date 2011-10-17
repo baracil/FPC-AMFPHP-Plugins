@@ -69,13 +69,13 @@ class FPC_ChainedClassResolver implements FPC_IClassResolver
      */
     public function resolve($explicitType)
     {
-        $classInfo = null;
         foreach ($this->classResolvers as $classResolver) {
             $classInfo = $classResolver->resolve($explicitType);
             if (!is_null($classInfo)) {
                 return $classInfo;
             }
         }
+        return null;
     }
 
 

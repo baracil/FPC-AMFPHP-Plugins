@@ -75,7 +75,7 @@ class FPC_PackageClassResolver implements FPC_IClassResolver
         $packagePath = $customClassInfo[1];
         $customClassName = $customClassInfo[2];
 
-        foreach ($this->packageRootPath as $folderPath) {
+        foreach ($this->packageRootPaths as $folderPath) {
             $customClassPath = $folderPath . "/" . $packagePath . $customClassName . ".php";
             if (file_exists($customClassPath)) {
                 return new FPC_ClassInfo($explicitType, $packageName, $customClassName, $customClassPath);

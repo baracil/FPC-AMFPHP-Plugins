@@ -43,7 +43,7 @@ class FPC_CurrentUserLoginSAVoterProvider extends FPC_AbstractReflectionSAVoterP
 
     const DEFAULT_IS_CURRENT_USER_LOGIN_TAG = "isCurrentUserLogin";
 
-    public function __construct($tag = self::DEFAULT_IS_CURRENT_USER_DATA_TAG) {
+    public function __construct($tag = self::DEFAULT_IS_CURRENT_USER_LOGIN_TAG) {
         parent::__construct($tag);
     }
 

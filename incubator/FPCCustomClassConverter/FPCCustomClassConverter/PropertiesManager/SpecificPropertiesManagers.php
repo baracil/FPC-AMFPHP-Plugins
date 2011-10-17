@@ -82,6 +82,7 @@ class FPC_SpecificPropertiesManagers implements FPC_IPropertiesManager {
 
     function getDefinedClass($originClassName) {
         return $originClassName;
+/**
         if (isset($this->classDispatcher[$originClassName])) {
             return $this->classDispatcher[$originClassName];
         }
@@ -98,5 +99,6 @@ class FPC_SpecificPropertiesManagers implements FPC_IPropertiesManager {
 
         $this->classDispatcher[$originClassName] = $className;
         return $className;
+ */
     }
 }

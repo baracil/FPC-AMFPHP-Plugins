@@ -33,7 +33,7 @@
  */
 require_once "ClassLoader.php";
 
-class FPCTransactionManager {
+class TransactionManager {
 
     const CONFIG_KEY = "manager";
 
