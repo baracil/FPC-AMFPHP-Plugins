@@ -86,7 +86,6 @@ class FPCCustomClassConverter implements Amfphp_Core_Common_ISerializer
         if (is_null($this->propertiesManager)) {
             //default
             $manager = new FPC_SmartPropertiesManager();
-            $manager->addSpecificManager(new FPC_PDOExceptionManager());
             $this->propertiesManager = $manager;
         }
 

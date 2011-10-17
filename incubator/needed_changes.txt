@@ -55,6 +55,6 @@ included in AMFPHP version : v2.0.1 (not released yet)
 modified file: amfphp/Core/Amf/Serialize.php
 modified lines :  44 and 768
 
-Modify the visibility of the property 'Amf0StoredObjects' and the method 'handleReference' from 'private' to 'protected'
+Modify the visibility of the property 'Amf0StoredObjects' and the method 'handleReference' from 'private' to 'protected'.
 
 This modification simplify the extension of the 'Amfphp_Core_Amf_Serializer' class.

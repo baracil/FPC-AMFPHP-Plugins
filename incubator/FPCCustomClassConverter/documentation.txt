@@ -1,0 +1,118 @@
+
+FPCCustomClassConverter, Bastien Aracil 2011 (femtoparsec.net)
+
+
+*************
+* Copyright *
+*************
+
+    Copyright (c) 2011, Bastien Aracil
+    All rights reserved.
+    New BSD license. See http://en.wikipedia.org/wiki/Bsd_license
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+       * Redistributions of source code must retain the above copyright
+         notice, this list of conditions and the following disclaimer.
+       * Redistributions in binary form must reproduce the above copyright
+         notice, this list of conditions and the following disclaimer in the
+         documentation and/or other materials provided with the distribution.
+       * The name of Bastien Aracil may not be used to endorse or promote products
+         derived from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL SILEX LABS BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+************
+* Versions *
+************
+
+V1.0-DRAFT - 10/2011 current - Creation of the document.
+
+
+************
+* Overview *
+************
+
+FPCCustomClassConverter is an AMFPHP plugin that improves the mechanism of VO class resolution from the explicitType value. For instance with a minimal configuration the plugin can manage package like explicitType value. For instance if explicitType is equal to "ne.femtoparsec.model.MyVoClass", the plugin will search the folder "<ROOT>/net/femtoparsec/model" for the file "MyVoClass.php" (<ROOT> is a parameter of the plugin).
+
+The plugin can also be configured to behave like the original CustomClassConverter.
+
+The plugin also modifies the way the properties to serialized are determined. The original version simply serializes public properties of PHP VO. This plugin do the same and also serialized private properties with getter and setter. It is also possible to serialize custom property for specific object that are not VO object (or not controlled by the develloper).
+
+*****************
+* Compatibility *
+*****************
+
+Plugin Version    |     AMFPHP Version
+------------------+-------------------
+v1.0              |     v2.0.1 (not released yet)
+
+****************
+* Installation *
+****************
+
+The installation consists in copying to the plugin directory of AMFPHP the directory 'FPCCustomClassConverter' at the same level than this file (not the directory including this file). You also need to disable the original 'CustomClassConverter' plugin (see the configuration section)
+
+*****************
+* Configuration *
+*****************
+
+You first need to disable the original CustomClassConverter plugin. The plugin needs two parameters. Each one as its one default value. Below are the configuration key and the expected value
+
+- "classResolver" : an object implementing FPC_IClassResolver
+- "propertiesManager" : an object implementing FPC_IPropertiesManager
+
+Both parameters have default value :
+
+- "classResolver" : a FPC_SmartClassResolver instance that reproduces the behaviour of the original CustomClassConverter plugin
+- "propertiesManager' : a FPC_SmartPropertiesManager that serializes public properties and private one if they have a setter and a getter.
+
+It is recommended to use the 'FPC_SmartClassResolver' and 'FPC_SmartPropertiesManager', but your are free to use your own 'FPC_IClassResolver' and 'FPC_IPropertiesManager'.
+
+So the recommended basic configuration should be :
+
+<?php
+//load the AMFPHP bundle
+require_once "PATH_TO_AMFPHP/ClassLoader.php';
+
+//load the FPCCustomClass bundle
+require_once "PATH_TO_FPCCustomClassConverter/ClassLoader.php";
+
+
+$config = new Amfphp_Core_Config();
+$config->disabledPlugins[] ="CustomClassConverter";
+
+$resolver = new FPC_SmartClassResolver();
+$manager = new FPC_SmartPropertiesManager();
+
+//do some configuration with $resolver and $manager
+
+$config->pluginsConfig['FPCCustomClassConverter'] = array("classResolver" => $resolver, "propertiesManager" => $manager));
+
+$gateway = Amfphp_Core_HttpRequestGatewayFactory::createGateway($config);
+$gateway->service();
+$gateway->output();
+?>
+
+
+********************************
+* Using FPC_SmartClassResolver *
+********************************
+
+TO WRITE
+
+************************************
+* Using FPC_SmartPropertiesManager *
+************************************
+
+TO WRITE
