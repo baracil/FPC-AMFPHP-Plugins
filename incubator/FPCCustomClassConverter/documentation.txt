@@ -23,7 +23,7 @@ FPCCustomClassConverter, Bastien Aracil 2011 (femtoparsec.net)
     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
     ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
     WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    DISCLAIMED. IN NO EVENT SHALL SILEX LABS BE LIABLE FOR ANY
+    DISCLAIMED. IN NO EVENT SHALL BASTIEN ARACIL BE LIABLE FOR ANY
     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
     (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -103,6 +103,21 @@ $gateway = Amfphp_Core_HttpRequestGatewayFactory::createGateway($config);
 $gateway->service();
 $gateway->output();
 ?>
+
+***************************************************
+* FPC_IClassResolver and provider implementations *
+***************************************************
+
+The plugin uses a FPC_IClassResolver to get from the explicitType value information about the corresponding PHP VO object. The interface has only one method that takes the explicitType value has argument and returns a FPC_ClassInfo object or null if the resolution
+could not be performed.
+
+The FPC_ClassInfo object contains, among other, two important information i) the file path to the PHP file that defines the VO and the class name of the VO. These are the information used to create the VO object.
+
+FPCCustomClassConverter provides several FPC_IClassResolver implementation. Below is the list :
+
+  * FPC_DefaultClassResolver : this resolver reproduce the default behaviour of AMFPHP. It uses an array of root path as argument
+
+
 
 
 ********************************
