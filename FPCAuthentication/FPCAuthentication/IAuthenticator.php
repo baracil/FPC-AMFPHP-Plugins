@@ -28,15 +28,27 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 04/11/11
  */
+ 
+interface FPCAuthentication_IAuthenticator {
 
-require_once "IAuthenticator.php";
-require_once "IBuilder.php";
+    /**
+     * @abstract
+     * @param $login login of the user trying to authenticate
+     * @param $password password of the user trying to authenticate
+     * @return mixed null if the authentication failed, otherwise any not null data.
+     * In case of success, the result of this method will be passed as the second parameter
+     * of the 'getRoles' method
+     */
+   function authenticate($login, $password);
 
-require_once "DefaultBuilder.php";
-require_once "LoginException.php";
-require_once "LoginResult.php";
-require_once "LoginResult.php";
-require_once "LoginService.php";
-require_once "FPCLogin.php";
+    /**
+     * @abstract Called only if the authentication succeed.
+     *
+     * @param $login login of the user trying to authenticate
+     * @param $token the result of the 'authenticate' method.
+     * @return array of string that define the roles of the authenticated user
+     */
+    function getRoles($login, $token);
+}

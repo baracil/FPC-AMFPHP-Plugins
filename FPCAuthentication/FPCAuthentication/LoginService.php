@@ -31,12 +31,12 @@
  * Date: 04/11/11
  */
 
-class FPCLogin_LoginService {
+class FPCAuthentication_LoginService {
 
     public function authenticate($login, $password) {
         $authenticator = $this->getAuthenticator();
         if (is_null($authenticator)) {
-            throw new FPCLogin_Exception("Invalid plugin configuration : no authenticator specified");
+            throw new FPCAuthentication_Exception("Invalid plugin configuration : no authenticator specified");
         }
 
         $result = $this->getLoginResult($login);
@@ -46,29 +46,29 @@ class FPCLogin_LoginService {
 
         if (is_null($token)) {
             $result->updateOnFailure();
-            $result->save(FPCLogin::FPC_LOGIN_RESULT_KEY);
-            throw new FPCLogin_Exception("Invalid login and/or password", $login, $result->getNbFailedAttempt());
+            $result->save(FPCAuthentication::FPC_LOGIN_RESULT_KEY);
+            throw new FPCAuthentication_Exception("Invalid login and/or password", $login, $result->getNbFailedAttempt());
         }
 
         $roles = $authenticator->getRoles($login, $token);
 
         $result->updateOnSuccess($roles);
-        $result->save(FPCLogin::FPC_LOGIN_RESULT_KEY);
+        $result->save(FPCAuthentication::FPC_LOGIN_RESULT_KEY);
 
         return $this->getBuilder()->build($result, $token);
     }
 
     public function logout() {
-        FPCLogin_Result::clear(FPCLogin::FPC_LOGIN_RESULT_KEY);
+        FPCAuthentication_Result::clear(FPCAuthentication::FPC_LOGIN_RESULT_KEY);
     }
 
     /**
      * @param $login
-     * @return FPCLogin_Result
+     * @return FPCAuthentication_Result
      */
     private function getLoginResult($login) {
-        $result = new FPCLogin_Result();
-        $result->restore(FPCLogin::FPC_LOGIN_RESULT_KEY);
+        $result = new FPCAuthentication_Result();
+        $result->restore(FPCAuthentication::FPC_LOGIN_RESULT_KEY);
 
         if ($result->getLogin() != $login) {
             $result->initialize($login);
@@ -78,18 +78,18 @@ class FPCLogin_LoginService {
     }
 
     /**
-     * @return FPCLogin_IAuthenticator
+     * @return FPCAuthentication_IAuthenticator
      */
     private function getAuthenticator() {
-        $config = $GLOBALS[FPCLogin::FPC_LOGIN_CONFIG_KEY];
+        $config = $GLOBALS[FPCAuthentication::FPC_LOGIN_CONFIG_KEY];
         return $config->authenticator;
     }
 
     /**
-     * @return FPCLogin_IBuilder
+     * @return FPCAuthentication_IBuilder
      */
     private function getBuilder() {
-        $config = $GLOBALS[FPCLogin::FPC_LOGIN_CONFIG_KEY];
+        $config = $GLOBALS[FPCAuthentication::FPC_LOGIN_CONFIG_KEY];
         return $config->builder;
     }
 }

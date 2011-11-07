@@ -31,7 +31,7 @@
  * Date: 06/11/11
  */
 
-class FPCLogin_Result {
+class FPCAuthentication_Result {
 
     private static function startSession() {
         if (session_id() == "") {
@@ -53,7 +53,7 @@ class FPCLogin_Result {
 
     /**
      * @param string $login
-     * @return FPCLogin_Result
+     * @return FPCAuthentication_Result
      */
     public function initialize($login = null) {
         $this->_login = $login;
@@ -64,7 +64,7 @@ class FPCLogin_Result {
     }
 
     /**
-     * @return FPCLogin_Result
+     * @return FPCAuthentication_Result
      */
     public function updateOnFailure() {
         $this->_authenticated = false;
@@ -75,7 +75,7 @@ class FPCLogin_Result {
 
     /**
      * @param $roles
-     * @return FPCLogin_Result
+     * @return FPCAuthentication_Result
      */
     public function updateOnSuccess($roles) {
         $this->_authenticated = true;
@@ -112,7 +112,7 @@ class FPCLogin_Result {
 
     /**
      * @param $data
-     * @return FPCLogin_Result
+     * @return FPCAuthentication_Result
      */
     public function fromArray($data) {
         $this->_login  = isset($data['login'])?$data['login']:null;
@@ -123,7 +123,7 @@ class FPCLogin_Result {
     }
 
     public function restore($sessionKey) {
-        FPCLogin_Result::startSession();
+        FPCAuthentication_Result::startSession();
 
         if (isset($_SESSION[$sessionKey])) {
             $this->fromArray($_SESSION[$sessionKey]);
@@ -136,13 +136,13 @@ class FPCLogin_Result {
     }
 
     public function save($sessionKey) {
-        FPCLogin_Result::startSession();
+        FPCAuthentication_Result::startSession();
         $_SESSION[$sessionKey] = $this->toArray();
         return $this;
     }
 
     public static function clear($sessionKey) {
-        FPCLogin_Result::startSession();
+        FPCAuthentication_Result::startSession();
         unset($_SESSION[$sessionKey]);
     }
 

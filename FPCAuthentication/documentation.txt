@@ -1,4 +1,4 @@
-FPCLogin, Bastien Aracil 2011 (femtoparsec.net)
+FPCAuthentication, Bastien Aracil 2011 (femtoparsec.net)
 
 
 *************
@@ -42,7 +42,7 @@ V1.0  - 10/2011 current - Creation of the document.
 * Overview *
 ************
 
-FPCLogin is an AMFPHP plugin that manages authentication of user with a login and a password. The authentication is
+FPCAuthentication is an AMFPHP plugin that manages authentication of user with a login and a password. The authentication is
 
 *****************
 * Compatibility *
@@ -56,7 +56,7 @@ v1.0              |     v2.0
 * Installation *
 ****************
 
-The installation consists in copying to the plugin directory of AMFPHP the directory 'FPCLogin' at the same level than this file (not the directory including this file).
+The installation consists in copying to the plugin directory of AMFPHP the directory 'FPCAuthentication' at the same level than this file (not the directory including this file).
 
 *****************
 * Configuration *
@@ -64,7 +64,7 @@ The installation consists in copying to the plugin directory of AMFPHP the direc
 
 To work properly the plugin needs a way to check to password of the user trying to authenticate.
 This is done by setting the mandatory configuration parameter 'authenticator' with an implementation
-of the interface 'FPCLogin_IAuthenticator' (see below for more details).
+of the interface 'FPCAuthentication_IAuthenticator' (see below for more details).
 
 The plugin has an optional configuration parameter 'builder'. This allows the customization of the
 result returned by the authentication process. By default this result is an associative array containing
@@ -74,7 +74,7 @@ the login and the roles of the user.
 * How to configure it *
 ***********************
 
-First, the developer needs to create his own implementation of the interface 'FPCLogin_IAuthenticator'.
+First, the developer needs to create his own implementation of the interface 'FPCAuthentication_IAuthenticator'.
 This interface defines the two methods 'authenticate' and 'getRoles'.
 
 The first one gets, as parameters, the login and the password of the user trying to authenticate
@@ -85,7 +85,7 @@ a non-null array of string listing the roles attributed to the authenticated use
 
 A simple implementation could be something like this :
 
-class SimpleAuthenticator implements FPCLogin_IAuthenticator {
+class SimpleAuthenticator implements FPCAuthentication_IAuthenticator {
     /**
      * @param $login login of the user trying to authenticate
      * @param $password password of the user trying to authenticate
@@ -175,7 +175,7 @@ To logout the user, the 'logout' method of the same "fake service" fpclogin must
 * Integration with ServiceAccess *
 **********************************
 
-This plugin is designed to easily work with the ServiceAccess plugin. In fact, if you use FPCLogin then
+This plugin is designed to easily work with the ServiceAccess plugin. In fact, if you use FPCAuthentication then
 ServiceAccess will work out-of-the-box, no configuration will be needed for it and you will be able
 to use annotations to secure your services.
 
@@ -184,12 +184,12 @@ to use annotations to secure your services.
 ******************************
 
 After any attempt to authenticate, the plugin saves some data in the session in the form of an associative
-array under the key 'FPCLoginResult'. The keys and values of this associative array are the following :
+array under the key 'FPCAuthenticationResult'. The keys and values of this associative array are the following :
 
-$_SESSION['FPCLoginResult']['authenticated'] = true if the authentication succeeded, false otherwise
-$_SESSION['FPCLoginResult']['login'] = the login og the user that tried to authenticate
-$_SESSION['FPCLoginResult']['roles'] = the array of string listing the roles attributed to the user, always null if the authentication failed
-$_SESSION['FPCLoginResult']['nbFailedAttempt'] = the number of successive failed authentication attempt made by this user.
+$_SESSION['FPCAuthenticationResult']['authenticated'] = true if the authentication succeeded, false otherwise
+$_SESSION['FPCAuthenticationResult']['login'] = the login og the user that tried to authenticate
+$_SESSION['FPCAuthenticationResult']['roles'] = the array of string listing the roles attributed to the user, always null if the authentication failed
+$_SESSION['FPCAuthenticationResult']['nbFailedAttempt'] = the number of successive failed authentication attempt made by this user.
 
 The data should not be modified.
 

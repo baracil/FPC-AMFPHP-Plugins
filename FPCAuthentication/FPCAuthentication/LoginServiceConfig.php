@@ -28,15 +28,18 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 04/11/11
  */
- 
-class FPCLogin_DefaultBuilder implements FPCLogin_IBuilder {
+class FPCAuthentication_LoginServiceConfig {
 
-    function build(FPCLogin_Result $result, $token)
-    {
-        return is_null($result)?null:$result->toArray();
-    }
+    /**
+     * @var FPCAuthentication_IAuthenticator
+     */
+    var $authenticator;
 
 
+    /**
+     * @var FPCAuthentication_IBuilder
+     */
+    var $builder;
 }

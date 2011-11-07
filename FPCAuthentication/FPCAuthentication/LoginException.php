@@ -28,11 +28,22 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 04/11/11
  */
+ 
+class FPCAuthentication_Exception extends Exception {
 
-interface FPCLogin_IBuilder {
+    var $_explicitType = "plugins.amfphp.FPCAuthentication.Exception";
 
-    function build(FPCLogin_Result $result, $token);
+    public $login;
 
+    public $nbFailedAttempt;
+
+    public $message;
+
+    public function __construct($message = null, $login = null, $nbFailedAttempt = 0) {
+        $this->message = $message;
+        $this->login = $login;
+        $this->nbFailedAttempt = $nbFailedAttempt;
+    }
 }

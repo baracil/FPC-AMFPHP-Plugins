@@ -28,18 +28,15 @@
 
 /**
  * User: Bastien Aracil
- * Date: 04/11/11
+ * Date: 06/11/11
  */
-class FPCLogin_LoginServiceConfig {
 
-    /**
-     * @var FPCLogin_IAuthenticator
-     */
-    var $authenticator;
+require_once "IAuthenticator.php";
+require_once "IBuilder.php";
 
-
-    /**
-     * @var FPCLogin_IBuilder
-     */
-    var $builder;
-}
+require_once "DefaultBuilder.php";
+require_once "LoginException.php";
+require_once "LoginResult.php";
+require_once "LoginResult.php";
+require_once "LoginService.php";
+require_once "FPCAuthentication.php";

@@ -34,15 +34,15 @@
 
 require_once "ClassLoader.php";
 
-class FPCLogin {
+class FPCAuthentication {
 
     const AUTHENTICATOR_KEY = "authenticator";
 
     const BUILDER_KEY = "builder";
 
-    const FPC_LOGIN_CONFIG_KEY = "FPCLoginConfig";
+    const FPC_LOGIN_CONFIG_KEY = "FPCAuthenticationConfig";
 
-    const FPC_LOGIN_RESULT_KEY = "FPCLoginResult";
+    const FPC_LOGIN_RESULT_KEY = "FPCAuthenticationResult";
 
     /**
      * @var Amfphp_Core_Common_ClassFindInfo
@@ -52,7 +52,7 @@ class FPCLogin {
     public function __construct(array $config = null) {
 
         $dirName = dirname(__FILE__);
-        $this->loginServiceClassInfo = new Amfphp_Core_Common_ClassFindInfo($dirName . DIRECTORY_SEPARATOR . "LoginService.php", "FPCLogin_LoginService");
+        $this->loginServiceClassInfo = new Amfphp_Core_Common_ClassFindInfo($dirName . DIRECTORY_SEPARATOR . "LoginService.php", "FPCAuthentication_LoginService");
 
         $filterManager = Amfphp_Core_FilterManager::getInstance();
         $filterManager->addFilter(Amfphp_Core_Gateway::FILTER_SERVICE_NAMES_2_CLASS_FIND_INFO, $this, "filterServiceNames2ClassFindInfo");
@@ -69,19 +69,19 @@ class FPCLogin {
             }
         }
 
-        if (is_null($authenticator) || !($authenticator instanceof FPCLogin_IAuthenticator)) {
-            throw new Exception("Invalid configuration for plugin FPCLogin : authenticator must be set and implement FPCLogin_IAuthenticator ");
+        if (is_null($authenticator) || !($authenticator instanceof FPCAuthentication_IAuthenticator)) {
+            throw new Exception("Invalid configuration for plugin FPCAuthentication : authenticator must be set and implement FPCAuthentication_IAuthenticator ");
         }
 
         if (is_null($builder)) {
-            $builder = new FPCLogin_DefaultBuilder();
+            $builder = new FPCAuthentication_DefaultBuilder();
         }
 
-        if (!($builder instanceof FPCLogin_IBuilder)) {
-            throw new Exception("Invalid configuration for plugin FPCLogin: builder must implement FPCLogin_IBuilder");
+        if (!($builder instanceof FPCAuthentication_IBuilder)) {
+            throw new Exception("Invalid configuration for plugin FPCAuthentication: builder must implement FPCAuthentication_IBuilder");
         }
 
-        $loginServiceConfig = new FPCLogin_LoginServiceConfig();
+        $loginServiceConfig = new FPCAuthentication_LoginServiceConfig();
         $loginServiceConfig->authenticator = $authenticator;
         $loginServiceConfig->builder = $builder;
 

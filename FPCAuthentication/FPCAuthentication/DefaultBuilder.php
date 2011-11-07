@@ -28,27 +28,15 @@
 
 /**
  * User: Bastien Aracil
- * Date: 04/11/11
+ * Date: 06/11/11
  */
  
-interface FPCLogin_IAuthenticator {
+class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
 
-    /**
-     * @abstract
-     * @param $login login of the user trying to authenticate
-     * @param $password password of the user trying to authenticate
-     * @return mixed null if the authentication failed, otherwise any not null data.
-     * In case of success, the result of this method will be passed as the second parameter
-     * of the 'getRoles' method
-     */
-   function authenticate($login, $password);
+    function build(FPCAuthentication_Result $result, $token)
+    {
+        return is_null($result)?null:$result->toArray();
+    }
 
-    /**
-     * @abstract Called only if the authentication succeed.
-     *
-     * @param $login login of the user trying to authenticate
-     * @param $token the result of the 'authenticate' method.
-     * @return array of string that define the roles of the authenticated user
-     */
-    function getRoles($login, $token);
+
 }
