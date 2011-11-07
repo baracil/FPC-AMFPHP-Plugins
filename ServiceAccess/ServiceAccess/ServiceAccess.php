@@ -81,7 +81,7 @@ class ServiceAccess
         }
 
         if (is_null($this->_user)) {
-            throw new Exception("Invalid configuration for plugin ServiceAccess : serviceAccessUser must be set ");
+            $this->_user = new FPC_FPCLoginServiceAccessUser("FPCLoginResult");
         }
 
         if (!($this->_user instanceof FPC_IServiceAccessUser)) {

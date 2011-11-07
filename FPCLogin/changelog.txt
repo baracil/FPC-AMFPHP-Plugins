@@ -1,0 +1,5 @@
+
+FPCLogin, Bastien Aracil 2011 (femtoparsec.net)
+
+------------ V1.0
+v1.0 - 08/2011 - first release
