@@ -1,5 +1,7 @@
 This package contains several plugins for AMFPHP. Each plugin has its own README and documentation file that should be checked.
 
+For ant help or feature request, please use the forum : http://www.femtoparsec.net/amfphpplugins/
+
 Below is a summary of the available plugins :
 
 ServiceAccess : a plugin to secure access to PHP services easily.
