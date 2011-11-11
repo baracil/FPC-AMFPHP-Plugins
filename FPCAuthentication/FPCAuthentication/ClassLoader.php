@@ -31,12 +31,23 @@
  * Date: 06/11/11
  */
 
-require_once "IAuthenticator.php";
-require_once "IBuilder.php";
 
-require_once "DefaultBuilder.php";
+require_once "ISecretProvider.php";
+require_once "IRolesProvider.php";
+require_once "IBuilder.php";
+require_once "IChallengeProvider.php";
+require_once "IChallengeSolver.php";
+
+require_once "LoginServiceConfig.php";
 require_once "LoginException.php";
-require_once "LoginResult.php";
-require_once "LoginResult.php";
+
+require_once "handler/ClassLoader.php";
+
+require_once "DefaultRolesProvider.php";
+require_once "DefaultBuilder.php";
+require_once "DefaultChallengeProvider.php";
+require_once "DefaultChallengeSolver.php";
+
+require_once "Result.php";
 require_once "LoginService.php";
 require_once "FPCAuthentication.php";

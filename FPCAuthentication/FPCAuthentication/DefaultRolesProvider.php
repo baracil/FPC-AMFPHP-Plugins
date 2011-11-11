@@ -28,14 +28,19 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 07/11/11
  */
- 
-class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
 
-    function build(FPCAuthentication_Result $result)
+class FPCAuthentication_DefaultRolesProvider implements FPCAuthentication_IRolesProvider {
+
+    /**
+     *
+     * @param $login login of the authenticated user
+     * @return array of string that define the roles of the authenticated user
+     */
+    function getRoles($login)
     {
-        return is_null($result)?null:$result->toArray();
+        return array();
     }
 
 

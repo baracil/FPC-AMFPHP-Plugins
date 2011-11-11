@@ -33,6 +33,30 @@
 
 class FPCAuthentication_Result {
 
+    const FPC_LOGIN_RESULT_KEY = "FPCAuthenticationResult";
+
+    /**
+     * @param $sessionKey
+     * @return FPCAuthentication_Result
+     */
+    public static function getLoginResult($login) {
+        FPCAuthentication_Result::startSession();
+
+        $result = new FPCAuthentication_Result();
+        $result->restore();
+
+        if ($result->getLogin() != $login) {
+            $result->initialize($login);
+        }
+
+        return $result;
+    }
+
+    public static function clear() {
+        FPCAuthentication_Result::startSession();
+        unset($_SESSION[self::FPC_LOGIN_RESULT_KEY]);
+    }
+
     private static function startSession() {
         if (session_id() == "") {
             session_start();
@@ -110,6 +134,16 @@ class FPCAuthentication_Result {
         return array('login' => $this->_login, 'authenticated' => $this->_authenticated, 'roles' => $this->_roles, 'nbFailedAttempt' => $this->_nbFailedAttempt );
     }
 
+    public function restore() {
+        if (!isset($_SESSION[self::FPC_LOGIN_RESULT_KEY])) {
+            $this->initialize();
+        }
+        else {
+            $this->fromArray($_SESSION[self::FPC_LOGIN_RESULT_KEY]);
+        }
+        return $this;
+    }
+
     /**
      * @param $data
      * @return FPCAuthentication_Result
@@ -122,28 +156,14 @@ class FPCAuthentication_Result {
         return $this;
     }
 
-    public function restore($sessionKey) {
+    public function save() {
         FPCAuthentication_Result::startSession();
-
-        if (isset($_SESSION[$sessionKey])) {
-            $this->fromArray($_SESSION[$sessionKey]);
-        }
-        else {
-            $this->initialize(null);
-        }
-
+        $_SESSION[self::FPC_LOGIN_RESULT_KEY] = $this->toArray();
         return $this;
     }
 
-    public function save($sessionKey) {
-        FPCAuthentication_Result::startSession();
-        $_SESSION[$sessionKey] = $this->toArray();
-        return $this;
-    }
-
-    public static function clear($sessionKey) {
-        FPCAuthentication_Result::startSession();
-        unset($_SESSION[$sessionKey]);
+    public function throwException() {
+        throw new FPCAuthentication_Exception("Invalid login and/or password", $this->_login, $this->_nbFailedAttempt);
     }
 
 

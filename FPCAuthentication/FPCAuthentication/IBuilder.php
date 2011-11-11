@@ -33,6 +33,6 @@
 
 interface FPCAuthentication_IBuilder {
 
-    function build(FPCAuthentication_Result $result, $token);
+    function build(FPCAuthentication_Result $result);
 
 }

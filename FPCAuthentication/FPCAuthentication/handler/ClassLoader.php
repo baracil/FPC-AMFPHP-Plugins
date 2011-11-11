@@ -28,15 +28,13 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 11/11/11
  */
- 
-class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
 
-    function build(FPCAuthentication_Result $result)
-    {
-        return is_null($result)?null:$result->toArray();
-    }
+require_once "HandshakeType.php";
+require_once "HandshakeData.php";
 
-
-}
+require_once "Handler.php";
+require_once "InvalidTypeHandler.php";
+require_once "ChallengeRequestHandler.php";
+require_once "ChallengeAnswerHandler.php";

@@ -36,13 +36,19 @@ require_once "ClassLoader.php";
 
 class FPCAuthentication {
 
-    const AUTHENTICATOR_KEY = "authenticator";
+    const SECRET_PROVIDER_KEY = "secretProvider";
+
+    const ROLES_PROVIDER_KEY = "rolesProvider";
+
+    const CHALLENGE_SOLVER_KEY = "challengeSolver";
 
     const BUILDER_KEY = "builder";
 
+    const CHALLENGE_PROVIDER_KEY = "challengeProvider";
+
     const FPC_LOGIN_CONFIG_KEY = "FPCAuthenticationConfig";
 
-    const FPC_LOGIN_RESULT_KEY = "FPCAuthenticationResult";
+    const FPC_COMMON_SECRET_KEY = "FPCAuthenticationCommonSecret";
 
     /**
      * @var Amfphp_Core_Common_ClassFindInfo
@@ -51,45 +57,48 @@ class FPCAuthentication {
 
     public function __construct(array $config = null) {
 
+        //create the classFindInfo for the login service
         $dirName = dirname(__FILE__);
         $this->loginServiceClassInfo = new Amfphp_Core_Common_ClassFindInfo($dirName . DIRECTORY_SEPARATOR . "LoginService.php", "FPCAuthentication_LoginService");
 
+        //hook the plugin
         $filterManager = Amfphp_Core_FilterManager::getInstance();
         $filterManager->addFilter(Amfphp_Core_Gateway::FILTER_SERVICE_NAMES_2_CLASS_FIND_INFO, $this, "filterServiceNames2ClassFindInfo");
 
-        $authenticator = null;
-        $builder = null;
+        //prepare the plugin configuration
+        $loginServiceConfig = new FPCAuthentication_LoginServiceConfig();
+        $loginServiceConfig->setDefaultBuilder(new FPCAuthentication_DefaultBuilder());
+        $loginServiceConfig->setDefaultRolesProvider(new FPCAuthentication_DefaultRolesProvider());
+        $loginServiceConfig->setDefaultChallengeSolver(new FPCAuthentication_DefaultChallengeSolver());
+        $loginServiceConfig->setDefaultChallengeProvider(new FPCAuthentication_DefaultChallengeProvider());
 
         if ($config) {
-            if (isset($config[self::AUTHENTICATOR_KEY])) {
-                $authenticator = $config[self::AUTHENTICATOR_KEY];
+            if (isset($config[self::SECRET_PROVIDER_KEY])) {
+                $loginServiceConfig->setSecretProvider($config[self::SECRET_PROVIDER_KEY]);
+            }
+            if (isset($config[self::ROLES_PROVIDER_KEY])) {
+                $loginServiceConfig->setRolesProvider($config[self::ROLES_PROVIDER_KEY]);
             }
             if (isset($config[self::BUILDER_KEY])) {
-                $builder = $config[self::BUILDER_KEY];
+                $loginServiceConfig->setBuilder($config[self::BUILDER_KEY]);
+            }
+            if (isset($config[self::CHALLENGE_SOLVER_KEY])) {
+                $loginServiceConfig->setBuilder($config[self::CHALLENGE_SOLVER_KEY]);
+            }
+            if (isset($config[self::CHALLENGE_PROVIDER_KEY])) {
+                $loginServiceConfig->setBuilder($config[self::CHALLENGE_PROVIDER_KEY]);
             }
         }
 
-        if (is_null($authenticator) || !($authenticator instanceof FPCAuthentication_IAuthenticator)) {
-            throw new Exception("Invalid configuration for plugin FPCAuthentication : authenticator must be set and implement FPCAuthentication_IAuthenticator ");
-        }
+        $loginServiceConfig->validate();
 
-        if (is_null($builder)) {
-            $builder = new FPCAuthentication_DefaultBuilder();
-        }
-
-        if (!($builder instanceof FPCAuthentication_IBuilder)) {
-            throw new Exception("Invalid configuration for plugin FPCAuthentication: builder must implement FPCAuthentication_IBuilder");
-        }
-
-        $loginServiceConfig = new FPCAuthentication_LoginServiceConfig();
-        $loginServiceConfig->authenticator = $authenticator;
-        $loginServiceConfig->builder = $builder;
-
+        //store in global space since there is no way to set a property to instances
+        //created by the AMFPHP serviceRouter
         $GLOBALS[self::FPC_LOGIN_CONFIG_KEY] = $loginServiceConfig;
     }
 
     public function filterServiceNames2ClassFindInfo($serviceNames2ClassFindInfo) {
-        $serviceNames2ClassFindInfo["fpclogin"] = $this->loginServiceClassInfo;
+        $serviceNames2ClassFindInfo["fpcauthentication"] = $this->loginServiceClassInfo;
         return $serviceNames2ClassFindInfo;
     }
 

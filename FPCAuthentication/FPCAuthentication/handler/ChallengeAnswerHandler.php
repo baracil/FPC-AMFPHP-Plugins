@@ -28,14 +28,55 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 11/11/11
  */
  
-class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
-
-    function build(FPCAuthentication_Result $result)
+class FPCAuthentication_ChallengeAnswerHandler extends FPCAuthentication_Handler {
+    /**
+     * @return void
+     */
+    protected function preHandle()
     {
-        return is_null($result)?null:$result->toArray();
+        //nothing to do
+    }
+
+    /**
+     * @param $data
+     * @return FPCAuthentication_HandshakeData
+     */
+    protected function getSessionData($data)
+    {
+        return FPCAuthentication_HandshakeData::getData();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getHandledType()
+    {
+        return FPCAuthentication_HandshakeType::CHALLENGE_ANSWER;
+    }
+
+    /**
+     * @param FPCAuthentication_HandshakeData $sessionData
+     * @param $data
+     * @return bool
+     */
+    protected function validateChallengeAnswer(FPCAuthentication_HandshakeData $sessionData, $data)
+    {
+        return $sessionData->getExpectedAnswer() == $data;
+    }
+
+    /**
+     * @param FPCAuthentication_Result $result
+     * @return FPCAuthentication_Result
+     */
+    protected function prepareResult($result)
+    {
+        //at this point, the user is authenticated. let's update the $result
+        $login = $result->getLogin();
+        $roles = $this->getConfig()->getRolesProvider()->getRoles($login);
+        return $result->updateOnSuccess($roles);
     }
 
 

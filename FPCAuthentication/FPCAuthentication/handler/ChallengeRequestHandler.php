@@ -28,14 +28,58 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 09/11/11
  */
  
-class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
-
-    function build(FPCAuthentication_Result $result)
+class FPCAuthentication_ChallengeRequestHandler extends FPCAuthentication_Handler {
+    /**
+     * @param $data
+     * @return FPCAuthentication_HandshakeData
+     */
+    public function getSessionData($data)
     {
-        return is_null($result)?null:$result->toArray();
+        $this->clearSessionData();
+        $data = new FPCAuthentication_HandshakeData();
+        $data->setLogin($data);
+
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHandledType()
+    {
+        return FPCAuthentication_HandshakeType::CHALLENGE_REQUEST;
+    }
+
+    /**
+     * @param FPCAuthentication_HandshakeData $sessionData
+     * @param $data
+     * @return bool
+     */
+    public function validateChallengeAnswer(FPCAuthentication_HandshakeData $sessionData, $data)
+    {
+        //no validation. $data is the login not the expected answer of a sent challenge (none has been sent at this step)
+        return true;
+    }
+
+    /**
+     * @return void
+     */
+    protected function preHandle()
+    {
+        //nothing to do
+    }
+
+    /**
+     * @param $result
+     * @return
+     */
+    protected function prepareResult($result)
+    {
+        //nothing special to do. The authentication is not complete yet.
+        return $result;
     }
 
 

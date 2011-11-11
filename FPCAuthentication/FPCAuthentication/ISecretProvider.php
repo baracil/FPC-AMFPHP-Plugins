@@ -28,15 +28,18 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 07/11/11
  */
  
-class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
+interface FPCAuthentication_ISecretProvider {
 
-    function build(FPCAuthentication_Result $result)
-    {
-        return is_null($result)?null:$result->toArray();
-    }
+    /**
+     * @abstract
+     * @param string $login
+     * @return string the secret of the user with the given login
+     */
+    function getSecret($login);
 
 
+    
 }

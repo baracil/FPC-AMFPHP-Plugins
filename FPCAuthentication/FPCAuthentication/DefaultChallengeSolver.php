@@ -28,14 +28,18 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 10/11/11
  */
  
-class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
+class FPCAuthentication_DefaultChallengeSolver implements FPCAuthentication_IChallengeSolver {
 
-    function build(FPCAuthentication_Result $result)
+    function solve($challenge, $secret)
     {
-        return is_null($result)?null:$result->toArray();
+        $str = $secret . base64_decode($challenge);
+        if (function_exists("openssl_digest")) {
+            return openssl_digest($str, "SHA256");
+        }
+        return hash("sha256", $str);
     }
 
 

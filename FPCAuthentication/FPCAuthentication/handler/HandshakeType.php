@@ -28,15 +28,36 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 09/11/11
  */
- 
-class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
 
-    function build(FPCAuthentication_Result $result)
-    {
-        return is_null($result)?null:$result->toArray();
+class FPCAuthentication_HandshakeType {
+
+    //sent by the client to start the handshake
+    const CHALLENGE_REQUEST = "challengeRequest";
+
+    //sent by the server in response of a CHALLENGE_REQUEST
+    const CHALLENGE = "challenge";
+
+    //sent by the client in response of a CHALLENGE message from the server
+    const CHALLENGE_ANSWER = "challengeAnswer";
+
+    //sent by the server if the answer from the client is correct. When the client receive
+    //this message, it can assume it has been authenticated on the server.
+    const CHALLENGE_VALIDATION = "challengeValidation";
+
+    /**
+     * @static
+     * @throws FPCAuthentication_Exception
+     * @param $type the type of the current message
+     * @return string the type of the next message in the protocol
+     */
+    public static function getNext($type) {
+        switch ($type) {
+            case FPCAuthentication_HandshakeType::CHALLENGE_REQUEST : return FPCAuthentication_HandshakeType::CHALLENGE;
+            case FPCAuthentication_HandshakeType::CHALLENGE : return FPCAuthentication_HandshakeType::CHALLENGE_ANSWER;
+            case FPCAuthentication_HandshakeType::CHALLENGE_ANSWER : return FPCAuthentication_HandshakeType::CHALLENGE_VALIDATION;
+            default : throw new FPCAuthentication_Exception("Invalid type : $type");
+        }
     }
-
-
 }

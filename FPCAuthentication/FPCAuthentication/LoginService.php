@@ -33,63 +33,64 @@
 
 class FPCAuthentication_LoginService {
 
-    public function authenticate($login, $password) {
-        $authenticator = $this->getAuthenticator();
-        if (is_null($authenticator)) {
-            throw new FPCAuthentication_Exception("Invalid plugin configuration : no authenticator specified");
+    //Basic authentication
+    public function authenticate($login, $secret) {
+        $result = FPCAuthentication_Result::getLoginResult($login);
+
+        //get the expected secret from the given login
+        $expectedSecret = $this->getConfig()->getSecretProvider()->getSecret($login);
+
+        if ($expectedSecret == $secret) {
+            //expected and provided secret match. The authentication is successful
+            //retrieve the roles and update the authentication result with them
+            $roles = $this->getConfig()->getRolesProvider()->getRoles($login);
+            $result->updateOnSuccess($roles);
         }
-
-        $result = $this->getLoginResult($login);
-
-        $token = $authenticator->authenticate($login, $password);
-
-
-        if (is_null($token)) {
+        else {
+            //expected and provided secret do not match. The authentication failed
+            //update the authentication result accordingly
             $result->updateOnFailure();
-            $result->save(FPCAuthentication::FPC_LOGIN_RESULT_KEY);
-            throw new FPCAuthentication_Exception("Invalid login and/or password", $login, $result->getNbFailedAttempt());
         }
 
-        $roles = $authenticator->getRoles($login, $token);
+        //save the authentication result into the SESSION
+        $result->save();
 
-        $result->updateOnSuccess($roles);
-        $result->save(FPCAuthentication::FPC_LOGIN_RESULT_KEY);
+        //let's finish the job.
+        if (!$result->getAuthenticated()) {
+            //the authentication failed, throw an exception to warn so
+            $result->throwException();
+        }
 
-        return $this->getBuilder()->build($result, $token);
+        return $this->getConfig()->getBuilder()->build($result);
     }
 
+
+    public function handshake($type, $data, $challenge) {
+        //retrieve the handler for the given type
+        $handler = FPCAuthentication_Handler::getHandler($type, $this->getConfig());
+
+        //handle the message
+        return $handler->handle($data, $challenge);
+    }
+
+    /**
+     * Clear all the session data regarding the authentication result and process
+     * @return void
+     */
     public function logout() {
-        FPCAuthentication_Result::clear(FPCAuthentication::FPC_LOGIN_RESULT_KEY);
+        FPCAuthentication_Result::clear();
+        FPCAuthentication_HandshakeData::clear();
     }
 
     /**
-     * @param $login
-     * @return FPCAuthentication_Result
+     * @return FPCAuthentication_LoginServiceConfig
      */
-    private function getLoginResult($login) {
-        $result = new FPCAuthentication_Result();
-        $result->restore(FPCAuthentication::FPC_LOGIN_RESULT_KEY);
-
-        if ($result->getLogin() != $login) {
-            $result->initialize($login);
-        }
-
-        return $result;
+    private function getConfig() {
+        return $GLOBALS[FPCAuthentication::FPC_LOGIN_CONFIG_KEY];
     }
 
-    /**
-     * @return FPCAuthentication_IAuthenticator
-     */
-    private function getAuthenticator() {
-        $config = $GLOBALS[FPCAuthentication::FPC_LOGIN_CONFIG_KEY];
-        return $config->authenticator;
-    }
-
-    /**
-     * @return FPCAuthentication_IBuilder
-     */
-    private function getBuilder() {
-        $config = $GLOBALS[FPCAuthentication::FPC_LOGIN_CONFIG_KEY];
-        return $config->builder;
+    private function getChallengeSolver()
+    {
+        return $this->getConfig()->getChallengeSolver();
     }
 }

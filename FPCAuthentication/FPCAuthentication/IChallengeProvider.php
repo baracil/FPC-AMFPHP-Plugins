@@ -28,15 +28,16 @@
 
 /**
  * User: Bastien Aracil
- * Date: 06/11/11
+ * Date: 10/11/11
  */
- 
-class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
 
-    function build(FPCAuthentication_Result $result)
-    {
-        return is_null($result)?null:$result->toArray();
-    }
+interface FPCAuthentication_IChallengeProvider {
 
+    /**
+     * @abstract
+     * @param $length the length of the challenge
+     * @return string a BASE64 encoded raw string of $length characters.
+     */
+    function getChallenge();
 
 }

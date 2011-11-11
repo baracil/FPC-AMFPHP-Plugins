@@ -28,27 +28,65 @@
 
 /**
  * User: Bastien Aracil
- * Date: 04/11/11
+ * Date: 09/11/11
  */
  
-interface FPCAuthentication_IAuthenticator {
+class FPCAuthentication_InvalidTypeHandler extends FPCAuthentication_Handler {
+
+    private $_receivedType;
+
+    public function __construct($type) {
+        $this->_receivedType = $type;
+    }
 
     /**
-     * @abstract
-     * @param $login login of the user trying to authenticate
-     * @param $password password of the user trying to authenticate
-     * @return mixed null if the authentication failed, otherwise any not null data.
-     * In case of success, the result of this method will be passed as the second parameter
-     * of the 'getRoles' method
+     * @throws FPCAuthentication_Exception
+     * @return void
      */
-   function authenticate($login, $password);
+    protected function preHandle()
+    {
+        throw new FPCAuthentication_Exception("Invalid message type : ".$this->_receivedType.". " ." was expected.");
+    }
 
     /**
-     * @abstract Called only if the authentication succeed.
-     *
-     * @param $login login of the user trying to authenticate
-     * @param $token the result of the 'authenticate' method.
-     * @return array of string that define the roles of the authenticated user
+     * @param $data
+     * @return FPCAuthentication_HandshakeData
      */
-    function getRoles($login, $token);
+    protected function getSessionData($data)
+    {
+        //nothing to do since preHandle will stop the treatment
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getHandledType()
+    {
+        //nothing to do since preHandle will stop the treatment
+        return null;
+    }
+
+    /**
+     * @param FPCAuthentication_HandshakeData $sessionData
+     * @param $data
+     * @return bool
+     */
+    protected function validateChallengeAnswer(FPCAuthentication_HandshakeData $sessionData, $data)
+    {
+        //nothing to do since preHandle will stop the treatment
+        return false;
+    }
+
+    /**
+     * @param $result
+     * @return
+     */
+    protected function prepareResult($result)
+    {
+        //nothing to do since preHandle will stop the treatment
+        return $result;
+    }
+
+
 }
