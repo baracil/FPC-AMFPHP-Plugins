@@ -31,6 +31,13 @@
  * Date: 09/11/11
  */
 
+/**
+ * FPCAuthentication uses a implementation of this interface to solve the challenge. Any implementation
+ * should be a one-way function (i.e. easy to compute, very hard to reverse) like digest operation (SHA256 ...)
+ *
+ * The Solver must be the same on the client side or the server and the client will never
+ * agree each other.
+ */
 interface FPCAuthentication_IChallengeSolver {
 
     function solve($challenge, $secret);

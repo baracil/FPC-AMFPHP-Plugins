@@ -36,7 +36,10 @@ interface FPCAuthentication_ISecretProvider {
     /**
      * @abstract
      * @param string $login
-     * @return string the secret of the user with the given login
+     * @return string the secret of the user with the given login. The secret is not necessarily
+     * the explicit password. The only constraint is that is should be the same thing provided
+     * by the client (an operation might then be mandatory between the user input and the call
+     * to the server).
      */
     function getSecret($login);
 

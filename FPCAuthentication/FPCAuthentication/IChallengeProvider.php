@@ -31,6 +31,12 @@
  * Date: 10/11/11
  */
 
+/**
+ * FPCAuthentication uses an implementation of this interface to generate
+ * random array of bytes (as raw string) BASE64 encoded. The random array
+ * are then used as challenge sent to the client.
+ *
+ */
 interface FPCAuthentication_IChallengeProvider {
 
     /**

@@ -33,9 +33,11 @@
  
 class FPCAuthentication_DefaultChallengeProvider implements FPCAuthentication_IChallengeProvider {
 
+    const DEFAULT_LENGTH = 64;
+
     private $_length;
 
-    public function __construct($length) {
+    public function __construct($length = self::DEFAULT_LENGTH) {
         $this->_length = $length;
     }
 

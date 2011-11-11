@@ -31,6 +31,10 @@
  * Date: 06/11/11
  */
 
+/**
+ * The user information saved in FPCAuthentication_Result are not sent directly to the
+ * client, they are transformed with a implementation of this interface.
+ */
 interface FPCAuthentication_IBuilder {
 
     function build(FPCAuthentication_Result $result);

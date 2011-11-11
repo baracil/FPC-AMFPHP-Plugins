@@ -65,7 +65,7 @@ class FPCAuthentication {
         $filterManager = Amfphp_Core_FilterManager::getInstance();
         $filterManager->addFilter(Amfphp_Core_Gateway::FILTER_SERVICE_NAMES_2_CLASS_FIND_INFO, $this, "filterServiceNames2ClassFindInfo");
 
-        //prepare the plugin configuration
+        //prepare the plugin default configuration
         $loginServiceConfig = new FPCAuthentication_LoginServiceConfig();
         $loginServiceConfig->setDefaultBuilder(new FPCAuthentication_DefaultBuilder());
         $loginServiceConfig->setDefaultRolesProvider(new FPCAuthentication_DefaultRolesProvider());
