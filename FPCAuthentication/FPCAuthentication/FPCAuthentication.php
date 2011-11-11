@@ -36,18 +36,28 @@ require_once "ClassLoader.php";
 
 class FPCAuthentication {
 
+    //Name of the emulated service
+    const EMULATED_SERVICE_NAME = "fpcAuthentication";
+
+    //configuration key for the secret provider
     const SECRET_PROVIDER_KEY = "secretProvider";
 
+    //configuration key for the role provider
     const ROLES_PROVIDER_KEY = "rolesProvider";
 
+    //configuration key for the challenge solver
     const CHALLENGE_SOLVER_KEY = "challengeSolver";
 
+    //configuration key for the result builder;
     const BUILDER_KEY = "builder";
 
+    //configuration key for the challenge provider
     const CHALLENGE_PROVIDER_KEY = "challengeProvider";
 
+    //session key for the loginService configuration
     const FPC_LOGIN_CONFIG_KEY = "FPCAuthenticationConfig";
 
+    //session key for the common secret key
     const FPC_COMMON_SECRET_KEY = "FPCAuthenticationCommonSecret";
 
     /**
@@ -64,6 +74,7 @@ class FPCAuthentication {
         //hook the plugin
         $filterManager = Amfphp_Core_FilterManager::getInstance();
         $filterManager->addFilter(Amfphp_Core_Gateway::FILTER_SERVICE_NAMES_2_CLASS_FIND_INFO, $this, "filterServiceNames2ClassFindInfo");
+        $filterManager->addFilter(Amfphp_Core_Common_ServiceRouter::FILTER_SERVICE_OBJECT, $this, "filterServiceObject");
 
         //prepare the plugin default configuration
         $loginServiceConfig = new FPCAuthentication_LoginServiceConfig();
@@ -98,8 +109,28 @@ class FPCAuthentication {
     }
 
     public function filterServiceNames2ClassFindInfo($serviceNames2ClassFindInfo) {
-        $serviceNames2ClassFindInfo["fpcauthentication"] = $this->loginServiceClassInfo;
+        $serviceNames2ClassFindInfo[self::EMULATED_SERVICE_NAME] = $this->loginServiceClassInfo;
         return $serviceNames2ClassFindInfo;
+    }
+
+    public function filterServiceObject($serviceObject, $serviceName, $methodName, $parameters) {
+        if ($serviceName == self::EMULATED_SERVICE_NAME) {
+            return $serviceObject;
+        }
+
+        if ($this->allowedNotAuthenticated($serviceName, $methodName)) {
+            return $serviceObject;
+        }
+
+        throw new FPCAuthentication_Exception("Call to $serviceName.$methodName is not allowed for user not authenticated");
+    }
+
+    private function allowedNotAuthenticated($serviceName, $methodName)
+    {
+        //TODO allow the user to configure a white and black list of service/method that can be called
+        //even if the user is not authenticated.
+        // For now, allow any method.
+        return true;
     }
 
 }

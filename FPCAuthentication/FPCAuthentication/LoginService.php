@@ -33,17 +33,26 @@
 
 class FPCAuthentication_LoginService {
 
+    /**
+     * @var FPCAuthentication_LoginServiceConfig $config
+     */
+    private $_config;
+
+    public function __construct( $config) {
+        $this->_config = $GLOBALS[FPCAuthentication::FPC_LOGIN_CONFIG_KEY];
+    }
+
     //Basic authentication
     public function authenticate($login, $secret) {
         $result = FPCAuthentication_Result::getLoginResult($login);
 
         //get the expected secret from the given login
-        $expectedSecret = $this->getConfig()->getSecretProvider()->getSecret($login);
+        $expectedSecret = $this->_config->getSecretProvider()->getSecret($login);
 
         if ($expectedSecret == $secret) {
             //expected and provided secret match. The authentication is successful
             //retrieve the roles and update the authentication result with them
-            $roles = $this->getConfig()->getRolesProvider()->getRoles($login);
+            $roles = $this->_config->getRolesProvider()->getRoles($login);
             $result->updateOnSuccess($roles);
         }
         else {
@@ -61,13 +70,16 @@ class FPCAuthentication_LoginService {
             $result->throwException();
         }
 
-        return $this->getConfig()->getBuilder()->build($result);
+        //save the secret as common key in the session
+        $_SESSION[FPCAuthentication::FPC_COMMON_SECRET_KEY] = $secret;
+
+        return $this->_config->getBuilder()->build($result);
     }
 
 
     public function handshake($type, $data, $challenge) {
         //retrieve the handler for the given type
-        $handler = FPCAuthentication_Handler::getHandler($type, $this->getConfig());
+        $handler = FPCAuthentication_Handler::getHandler($type, $this->_config);
 
         //handle the message
         return $handler->handle($data, $challenge);
@@ -80,17 +92,7 @@ class FPCAuthentication_LoginService {
     public function logout() {
         FPCAuthentication_Result::clear();
         FPCAuthentication_HandshakeData::clear();
+        unset($_SESSION[FPCAuthentication::FPC_COMMON_SECRET_KEY]);
     }
 
-    /**
-     * @return FPCAuthentication_LoginServiceConfig
-     */
-    private function getConfig() {
-        return $GLOBALS[FPCAuthentication::FPC_LOGIN_CONFIG_KEY];
-    }
-
-    private function getChallengeSolver()
-    {
-        return $this->getConfig()->getChallengeSolver();
-    }
-}
+ }
