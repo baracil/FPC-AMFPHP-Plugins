@@ -35,14 +35,28 @@ FPCAuthentication, Bastien Aracil 2011 (femtoparsec.net)
 * Versions *
 ************
 
-V1.0  - 10/2011 current - Creation of the document.
+V1.0  - 11/2011 current - Creation of the document.
 
 
 ************
 * Overview *
 ************
 
-FPCAuthentication is an AMFPHP plugin that manages authentication of user with a login and a password. The authentication is
+FPCAuthentication is an AMFPHP plugin that manages authentication of user with a login
+and a password. The login offer two ways to authenticated, a basic and a elaborate one.
+
+The basic method is a simple call to the server with the user login and its secret value
+(generally a digest of a password) and the server grants or rejects the access according
+to these two values. This method is simple but not 100% secured if not used over a secured
+connection (a https connection) since message can be intercepted and even if a digest of
+the password is sent, this digest is the password for the server.
+
+The elaborate method is an exchange of 4 messages between the server and the client.
+The secret of the user is never sent explicitly nor a direct digest of it. This method
+allows the authentication of the user on the server but also the authentication of the
+server on the client side. Also, it provides a random password only known by the client
+and the server and only valid as long as the user does not logout. This temporary password
+can be used to send sensible data to the server without comprising the user password.
 
 *****************
 * Compatibility *
@@ -56,19 +70,99 @@ v1.0              |     v2.0
 * Installation *
 ****************
 
-The installation consists in copying to the plugin directory of AMFPHP the directory 'FPCAuthentication' at the same level than this file (not the directory including this file).
+The installation consists in copying to the plugin directory of AMFPHP the directory
+'FPCAuthentication' at the same level than this file (not the directory including this file).
 
 *****************
 * Configuration *
 *****************
 
-To work properly the plugin needs a way to check to password of the user trying to authenticate.
-This is done by setting the mandatory configuration parameter 'authenticator' with an implementation
-of the interface 'FPCAuthentication_IAuthenticator' (see below for more details).
+The plugins has several configuration parameters but only one is mandatory, all the others have
+default values that should be sufficient for most of the cases. Below is the list of the
+configuration parameters (the values in parentheses indicate if the parameter is mandatory or not
+, and which interface the parameter must implement) :
 
-The plugin has an optional configuration parameter 'builder'. This allows the customization of the
-result returned by the authentication process. By default this result is an associative array containing
-the login and the roles of the user.
+- 'secretProvider' (mandatory, FPCAuthentication_ISecretProvider) :
+This parameter is used to retrieve the user secret from its login.
+Below is a very simple example of implementation of such parameter :
+
+class SimpleSecretProvider implements FPCAuthentication_ISecretProvider {
+    /**
+     * @abstract
+     * @param string $login
+     * @return string the secret of the user with the given login. The secret is not necessarily
+     * the explicit password. The only constraint is that is should be the same thing provided
+     * by the client (an operation might then be mandatory between the user input and the call
+     * to the server).
+     */
+    function getSecret($login);
+    {
+        switch ($login) {
+          case "admin" : return "adminPassword";
+          case "user1" : return "user1Password";
+        }
+        return null;
+    }
+}
+
+Common implementation would access a database to get the secret of the user.
+
+
+
+- 'rolesProvider' (optional, FPCAuthentication_IRolesProvider) :
+This parameter is used to retrieve the roles of a user. It is used only if the
+user is successfully authenticated. Below is a simple implementation of this parameter :
+
+class SimpleRolesProvider implements FPCAuthentication_IRolesProvider {
+    /**
+     * Called only if the authentication succeed.
+     *
+     * @param $login login of the authenticated user
+     * @return array of string that defines the roles of the authenticated user
+     */
+    function getRoles($login) {
+        switch ($login) {
+            case "admin" : return array("USER_INFO_EDITOR", "ORDER_EDITOR", "INVOICE_EDITOR");
+            case "user1" : return array("USER_INFO_VIEWER", "ORDER_VIEWER");
+        }
+        return null;
+    }
+
+}
+
+Even if this parameters is optional, the developer might want to change its default behaviour
+that is send an empty array, i.e. the user has no roles.
+
+
+
+- 'builder' (optional, FPCAuthentication_IBuilder) :
+The plugin saves some data during the authentication process and these data are used to create the
+result returns by the authentication methods. The transformation of these data is done by this parameter.
+The default builder (see below) should be enough but can be modified if more information is needed.
+
+class FPCAuthentication_DefaultBuilder implements FPCAuthentication_IBuilder {
+
+    function build(FPCAuthentication_Result $result)
+    {
+        if (is_null($result)) {
+            return null
+        }
+
+        return array(
+            'login' => $result->getLogin(),
+            'authenticated' => $this->getAuthenticated(),
+            'roles' => $this->getRoles(),
+            'nbFailedAttempt' => $this->getNbFailedAttempt() );
+    }
+
+}
+
+
+
+- 'challengeProvider' (optional, FPCAuthentication_IChallengeProvider) :
+
+- 'challengeSolver' (optional, FPCAuthentication_IChallengeProvider) :
+
 
 ***********************
 * How to configure it *

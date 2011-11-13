@@ -34,7 +34,7 @@
 interface FPCAuthentication_IRolesProvider {
 
     /**
-     * @abstract Called only if the authentication succeed.
+     * Called only if the authentication succeed.
      *
      * @param $login login of the authenticated user
      * @return array of string that defines the roles of the authenticated user
