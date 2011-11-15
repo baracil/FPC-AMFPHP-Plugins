@@ -42,11 +42,6 @@ class FPC_CachedSAVoterProvider implements FPC_IServiceAccessVoterProvider
     const CACHED_SA_VOTER_SESSION_KEY = "CACHED_SA_VOTER_SESSION_KEY";
 
     /**
-     * @var array of IServiceAccessVoter
-     */
-    private $_cache;
-
-    /**
      * @var FPC_IServiceAccessVoterProvider;
      */
     private $_delegate;
@@ -77,6 +72,10 @@ class FPC_CachedSAVoterProvider implements FPC_IServiceAccessVoterProvider
 
         if (is_null($voter)) {
             $voter = $this->_delegate->getVoter($serviceObject, $serviceName, $methodName);
+            if (is_null($voter)) {
+                //create an allower to avoid recalling the delegate
+                $voter = new FPC_AlloverSAVoter();
+            }
             $this->putVoterInCache($key, $voter);
         }
 
