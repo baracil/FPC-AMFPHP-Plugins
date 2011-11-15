@@ -43,11 +43,11 @@ class FPCAuthentication_DefaultChallengeProvider implements FPCAuthentication_IC
 
     /**
      * @param $length the length of the challenge
-     * @return a BASE64 encoded raw string of $length characters.
+     * @return a raw string of $length characters.
      */
     function getChallenge()
     {
-        return base64_encode($this->randomPseudoBytes($this->_length));
+        return $this->randomPseudoBytes($this->_length);
     }
 
     private function randomPseudoBytes($length) {

@@ -81,7 +81,7 @@ class ServiceAccess
         }
 
         if (is_null($this->_user)) {
-            $this->_user = new FPC_FPCLoginServiceAccessUser("FPCLoginResult");
+            $this->_user = new FPC_FPCAuthenticationAccessUser("FPCLoginResult");
         }
 
         if (!($this->_user instanceof FPC_IServiceAccessUser)) {

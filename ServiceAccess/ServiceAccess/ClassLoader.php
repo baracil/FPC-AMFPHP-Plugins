@@ -38,5 +38,6 @@ require_once "ServiceAccessException.php";
 require_once "ServiceAccess.php";
 require_once "SessionServiceAccessUser.php";
 require_once "DefaultVoterProvider.php";
+require_once "FPCAuthenticationAccessUser.php";
 
 ?>

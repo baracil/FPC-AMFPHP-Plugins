@@ -31,7 +31,7 @@
  * Date: 06/11/11
  */
  
-class FPC_FPCLoginServiceAccessUser implements FPC_IServiceAccessUser {
+class FPC_FPCAuthenticationAccessUser implements FPC_IServiceAccessUser {
 
     private $_sessionKey;
 

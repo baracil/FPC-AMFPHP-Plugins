@@ -61,14 +61,15 @@ class FPCAuthentication {
     const FPC_COMMON_SECRET_KEY = "FPCAuthenticationCommonSecret";
 
     /**
-     * @var FPCAuthentication_LoginService
+     * @var Amfphp_Core_Common_ClassFindInfo
      */
-    private $loginService;
+    private $loginServiceClassInfo;
 
     public function __construct(array $config = null) {
 
         //hook the plugin
         $filterManager = Amfphp_Core_FilterManager::getInstance();
+        $filterManager->addFilter(Amfphp_Core_Gateway::FILTER_SERVICE_NAMES_2_CLASS_FIND_INFO, $this, "filterServiceNames2ClassFindInfo");
         $filterManager->addFilter(Amfphp_Core_Common_ServiceRouter::FILTER_SERVICE_OBJECT, $this, "filterServiceObject");
 
         //prepare the plugin default configuration
@@ -97,15 +98,18 @@ class FPCAuthentication {
         }
 
         $loginServiceConfig->validate();
+        $GLOBALS["loginServiceConfig"] = $loginServiceConfig;
 
-        $this->loginService = new FPCAuthentication_LoginService($loginServiceConfig);
+        $this->loginServiceClassInfo = new Amfphp_Core_Common_ClassFindInfo(dirname(__FILE__)."/LoginService.php","FPCAuthentication_LoginService");
+
+    }
+
+    public function filterServiceNames2ClassFindInfo($serviceNames2ClassFindInfo) {
+        $serviceNames2ClassFindInfo[self::EMULATED_SERVICE_NAME] = $this->loginServiceClassInfo;
+        return $serviceNames2ClassFindInfo;
     }
 
     public function filterServiceObject($serviceObject, $serviceName, $methodName, $parameters) {
-        if ($serviceName == self::EMULATED_SERVICE_NAME) {
-            return $this->loginService;
-        }
-
         if ($this->allowedNotAuthenticated($serviceName, $methodName)) {
             return $serviceObject;
         }

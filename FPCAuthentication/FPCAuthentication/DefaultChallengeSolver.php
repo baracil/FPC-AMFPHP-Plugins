@@ -35,11 +35,11 @@ class FPCAuthentication_DefaultChallengeSolver implements FPCAuthentication_ICha
 
     function solve($challenge, $secret)
     {
-        $str = $secret . base64_decode($challenge);
+        $str = $secret . $challenge;
         if (function_exists("openssl_digest")) {
-            return openssl_digest($str, "SHA256");
+            return openssl_digest($str, "SHA256",true);
         }
-        return hash("sha256", $str);
+        return hash("sha256", $str,true);
     }
 
 

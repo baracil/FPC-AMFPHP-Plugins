@@ -72,7 +72,7 @@ abstract class FPCAuthentication_Handler {
     /**
      * @param $data the data of the incoming message
      * @param $challenge the challenge of the incoming message
-     * @return the response to the client
+     * @return FPCAuthentication_HandshakeMessage
      */
     public function handle($data, $challenge) {
         $this->preHandle();
@@ -182,8 +182,20 @@ abstract class FPCAuthentication_Handler {
         unset($_SESSION[FPCAuthentication::FPC_COMMON_SECRET_KEY]);
     }
 
+    /**
+     * @param $type
+     * @param $data
+     * @param $challenge
+     * @param $info
+     * @return FPCAuthentication_HandshakeMessage
+     */
     private function formMessage($type, $data, $challenge, $info) {
-        return  array('type'=>$type, 'data' => $data, 'challenge' => $challenge, 'info' => $info);
+        $msg = new FPCAuthentication_HandshakeMessage();
+        $msg->type = $type;
+        $msg->data = $data;
+        $msg->challenge = $challenge;
+        $msg->info = $info;
+        return $msg;
     }
 
 

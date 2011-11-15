@@ -39,7 +39,7 @@ require_once "IChallengeProvider.php";
 require_once "IChallengeSolver.php";
 
 require_once "LoginServiceConfig.php";
-require_once "LoginException.php";
+require_once "Exception.php";
 
 require_once "handler/ClassLoader.php";
 

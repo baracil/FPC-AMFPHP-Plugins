@@ -38,8 +38,8 @@ class FPCAuthentication_LoginService {
      */
     private $_config;
 
-    public function __construct(FPCAuthentication_LoginServiceConfig $config) {
-        $this->_config = $config;
+    public function __construct() {
+        $this->_config = $GLOBALS["loginServiceConfig"];
     }
 
     //Basic authentication
@@ -78,11 +78,17 @@ class FPCAuthentication_LoginService {
 
 
     public function handshake($type, $data, $challenge) {
+        $decodedData = base64_decode($data);
+        $decodedChallenge = base64_decode($challenge);
+
         //retrieve the handler for the given type
         $handler = FPCAuthentication_Handler::getHandler($type, $this->_config);
 
         //handle the message
-        return $handler->handle($data, $challenge);
+        $msg = $handler->handle($decodedData, $decodedChallenge);
+        //encode in BASE64 the challenge before sending it over the network
+        $msg->challenge = base64_encode($msg->challenge);
+        $msg->data = base64_encode($msg->data);
     }
 
     /**
