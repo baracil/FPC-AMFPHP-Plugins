@@ -28,14 +28,19 @@
 
 /**
  * User: Bastien Aracil
- * Date: 11/11/11
+ * Date: 04/11/11
  */
+ 
+class FPCAuthentication_Exception extends Exception {
 
-require_once "HandshakeType.php";
-require_once "HandshakeData.php";
-require_once "HandshakeMessage.php";
+    var $_explicitType = "plugins.amfphp.FPCAuthentication.Exception";
 
-require_once "Handler.php";
-require_once "InvalidTypeHandler.php";
-require_once "ChallengeRequestHandler.php";
-require_once "ChallengeAnswerHandler.php";
+    public $login;
+
+    public $message;
+
+    public function __construct($message = null, $login = null) {
+        $this->message = $message;
+        $this->login = $login;
+    }
+}

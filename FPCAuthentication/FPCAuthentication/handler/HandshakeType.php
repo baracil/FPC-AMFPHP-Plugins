@@ -57,6 +57,7 @@ class FPCAuthentication_HandshakeType {
             case FPCAuthentication_HandshakeType::CHALLENGE_REQUEST : return FPCAuthentication_HandshakeType::CHALLENGE;
             case FPCAuthentication_HandshakeType::CHALLENGE : return FPCAuthentication_HandshakeType::CHALLENGE_ANSWER;
             case FPCAuthentication_HandshakeType::CHALLENGE_ANSWER : return FPCAuthentication_HandshakeType::CHALLENGE_VALIDATION;
+            case FPCAuthentication_HandshakeType::CHALLENGE_VALIDATION : return null;
             default : throw new FPCAuthentication_Exception("Invalid type : $type");
         }
     }

@@ -69,8 +69,6 @@ class FPCAuthentication_Result {
 
     private $_roles;
 
-    private $_nbFailedAttempt;
-
     public function __construct($login = null) {
         $this->initialize($login);
     }
@@ -83,7 +81,6 @@ class FPCAuthentication_Result {
         $this->_login = $login;
         $this->_authenticated = false;
         $this->_roles = array();
-        $this->_nbFailedAttempt = 0;
         return $this;
     }
 
@@ -93,7 +90,6 @@ class FPCAuthentication_Result {
     public function updateOnFailure() {
         $this->_authenticated = false;
         $this->_roles = array();
-        $this->_nbFailedAttempt++;
         return $this;
     }
 
@@ -117,11 +113,6 @@ class FPCAuthentication_Result {
         return $this->_login;
     }
 
-    public function getNbFailedAttempt()
-    {
-        return $this->_nbFailedAttempt;
-    }
-
     public function getRoles()
     {
         return $this->_roles;
@@ -131,7 +122,7 @@ class FPCAuthentication_Result {
      * @return array
      */
     public function toArray() {
-        return array('login' => $this->_login, 'authenticated' => $this->_authenticated, 'roles' => $this->_roles, 'nbFailedAttempt' => $this->_nbFailedAttempt );
+        return array('login' => $this->_login, 'authenticated' => $this->_authenticated, 'roles' => $this->_roles);
     }
 
     public function restore() {
@@ -151,7 +142,6 @@ class FPCAuthentication_Result {
     public function fromArray($data) {
         $this->_login  = isset($data['login'])?$data['login']:null;
         $this->_authenticated = isset($data['authenticated'])?$data['authenticated']:false;
-        $this->_nbFailedAttempt = isset($data['nbFailedAttempt'])?$data['nbFailedAttempt']:0;
         $this->_roles = isset($data['roles'])?$data['roles']:array();
         return $this;
     }
@@ -163,7 +153,7 @@ class FPCAuthentication_Result {
     }
 
     public function throwException() {
-        throw new FPCAuthentication_Exception("Invalid login and/or password", $this->_login, $this->_nbFailedAttempt);
+        throw new FPCAuthentication_Exception("Invalid login and/or password", $this->_login);
     }
 
 

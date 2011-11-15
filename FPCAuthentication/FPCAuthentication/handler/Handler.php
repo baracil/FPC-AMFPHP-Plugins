@@ -127,7 +127,8 @@ abstract class FPCAuthentication_Handler {
             //authentication done, send user information, clear session data and save common key
             $newInfo = $this->getConfig()->getBuilder()->build($result);
             $this->clearSessionData();
-            $_SESSION[FPCAuthentication::FPC_COMMON_SECRET_KEY] = $sessionData->getExpectedAnswer();
+            $_SESSION[FPCAuthentication::FPC_COMMON_SECRET_KEY] = $this->getConfig()->getChallengeSolver()->solve($sessionData->getExpectedAnswer(), $secret);
+            error_log(base64_encode($_SESSION[FPCAuthentication::FPC_COMMON_SECRET_KEY]));
         }
 
 

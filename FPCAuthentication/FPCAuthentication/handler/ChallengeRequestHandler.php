@@ -39,10 +39,11 @@ class FPCAuthentication_ChallengeRequestHandler extends FPCAuthentication_Handle
     public function getSessionData($data)
     {
         $this->clearSessionData();
-        $data = new FPCAuthentication_HandshakeData();
-        $data->setLogin($data);
+        $result = new FPCAuthentication_HandshakeData();
+        $result->setLogin($data);
+        $result->setExpectedType(FPCAuthentication_HandshakeType::CHALLENGE_REQUEST);
 
-        return $data;
+        return $result;
     }
 
     /**

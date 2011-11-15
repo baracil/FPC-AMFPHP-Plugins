@@ -89,6 +89,8 @@ class FPCAuthentication_LoginService {
         //encode in BASE64 the challenge before sending it over the network
         $msg->challenge = base64_encode($msg->challenge);
         $msg->data = base64_encode($msg->data);
+
+        return $msg;
     }
 
     /**
