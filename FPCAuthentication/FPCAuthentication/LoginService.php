@@ -38,8 +38,8 @@ class FPCAuthentication_LoginService {
      */
     private $_config;
 
-    public function __construct() {
-        $this->_config = $GLOBALS["loginServiceConfig"];
+    public function __construct($config = null) {
+        $this->_config = $config;
     }
 
     //Basic authentication
@@ -103,4 +103,20 @@ class FPCAuthentication_LoginService {
         unset($_SESSION[FPCAuthentication::FPC_COMMON_SECRET_KEY]);
     }
 
- }
+    /**
+     * @param \FPCAuthentication_LoginServiceConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->_config = $config;
+    }
+
+    /**
+     * @return \FPCAuthentication_LoginServiceConfig
+     */
+    public function getConfig()
+    {
+        return $this->_config;
+    }
+
+}

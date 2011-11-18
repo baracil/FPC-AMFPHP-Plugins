@@ -65,6 +65,11 @@ class FPCAuthentication {
      */
     private $loginServiceClassInfo;
 
+    /**
+     * @var FPCAuthentication_LoginServiceConfig
+     */
+    private $loginServiceConfig;
+
     public function __construct(array $config = null) {
 
         //hook the plugin
@@ -73,33 +78,31 @@ class FPCAuthentication {
         $filterManager->addFilter(Amfphp_Core_Common_ServiceRouter::FILTER_SERVICE_OBJECT, $this, "filterServiceObject");
 
         //prepare the plugin default configuration
-        $loginServiceConfig = new FPCAuthentication_LoginServiceConfig();
-        $loginServiceConfig->setDefaultBuilder(new FPCAuthentication_DefaultBuilder());
-        $loginServiceConfig->setDefaultRolesProvider(new FPCAuthentication_DefaultRolesProvider());
-        $loginServiceConfig->setDefaultChallengeSolver(new FPCAuthentication_DefaultChallengeSolver());
-        $loginServiceConfig->setDefaultChallengeProvider(new FPCAuthentication_DefaultChallengeProvider());
+        $this->loginServiceConfig = new FPCAuthentication_LoginServiceConfig();
+        $this->loginServiceConfig->setDefaultBuilder(new FPCAuthentication_DefaultBuilder());
+        $this->loginServiceConfig->setDefaultRolesProvider(new FPCAuthentication_DefaultRolesProvider());
+        $this->loginServiceConfig->setDefaultChallengeSolver(new FPCAuthentication_DefaultChallengeSolver());
+        $this->loginServiceConfig->setDefaultChallengeProvider(new FPCAuthentication_DefaultChallengeProvider());
 
         if ($config) {
             if (isset($config[self::SECRET_PROVIDER_KEY])) {
-                $loginServiceConfig->setSecretProvider($config[self::SECRET_PROVIDER_KEY]);
+                $this->loginServiceConfig->setSecretProvider($config[self::SECRET_PROVIDER_KEY]);
             }
             if (isset($config[self::ROLES_PROVIDER_KEY])) {
-                $loginServiceConfig->setRolesProvider($config[self::ROLES_PROVIDER_KEY]);
+                $this->loginServiceConfig->setRolesProvider($config[self::ROLES_PROVIDER_KEY]);
             }
             if (isset($config[self::BUILDER_KEY])) {
-                $loginServiceConfig->setBuilder($config[self::BUILDER_KEY]);
+                $this->loginServiceConfig->setBuilder($config[self::BUILDER_KEY]);
             }
             if (isset($config[self::CHALLENGE_SOLVER_KEY])) {
-                $loginServiceConfig->setBuilder($config[self::CHALLENGE_SOLVER_KEY]);
+                $this->loginServiceConfig->setBuilder($config[self::CHALLENGE_SOLVER_KEY]);
             }
             if (isset($config[self::CHALLENGE_PROVIDER_KEY])) {
-                $loginServiceConfig->setBuilder($config[self::CHALLENGE_PROVIDER_KEY]);
+                $this->loginServiceConfig->setBuilder($config[self::CHALLENGE_PROVIDER_KEY]);
             }
         }
 
-        $loginServiceConfig->validate();
-        $GLOBALS["loginServiceConfig"] = $loginServiceConfig;
-
+        $this->loginServiceConfig->validate();
         $this->loginServiceClassInfo = new Amfphp_Core_Common_ClassFindInfo(dirname(__FILE__)."/LoginService.php","FPCAuthentication_LoginService");
 
     }
@@ -110,11 +113,26 @@ class FPCAuthentication {
     }
 
     public function filterServiceObject($serviceObject, $serviceName, $methodName, $parameters) {
-        if ($this->allowedNotAuthenticated($serviceName, $methodName)) {
-            return $serviceObject;
+        $allowedNotAuthenticated = false;
+
+
+        if ($serviceName == self::EMULATED_SERVICE_NAME) {
+            $this->setConfiguration($serviceObject);
+            $allowedNotAuthenticated = true;
+        }
+        else {
+            $allowedNotAuthenticated = $this->allowedNotAuthenticated($serviceName, $methodName);
         }
 
-        throw new FPCAuthentication_Exception("Call to $serviceName.$methodName is not allowed for not authenticated user");
+        if (!$allowedNotAuthenticated && !$this->isAuthenticated()) {
+            throw new FPCAuthentication_Exception("Call to $serviceName.$methodName is not allowed for not authenticated user");
+        }
+
+        return $serviceObject;
+    }
+
+    private function setConfiguration(FPCAuthentication_LoginService $service) {
+        $service->setConfig($this->loginServiceConfig);
     }
 
     private function allowedNotAuthenticated($serviceName, $methodName)
@@ -123,6 +141,14 @@ class FPCAuthentication {
         //even if the user is not authenticated.
         // For now, allows any method.
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isAuthenticated() {
+        $result = FPCAuthentication_Result::getResult();
+        return $result->getAuthenticated();
     }
 
 }

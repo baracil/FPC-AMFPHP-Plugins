@@ -42,14 +42,19 @@ class FPCAuthentication_Result {
     public static function getLoginResult($login) {
         FPCAuthentication_Result::startSession();
 
-        $result = new FPCAuthentication_Result();
-        $result->restore();
+        $result = FPCAuthentication_Result::getResult();
 
         if ($result->getLogin() != $login) {
             $result->initialize($login);
         }
 
         return $result;
+    }
+
+    public static function getResult() {
+        FPCAuthentication_Result::startSession();
+        $result = new FPCAuthentication_Result();
+        return $result->restore();
     }
 
     public static function clear() {
@@ -125,6 +130,9 @@ class FPCAuthentication_Result {
         return array('login' => $this->_login, 'authenticated' => $this->_authenticated, 'roles' => $this->_roles);
     }
 
+    /**
+     * @return FPCAuthentication_Result
+     */
     public function restore() {
         if (!isset($_SESSION[self::FPC_LOGIN_RESULT_KEY])) {
             $this->initialize();
