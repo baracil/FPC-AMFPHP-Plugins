@@ -29,32 +29,56 @@
  */
 
 /**
- *
- * The default voter provider.
- *
- * It is a {@link FPC_ComitySAVoterProvider} that handles @rolesAllowed (see {@link FPC_ReflectionRolesSAVoterProvider}), @isCurrentUserLogin (see {@link FPC_CurrentUserLoginSAVoterProvider})
- * and @methodCheck (see {@link FPC_ReflectionMethodSAVoterProvider}) annotations.
- * By default, this provider caches the data into the SESSION. This can be changed by passing false to the constructor (useful when developing).
- *
- * see the main documentation (in {@link ServiceAccess}) for more details
+ * A {@link FPC_IServiceAccessUser} that uses the results of the FPCAuthentication plugin
+ * to get the user login and roles.
  *
  * @package FPC_AMFPHP_Plugins_ServiceAccess
  * @author Bastien Aracil
  */
-class FPC_DefaultVoterProvider extends FPC_ProxySAVoterProvider {
+class FPC_FPCAuthenticationUser implements FPC_IServiceAccessUser {
+
+    private $_sessionKey;
 
     /**
-     * @param bool $cached if true, the provider caches the voters found for a method
-     * into the SESSION
+     * @param $sessionKey the Session key used by the FPCAuthentication plugin to save its authentication results.
      */
-    public function __construct($cached = true) {
-        parent::__construct(new FPC_ComitySAVoterProvider(
-            array(
-                 new FPC_ReflectionRolesSAVoterProvider(),
-                 new FPC_ReflectionMethodSAVoterProvider(),
-                 new FPC_CurrentUserLoginSAVoterProvider())
-        ),
-        $cached);
+    public function __construct($sessionKey= "FPCAuthenticationResult") {
+        $this->_sessionKey = $sessionKey;
+    }
+
+    /**
+     * @return string the login of the user
+     */
+    function getLogin()
+    {
+        $result = $this->getFPCAuthenticationResult();
+        return is_null($result)?null:$result['login'];
+    }
+
+    /**
+     * @return array of strings of the roles given to the user
+     */
+    function getRoles()
+    {
+        $result = $this->getFPCAuthenticationResult();
+        return is_null($result)?null:$result['roles'];
+    }
+
+    /**
+     * @return array an associative array containing the FPCAuthentication plugin results
+     */
+    private function getFPCAuthenticationResult() {
+        if (session_id() == "") {
+            session_start();
+        }
+
+        $result = null;
+
+        if (isset($_SESSION[$this->_sessionKey])) {
+            $result = $_SESSION[$this->_sessionKey];
+        }
+
+        return $result;
     }
 
 }
