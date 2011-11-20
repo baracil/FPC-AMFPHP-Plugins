@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class FPC_IServiceAccessVoter</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Interface FPC_IServiceAccessVoter</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">An voter interface that grants or denies access to a service.</p>
+<p class="description"><p>Before calling the service, the voter is called with information about the user calling the service, the called service object and  the parameters of the called service. The voter should return true if the user trying to access the service is allowed to do so.</p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Bastien Aracil</li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_ServiceAccess---Providers---Voters---IServiceAccessVoter.php.html">/ServiceAccess/Providers/Voters/IServiceAccessVoter.php</a> (line <span class="field">43</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+												
+												<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#accessGranted" title="details" class="method-name">accessGranted</a>
+											(<span class="var-type"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/FPC_IServiceAccessUser.html">FPC_IServiceAccessUser</a></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$parameters</span>)
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="methodaccessGranted" id="accessGranted"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">accessGranted</span> (line <span class="line-number">53</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">return:</span> true if access is granted, false otherwise</li>
+				<li><span class="field">abstract:</span> </li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			accessGranted
+		</span>
+					(<span class="var-type"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/FPC_IServiceAccessUser.html">FPC_IServiceAccessUser</a></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$parameters</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/FPC_IServiceAccessUser.html">FPC_IServiceAccessUser</a></span>
+				<span class="var-name">$user</span><span class="var-description">: the current user information</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$parameters</span><span class="var-description">: the parameters that will be passed to the secured method</span>			</li>
+					<li>
+				<span class="var-type">$serviceObject</span>
+				<span class="var-name">$serviceObject</span><span class="var-description">: the instance of the service</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+
+	<p class="notes" id="credit">
+		Documentation generated on Sun, 20 Nov 2011 02:03:16 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class FPC_ReflectionMethodSAVoterProvider</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class FPC_ReflectionMethodSAVoterProvider</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+											<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+						
+			</div>
+	<div class="info-box-body">
+                <p class="implements">
+            Implements interfaces:
+            <ul>
+                <li><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_IServiceAccessVoterProvider.html">FPC_IServiceAccessVoterProvider</a></li>            </ul>
+        </p>
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">A provider that create a <a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_MethodSAVoter.html">FPC_MethodSAVoter</a>.</p>
+<p class="description"><p>The provider uses the annotation @checkMethod to get the name of the method  the voter need to call to grant or deny access.</p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Bastien Aracil</li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_ServiceAccess---Providers---ReflectionMethodSAVoterProvider.php.html">/ServiceAccess/Providers/ReflectionMethodSAVoterProvider.php</a> (line <span class="field">43</span>)
+		</p>
+		
+				
+		<pre><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html">FPC_AbstractReflectionSAVoterProvider</a>
+   |
+   --FPC_ReflectionMethodSAVoterProvider</pre>
+	
+			</div>
+</div>
+
+
+	<a name="sec-const-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constant Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Constants</span> (<a href="#sec-consts">details</a>)
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="const-summary">
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#DEFAULT_METHOD_TAG" title="details" class="const-name">DEFAULT_METHOD_TAG</a> = 					<span class="var-type"> &quot;checkMethod&quot;</span>
+
+				</div>
+							</div>
+		</div>
+	</div>
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+									<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																				
+												<div class="method-definition">
+											<span class="method-result">FPC_ReflectionMethodSAVoterProvider</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											([<span class="var-type"></span>&nbsp;<span class="var-name">$tag</span> = <span class="var-default">self::DEFAULT_METHOD_TAG</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html">FPC_IServiceAccessVoter</a></span>
+										<a href="#handleValues" title="details" class="method-name">handleValues</a>
+											(<span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">$serviceName</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">$methodName</span>&nbsp;<span class="var-name">$methodName</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$values</span>)
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																		<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">47</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">FPC_ReflectionMethodSAVoterProvider</span>
+		<span class="method-name">
+			__construct
+		</span>
+					([<span class="var-type"></span>&nbsp;<span class="var-name">$tag</span> = <span class="var-default">self::DEFAULT_METHOD_TAG</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$tag</span>			</li>
+				</ul>
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html#method__construct">FPC_AbstractReflectionSAVoterProvider::__construct()</a></dt>
+					</dl>
+			
+	</div>
+<a name="methodhandleValues" id="handleValues"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">handleValues</span> (line <span class="line-number">58</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">return:</span> a voter for this service/method</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html">FPC_IServiceAccessVoter</a></span>
+		<span class="method-name">
+			handleValues
+		</span>
+					(<span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">$serviceName</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">$methodName</span>&nbsp;<span class="var-name">$methodName</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$values</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$values</span><span class="var-description">: list of values after the $tag in the method comment</span>			</li>
+					<li>
+				<span class="var-type">$serviceObject</span>
+				<span class="var-name">$serviceObject</span><span class="var-description">: the object representing the service</span>			</li>
+					<li>
+				<span class="var-type">$serviceName</span>
+				<span class="var-name">$serviceName</span><span class="var-description">: the name of the service</span>			</li>
+					<li>
+				<span class="var-type">$methodName</span>
+				<span class="var-name">$methodName</span><span class="var-description">: the name of the method</span>			</li>
+				</ul>
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html#methodhandleValues">FPC_AbstractReflectionSAVoterProvider::handleValues()</a></dt>
+					</dl>
+			
+	</div>
+							<h4>Inherited Methods</h4>
+				<a name='inherited_methods'><!-- --></a>	
+									<!-- =========== Summary =========== -->
+					<p>Inherited From <span class="classname"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html">FPC_AbstractReflectionSAVoterProvider</a></span></p>
+					<blockquote>
+													<span class="method-name"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html#method__construct">FPC_AbstractReflectionSAVoterProvider::__construct()</a></span><br>
+													<span class="method-name"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html#methodgetVoter">FPC_AbstractReflectionSAVoterProvider::getVoter()</a></span><br>
+													<span class="method-name"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html#methodhandleValues">FPC_AbstractReflectionSAVoterProvider::handleValues()</a></span><br>
+											</blockquote>
+										
+		</div>
+	</div>
+
+	<a name="sec-consts"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Constants</a> (<span class="disabled">details</span>)
+						
+			
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="constDEFAULT_METHOD_TAG" id="DEFAULT_METHOD_TAG"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">DEFAULT_METHOD_TAG</span>
+			 = <span class="const-default"> &quot;checkMethod&quot;</span>
+			(line <span class="line-number">45</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	
+	
+</div>
+						
+		</div>
+	</div>
+
+	<p class="notes" id="credit">
+		Documentation generated on Sun, 20 Nov 2011 02:03:16 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class FPC_CurrentUserLoginSAVoter</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class FPC_CurrentUserLoginSAVoter</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+                <p class="implements">
+            Implements interfaces:
+            <ul>
+                <li><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html">FPC_IServiceAccessVoter</a></li>            </ul>
+        </p>
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">A voter that grants access if a given property of a the parameters is equals to the current user login.</p>
+<p class="description"><p>When called, a voter gets the $parameters of the secured method. This voter check  if a given property of one of these parameters is equal to the login of the current  authenticated user. To define which property of which parameter should be used for  the check, two parameters are used :</p><p>$index : the index of the parameter in the parameters array where the login information is.  $loginProperty : the property name of the selected parameter that holds the login.</p><p>By default, $index = 0 and $loginProperty = &quot;login&quot;</p><p>if $loginProperty is note define, then $parameters[$index] is directly used.</p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Bastien Aracil</li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_ServiceAccess---Providers---Voters---CurrentUserLoginSAVoter.php.html">/ServiceAccess/Providers/Voters/CurrentUserLoginSAVoter.php</a> (line <span class="field">54</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																				
+												<div class="method-definition">
+											<span class="method-result">FPC_CurrentUserLoginSAVoter</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											([<span class="var-type">int</span>&nbsp;<span class="var-name">$index</span> = <span class="var-default">0</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$loginProperty</span> = <span class="var-default">&quot;login&quot;</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#accessGranted" title="details" class="method-name">accessGranted</a>
+											(<span class="var-type"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/FPC_IServiceAccessUser.html">FPC_IServiceAccessUser</a></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$parameters</span>)
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">64</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">FPC_CurrentUserLoginSAVoter</span>
+		<span class="method-name">
+			__construct
+		</span>
+					([<span class="var-type">int</span>&nbsp;<span class="var-name">$index</span> = <span class="var-default">0</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$loginProperty</span> = <span class="var-default">&quot;login&quot;</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$index</span><span class="var-description">: the index of the parameters that is used for the check</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$loginProperty</span><span class="var-description">: the property of the selected parameter that holds the login</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodaccessGranted" id="accessGranted"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">accessGranted</span> (line <span class="line-number">80</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">This voter extracts from the parameters a login value and compare it to the login  of the authenticated user to grant or deny access to the method. If $loginProperty (see contructor)  is null then $parameters[$index] is used, else $parameters[$index]-&gt;${loginProperty} is used.</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> true if the extracted login is equal to the login of the authenticated user</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			accessGranted
+		</span>
+					(<span class="var-type"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/FPC_IServiceAccessUser.html">FPC_IServiceAccessUser</a></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$parameters</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/FPC_IServiceAccessUser.html">FPC_IServiceAccessUser</a></span>
+				<span class="var-name">$user</span><span class="var-description">: the current user information</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$parameters</span><span class="var-description">: the parameters that will be passed to the secured method</span>			</li>
+					<li>
+				<span class="var-type">$serviceObject</span>
+				<span class="var-name">$serviceObject</span><span class="var-description">: the instance of the service</span>			</li>
+				</ul>
+		
+				<hr class="separator" />
+		<div class="notes">Implementation of:</div>
+			<dl>
+			<dt><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html#methodaccessGranted">FPC_IServiceAccessVoter::accessGranted()</a></dt>
+					</dl>
+			
+	</div>
+						
+		</div>
+	</div>
+
+
+	<p class="notes" id="credit">
+		Documentation generated on Sun, 20 Nov 2011 02:03:16 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

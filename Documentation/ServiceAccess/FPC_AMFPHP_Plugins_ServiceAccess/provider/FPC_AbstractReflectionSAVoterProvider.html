@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class FPC_AbstractReflectionSAVoterProvider</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class FPC_AbstractReflectionSAVoterProvider</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+							<a href="#sec-descendents">Descendents</a>
+			|													<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+                <p class="implements">
+            Implements interfaces:
+            <ul>
+                <li><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_IServiceAccessVoterProvider.html">FPC_IServiceAccessVoterProvider</a></li>            </ul>
+        </p>
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Abstract class used for providers using &quot;annotations&quot;. The class extending it must set the $tag value at construction.</p>
+<p class="description"><p>The $tag value is the annotation name searched in the documentation. The $tag does not include the beginning &quot;@&quot;.</p><p>When called, the documentation of the method is searched for the $tag. If found, the values following it are sent  to the abstract method 'handleValues'. Values must be separated by a coma. For instance  <div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Some&nbsp;function&nbsp;documentation</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@MyTag</span><span class="src-doc">&nbsp;value1,&nbsp;value2,&nbsp;value3</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">aFunction</span><span class="src-sym">(</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span>...<span class="src-sym">}</span></div></li>
+</ol></div></p><p>By default, if multiple tags are present in the documentation only the first one is used, for instance :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Some&nbsp;function&nbsp;documentation</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@MyTag</span><span class="src-doc">&nbsp;value1,&nbsp;value2,&nbsp;value3</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@MyTag</span><span class="src-doc">&nbsp;value4,&nbsp;value5,&nbsp;value6</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">aFunction</span><span class="src-sym">(</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span>...<span class="src-sym">}</span></div></li>
+</ol></div></p><p>Only value1, value2 and value3 will be used. This behaviour can be changed  by setting the secondary parameter of the constructor to 'true'. Then values are merged.  So with the previous example, value1, value2, value3, value4, value5 and value6 will be used.</p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Bastien Aracil</li>
+				<li><span class="field">abstract:</span> </li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_ServiceAccess---Providers---AbstractReflectionSAVoterProvider.php.html">/ServiceAccess/Providers/AbstractReflectionSAVoterProvider.php</a> (line <span class="field">66</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+	<a name="sec-descendents"></a>
+	<div class="info-box">
+		<div class="info-box-title">Direct descendents</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+			<span class="disabled">Descendents</span>
+			|															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<table cellpadding="2" cellspacing="0" class="class-table">
+				<tr>
+					<th class="class-table-header">Class</th>
+					<th class="class-table-header">Description</th>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ComitySAVoterProvider.html">FPC_ComitySAVoterProvider</a></td>
+					<td>
+											A provider that create a <a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_ComitySAVoters.html">FPC_ComitySAVoters</a>.
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_CurrentUserLoginSAVoterProvider.html">FPC_CurrentUserLoginSAVoterProvider</a></td>
+					<td>
+											A provider that create a <a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_CurrentUserLoginSAVoter.html">FPC_CurrentUserLoginSAVoter</a>.
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionMethodSAVoterProvider.html">FPC_ReflectionMethodSAVoterProvider</a></td>
+					<td>
+											A provider that create a <a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_MethodSAVoter.html">FPC_MethodSAVoter</a>.
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionRolesSAVoterProvider.html">FPC_ReflectionRolesSAVoterProvider</a></td>
+					<td>
+											A provider that returns a <a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_RolesSAVoter.html">FPC_RolesSAVoter</a>
+										</td>
+				</tr>
+							</table>
+		</div>
+	</div>
+
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																												
+												<div class="method-definition">
+											<span class="method-result">FPC_AbstractReflectionSAVoterProvider</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											(<span class="var-type">$tag</span>&nbsp;<span class="var-name">$tag</span>, [<span class="var-type">bool</span>&nbsp;<span class="var-name">$mergeMultiple</span> = <span class="var-default">false</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html">FPC_IServiceAccessVoter</a></span>
+										<a href="#getVoter" title="details" class="method-name">getVoter</a>
+											(<span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">$serviceName</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">$methodName</span>&nbsp;<span class="var-name">$methodName</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html">FPC_IServiceAccessVoter</a></span>
+										<a href="#handleValues" title="details" class="method-name">handleValues</a>
+											(<span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">$serviceName</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">$methodName</span>&nbsp;<span class="var-name">$methodName</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$values</span>)
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+																<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">83</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">FPC_AbstractReflectionSAVoterProvider</span>
+		<span class="method-name">
+			__construct
+		</span>
+					(<span class="var-type">$tag</span>&nbsp;<span class="var-name">$tag</span>, [<span class="var-type">bool</span>&nbsp;<span class="var-name">$mergeMultiple</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$mergeMultiple</span><span class="var-description">: if true, the values of multiple occurrences of the $tag annotation will be merged.  if false, only the values of the first $tag annotation will be used</span>			</li>
+					<li>
+				<span class="var-type">$tag</span>
+				<span class="var-name">$tag</span><span class="var-description">: the annotation this provider handles without the beginning '@'</span>			</li>
+				</ul>
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ComitySAVoterProvider.html#method__construct">FPC_ComitySAVoterProvider::__construct()</a>
+							</li>
+					<li>
+				<a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_CurrentUserLoginSAVoterProvider.html#method__construct">FPC_CurrentUserLoginSAVoterProvider::__construct()</a>
+							</li>
+					<li>
+				<a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionMethodSAVoterProvider.html#method__construct">FPC_ReflectionMethodSAVoterProvider::__construct()</a>
+							</li>
+					<li>
+				<a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionRolesSAVoterProvider.html#method__construct">FPC_ReflectionRolesSAVoterProvider::__construct()</a>
+							</li>
+				</ul>
+	</div>
+<a name="methodgetVoter" id="getVoter"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">getVoter</span> (line <span class="line-number">95</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">return:</span> the voter used to determine the access right to the secured method of the given service.</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html">FPC_IServiceAccessVoter</a></span>
+		<span class="method-name">
+			getVoter
+		</span>
+					(<span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">$serviceName</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">$methodName</span>&nbsp;<span class="var-name">$methodName</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">$serviceObject</span>
+				<span class="var-name">$serviceObject</span><span class="var-description">: the instance of the service</span>			</li>
+					<li>
+				<span class="var-type">$serviceName</span>
+				<span class="var-name">$serviceName</span><span class="var-description">: the service name</span>			</li>
+					<li>
+				<span class="var-type">$methodName</span>
+				<span class="var-name">$methodName</span><span class="var-description">: the secured method name</span>			</li>
+				</ul>
+		
+				<hr class="separator" />
+		<div class="notes">Implementation of:</div>
+			<dl>
+			<dt><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_IServiceAccessVoterProvider.html#methodgetVoter">FPC_IServiceAccessVoterProvider::getVoter()</a></dt>
+					</dl>
+			
+	</div>
+<a name="methodhandleValues" id="handleValues"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">handleValues</span> (line <span class="line-number">117</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">return:</span> a voter for this service/method</li>
+				<li><span class="field">abstract:</span> </li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html">FPC_IServiceAccessVoter</a></span>
+		<span class="method-name">
+			handleValues
+		</span>
+					(<span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">$serviceName</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">$methodName</span>&nbsp;<span class="var-name">$methodName</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$values</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$values</span><span class="var-description">: list of values after the $tag in the method documentation</span>			</li>
+					<li>
+				<span class="var-type">$serviceObject</span>
+				<span class="var-name">$serviceObject</span><span class="var-description">: the object representing the service</span>			</li>
+					<li>
+				<span class="var-type">$serviceName</span>
+				<span class="var-name">$serviceName</span><span class="var-description">: the name of the service</span>			</li>
+					<li>
+				<span class="var-type">$methodName</span>
+				<span class="var-name">$methodName</span><span class="var-description">: the name of the method</span>			</li>
+				</ul>
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ComitySAVoterProvider.html#methodhandleValues">FPC_ComitySAVoterProvider::handleValues()</a>
+							</li>
+					<li>
+				<a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_CurrentUserLoginSAVoterProvider.html#methodhandleValues">FPC_CurrentUserLoginSAVoterProvider::handleValues()</a>
+							</li>
+					<li>
+				<a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionMethodSAVoterProvider.html#methodhandleValues">FPC_ReflectionMethodSAVoterProvider::handleValues()</a>
+							</li>
+					<li>
+				<a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionRolesSAVoterProvider.html#methodhandleValues">FPC_ReflectionRolesSAVoterProvider::handleValues()</a>
+							</li>
+				</ul>
+	</div>
+						
+		</div>
+	</div>
+
+
+	<p class="notes" id="credit">
+		Documentation generated on Sun, 20 Nov 2011 02:03:15 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class ServiceAccess</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class ServiceAccess</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+											<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+						
+			</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">The main class of the ServiceAccess plugin.</p>
+<p class="description"><p><strong>Overview</strong></p><p>ServiceAccess is an AMFPHP plugin that manages security access to services easily.  For instance with a minimal configuration a method can be secured like this :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@rolesAllowed</span><span class="src-doc">&nbsp;USER_WRITE,&nbsp;GROUP_WRITE</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;This&nbsp;function&nbsp;is&nbsp;allowed&nbsp;to&nbsp;users&nbsp;that&nbsp;have&nbsp;the&nbsp;role</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;USER_WRITE&nbsp;or&nbsp;GROUP_WRITE.</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">myFunction</span><span class="src-sym">(</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+</ol></div></p><p>If the access is granted, the method is called, otherwise a <a href="../FPC_AMFPHP_Plugins_ServiceAccess/ServiceAccessException.html">ServiceAccessException</a>  is thrown.</p><p><strong>Configuration</strong></p><p>The plugins has two configuration parameters all optional. Below is the list of the parameters and a description of  their value (in parentheses, the interface the parameter value must implement) :</p><p><ul><li><em>voterProvider</em> (<a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_IServiceAccessVoterProvider.html">FPC_IServiceAccessVoterProvider</a>) : The voter provider used by the plugin
+ to get the voters associated to a method. By default, the plugin uses <a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_DefaultVoterProvider.html">FPC_DefaultVoterProvider</a>.</li><li><em>userProvider</em> (<a href="../FPC_AMFPHP_Plugins_ServiceAccess/FPC_IServiceAccessUser.html">FPC_IServiceAccessUser</a>) : The user provider used by the plugin to get the
+ login and the roles of the currently authenticated user. By default, the plugin is configured to use the results
+ of the FPCAuthentication plugin with <a href="../FPC_AMFPHP_Plugins_ServiceAccess/FPC_FPCAuthenticationUser.html">FPC_FPCAuthenticationUser</a>.</li></ul></p><p>The plugins comes with two user providers and several voter providers. See the documentation of each of them for more detail :</p><p><em>User providers</em>  <ul><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/FPC_SessionServiceAccessUser.html">FPC_SessionServiceAccessUser</a></li><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/FPC_FPCAuthenticationUser.html">FPC_FPCAuthenticationUser</a></li></ul></p><p><em>Voter providers</em>  <ul><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_DefaultVoterProvider.html">FPC_DefaultVoterProvider</a></li><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionRolesSAVoterProvider.html">FPC_ReflectionRolesSAVoterProvider</a></li><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_MethodRolesSAVoterProvider.html">FPC_MethodRolesSAVoterProvider</a></li><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionMethodSAVoterProvider.html">FPC_ReflectionMethodSAVoterProvider</a></li><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_CurrentUserLoginSAVoterProvider.html">FPC_CurrentUserLoginSAVoterProvider</a></li><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/_ServiceAccess---Providers---ComitySAVoterProvider.php.html">ComitySAVoterProvider.php</a></li><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_CachedSAVoterProvider.html">FPC_CachedSAVoterProvider</a></li><li><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ProxySAVoterProvider.html">FPC_ProxySAVoterProvider</a></li></ul></p><p><strong>Behaviour of the default voter provider <a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_DefaultVoterProvider.html">FPC_DefaultVoterProvider</a></strong></p><p>By default, the plugin uses annotations in the documentation of a method (the comments of the form /** ... */)  to secure a method. The plugin handles 4 annotations that can have parameters. Below is the syntax of each of them :</p><p><ul><li><strong>@rolesAllowed ROLE[,ROLE]*</strong> : the access is granted if the current user has at least one of the listed roles ;
+<br /></li><li><strong>@isCurrentUserLogin [index[,loginProperty]]</strong> : the access is granted if the property
+               named 'loginProperty' of the 'index'th parameter of the secured method
+               is equal to the login of the current user. By default, index=0 and
+               loginProperty='login'. If 'loginProperty' is set to 'null' then the
+          	'index'th parameter is directly compared to the login of the current
+               user ;</li><li><strong>@checkMethod checkMethod</strong> : the access is granted if the method named 'checkMethod'
+               returns 'true'. The signature of the 'checkMethod' method must be :
+<div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">function&nbsp;</span><span class="src-id">myCheckMethod</span><span class="src-sym">(</span><span class="src-var">$serviceName</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$methodName</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$parameters</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id">FPC_IServiceAccessUser&nbsp;</span><span class="src-var">$user</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span>...<span class="src-sym">}</span></div></li>
+</ol></div>
+              where $serviceName, $methodName are the names of the service and
+              the secured method, $parameters the parameters of the secured method
+              as an array and $user the current user information ;</li><li><strong>@comityMode (ALL|VETO|MAJORITY)</strong> : if a mixed of the previous annotations is found
+              in the method documentation, this annotation defines how the results
+              of each of them must be combined to finally grant access. With ALL,
+              all must grant access, with VETO, only one must, with MAJORITY, the
+              majority must grant access (rarely used). By default (if the @comityMode
+              annotation is not found) VETO mode is used. For instance :
+
+ <div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;the&nbsp;next&nbsp;annotation&nbsp;can&nbsp;be&nbsp;removed&nbsp;since&nbsp;it&nbsp;is&nbsp;the&nbsp;default&nbsp;behavior</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@comityMode</span><span class="src-doc">&nbsp;VETO</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@rolesAllowed</span><span class="src-doc">&nbsp;USER_WRITE,&nbsp;GROUP_READ_ONLY</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@isCurrentUserLogin</span><span class="src-doc">&nbsp;1,&nbsp;login</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@checkMethod</span><span class="src-doc">&nbsp;complexCheck</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;The&nbsp;access&nbsp;is&nbsp;granted&nbsp;if</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;the&nbsp;current&nbsp;user&nbsp;has&nbsp;the&nbsp;role&nbsp;USER_WRITE&nbsp;or&nbsp;GROUP_READ_ONLY</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;OR</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;the&nbsp;value&nbsp;of&nbsp;$userInfo-&gt;login&nbsp;is&nbsp;equal&nbsp;to&nbsp;the&nbsp;current&nbsp;user&nbsp;login</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;OR</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;the&nbsp;method&nbsp;'complexCheck'&nbsp;returns&nbsp;true</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">myMethod1</span><span class="src-sym">(</span><span class="src-var">$dataInfo</span><span class="src-sym">,&nbsp;</span><span class="src-var">$userInfo</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span>...<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@comityMode</span><span class="src-doc">&nbsp;ALL</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@rolesAllowed</span><span class="src-doc">&nbsp;USER_WRITE,&nbsp;GROUP_READ_ONLY</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@isCurrentUserLogin</span><span class="src-doc">&nbsp;1,&nbsp;login</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@checkMethod</span><span class="src-doc">&nbsp;complexCheck</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;The&nbsp;access&nbsp;is&nbsp;granted&nbsp;if</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;the&nbsp;current&nbsp;user&nbsp;has&nbsp;the&nbsp;role&nbsp;USER_WRITE&nbsp;or&nbsp;GROUP_READ_ONLY</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;AND</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;the&nbsp;value&nbsp;of&nbsp;$userInfo-&gt;login&nbsp;is&nbsp;equal&nbsp;to&nbsp;the&nbsp;current&nbsp;user&nbsp;login</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;AND</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;the&nbsp;method&nbsp;'complexCheck'&nbsp;returns&nbsp;true</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">myMethod2</span><span class="src-sym">(</span><span class="src-var">$dataInfo</span><span class="src-sym">,&nbsp;</span><span class="src-var">$userInfo</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span>...<span class="src-sym">}</span></div></li>
+</ol></div></li></ul></p><p>If an annotation is repeated in the method documentation, then only the first one  is used except for the @rolesAllowed annotation for which the listed roles are merged, i.e. :  <div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@rolesAllowed</span><span class="src-doc">&nbsp;ROLE1,&nbsp;ROLE2</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@rolesAllowed</span><span class="src-doc">&nbsp;ROLE3,&nbsp;ROLE4</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;*/</span></div></li>
+</ol></div>   is equivalent to  <div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@rolesAllowed</span><span class="src-doc">&nbsp;ROLE1,&nbsp;ROLE2,&nbsp;ROLE3,&nbsp;ROLE4</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;*/</span></div></li>
+</ol></div></p><p><strong>How it works and how to customize it</strong></p><p>Here is a quick description of how it works. I will not detailed much since the default  behavior should be enough. But if you want to add your own annotations for instance,  then you should read the following and also the documentation in the code.</p><p>The plugin uses voters to grant or denied access to a method. A voter must implements  the interface 'FPC_IServiceAccessVoter' that defines one function : 'accessGranted'.</p><p>Before calling a secured method, the plugin gets the voter associated with  the secured method and it calls its function 'accessGranted'.  If the function returns true, access to the secured method is granted, otherwise access is denied.</p><p>Now, the plugin uses a voter-provider to get the voter of a secured method.  A voter-provider must implements the interface 'FPC_IServiceAccessVoterProvider'  that defines one function : 'getVoter'. The plugin calls the 'getVoter' function  with the information about the service and secured method. The function 'getVoter'  returns a 'voter' that then will be used to grant or to deny access  to the secured method as described previously.</p><p>By default, the voter-provider used by the plugin handles annotations  in the method documentation has described in the previous section  (see the class <a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_DefaultVoterProvider.html">FPC_DefaultVoterProvider</a>). You can change the default  voter-provider with the configuration parameter 'voterProvider'.</p><p>If you want to create a voter-provider that provides an existing voter  you must implements the interface '<a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_IServiceAccessVoterProvider.html">FPC_IServiceAccessVoterProvider</a>'.  On the other hand if you want to create your own voter, then you must  implements the interface '<a href="../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html">FPC_IServiceAccessVoter</a>' and also the voter-provider  for this voter.</p><p><strong>Example of creation of a voter-provider</strong></p><p>Let's create a voter-provider that will provide a FPC_MethodSAVoter  that will use the method with the name of the secured method append  with 'Check'. For instance, if the called method is 'getUser' then  the method called by the voter will be 'getUserCheck'.</p><p>So let's implements the 'FPC_IServiceAccessVoterProvider',  here is the skeleton of a voter-provider</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">FPC_AppendMethodSAVoterProvider&nbsp;</span><span class="src-key">implements&nbsp;</span><span class="src-id">FPC_IServiceAccessVoterProvider&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$serviceObject&nbsp;</span><span class="src-doc">the&nbsp;instance&nbsp;of&nbsp;the&nbsp;service</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$serviceName&nbsp;</span><span class="src-doc">the&nbsp;service&nbsp;name</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$methodName&nbsp;</span><span class="src-doc">the&nbsp;secured&nbsp;method&nbsp;name</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@return&nbsp;</span><span class="src-doc-type">FPC_IServiceAccessVoter&nbsp;</span><span class="src-doc">the&nbsp;voter&nbsp;used&nbsp;to&nbsp;determine&nbsp;the&nbsp;access</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;right&nbsp;to&nbsp;the&nbsp;secured&nbsp;method&nbsp;of&nbsp;the&nbsp;given&nbsp;service.</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">function&nbsp;</span><span class="src-id">getVoter</span><span class="src-sym">(</span><span class="src-var">$serviceObject</span><span class="src-sym">,&nbsp;</span><span class="src-var">$serviceName</span><span class="src-sym">,&nbsp;</span><span class="src-var">$methodName</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//&nbsp;TODO:&nbsp;Implement&nbsp;getVoter()&nbsp;method.</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;<span class="src-php">?&gt;</span></div></li>
+</ol></div></p><p>Let's have a look at the FPC_MethodSAVoter constructor :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">String&nbsp;</span><span class="src-doc-var">$serviceName&nbsp;</span><span class="src-doc">the&nbsp;name&nbsp;of&nbsp;the&nbsp;service</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">String&nbsp;</span><span class="src-doc-var">$methodName&nbsp;</span><span class="src-doc">the&nbsp;name&nbsp;of&nbsp;the&nbsp;secured&nbsp;method</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">String&nbsp;</span><span class="src-doc-var">$checkMethodName&nbsp;</span><span class="src-doc">the&nbsp;name&nbsp;of&nbsp;the&nbsp;method</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;will&nbsp;be&nbsp;called&nbsp;to&nbsp;determine&nbsp;the&nbsp;access&nbsp;right</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">bool&nbsp;</span><span class="src-doc-var">$grantedIfNoMethod&nbsp;</span><span class="src-doc">the&nbsp;value&nbsp;return</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;the&nbsp;checkMethod&nbsp;is&nbsp;not&nbsp;found&nbsp;(false&nbsp;by&nbsp;default)</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><a href="../FPC_AMFPHP_Plugins_ServiceAccess/ServiceAccess.html#method__construct">__construct</a><span class="src-sym">(</span><span class="src-var">$serviceName</span><span class="src-sym">,&nbsp;</span><span class="src-var">$methodName</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$checkMethodName</span><span class="src-sym">,&nbsp;</span><span class="src-var">$grantedIfNoMethod&nbsp;</span>=&nbsp;<span class="src-id">false</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span>...<span class="src-sym">}</span></div></li>
+</ol></div></p><p>We have the first two parameters from the provider and we will set to 'true'  the last parameter (access will be granted if we do not defined the checking method).  So we need the value of $checkMethodName. Let's implements 'getVoter()' :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">FPC_AppendMethodSAVoterProvider&nbsp;</span><span class="src-key">implements&nbsp;</span><span class="src-id">FPC_IServiceAccessVoterProvider&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$serviceObject&nbsp;</span><span class="src-doc">the&nbsp;instance&nbsp;of&nbsp;the&nbsp;service</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$serviceName&nbsp;</span><span class="src-doc">the&nbsp;service&nbsp;name</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$methodName&nbsp;</span><span class="src-doc">the&nbsp;secured&nbsp;method&nbsp;name</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@return&nbsp;</span><span class="src-doc-type">FPC_IServiceAccessVoter&nbsp;</span><span class="src-doc">the&nbsp;voter&nbsp;used&nbsp;to&nbsp;determine</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;access&nbsp;right&nbsp;to&nbsp;the&nbsp;secured&nbsp;method&nbsp;of&nbsp;the&nbsp;given&nbsp;service.</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">function&nbsp;</span><span class="src-id">getVoter</span><span class="src-sym">(</span><span class="src-var">$serviceObject</span><span class="src-sym">,&nbsp;</span><span class="src-var">$serviceName</span><span class="src-sym">,&nbsp;</span><span class="src-var">$methodName</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-key">new&nbsp;</span><span class="src-id"><a href="../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_MethodSAVoter.html">FPC_MethodSAVoter</a></span><span class="src-sym">(</span><span class="src-var">$serviceName</span><span class="src-sym">,&nbsp;</span><span class="src-var">$methodName</span><span class="src-sym">,&nbsp;</span><span class="src-str">&quot;</span><span class="src-str">${<span class="src-var">$methodName</span><span class="src-sym">}</span>Check</span><span class="src-str">&quot;</span><span class="src-sym">,&nbsp;</span><span class="src-id">true</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-php">?&gt;</span></div></li>
+</ol></div></p><p>That's it. Now, to use this voter-provider with the plugin just set the configuration property 'voterProvider'  with this voter-provider :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-var">$serviceAccessConfig</span><span class="src-sym">[</span><span class="src-str">'voterProvider'</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">FPC_AppendMethodSAVoterProvider</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+</ol></div></p><p>By doing so you will only be able to use this mechanism to check access to secured method.  If you also want to use the @rolesAllowed annotation or other provider you need  to use a FPC_ComitySAVoterProvider like this :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-var">$serviceAccessConfig</span><span class="src-sym">[</span><span class="src-str">'voterProvider'</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id"><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ComitySAVoterProvider.html">FPC_ComitySAVoterProvider</a></span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id"><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionRolesSAVoterProvider.html">FPC_ReflectionRolesSAVoterProvider</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">FPC_AppendMethodSAVoterProvider</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">))</span><span class="src-sym">;</span></div></li>
+</ol></div></p><p>Moreover, after debugging the provider, it might be useful in production to cache  the voters. You can use a '<a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_CachedSAVoterProvider.html">FPC_CachedSAVoterProvider</a>' like this :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-var">$notCachedProvider&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id"><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ComitySAVoterProvider.html">FPC_ComitySAVoterProvider</a></span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id"><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionRolesSAVoterProvider.html">FPC_ReflectionRolesSAVoterProvider</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">FPC_AppendMethodSAVoterProvider</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">))</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-var">$serviceAccessConfig</span><span class="src-sym">[</span><span class="src-str">'voterProvider'</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id"><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_CachedSAVoterProvider.html">FPC_CachedSAVoterProvider</a></span><span class="src-sym">(</span><span class="src-var">$notCachedProvider</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+</ol></div></p><p><strong>Example of creation of a voter and its provider</strong></p><p>Let's create a voter and a provider that will allow something like this :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-tag">@rolesDenied</span><span class="src-doc">&nbsp;USER_WRITE,&nbsp;GROUP_WRITE</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;users&nbsp;with&nbsp;the&nbsp;role&nbsp;USER_WRITE&nbsp;or&nbsp;GROUP_WILL&nbsp;are&nbsp;not&nbsp;allowed&nbsp;to&nbsp;call&nbsp;this&nbsp;method.</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">securedMethod</span><span class="src-sym">(</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span>...<span class="src-sym">}</span></div></li>
+</ol></div></p><p>So, first let's create a voter skeleton :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">DeniedRolesSAVoter&nbsp;</span><span class="src-key">implements&nbsp;</span><span class="src-id">FPC_IServiceAccessVoter&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">FPC_IServiceAccessUser&nbsp;</span><span class="src-doc-var">$user&nbsp;</span><span class="src-doc">the&nbsp;current&nbsp;user&nbsp;information</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$serviceObject&nbsp;</span><span class="src-doc">the&nbsp;instance&nbsp;of&nbsp;the&nbsp;service</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">array&nbsp;</span><span class="src-doc-var">$parameters&nbsp;</span><span class="src-doc">the&nbsp;parameters&nbsp;that&nbsp;will&nbsp;be&nbsp;passed&nbsp;to&nbsp;the&nbsp;secured&nbsp;method</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@return&nbsp;</span><span class="src-doc-type">bool&nbsp;</span><span class="src-doc">true&nbsp;if&nbsp;access&nbsp;is&nbsp;granted,&nbsp;false&nbsp;otherwise</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">function&nbsp;</span><span class="src-id">accessGranted</span><span class="src-sym">(</span><span class="src-id">FPC_IServiceAccessUser&nbsp;</span><span class="src-var">$user</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$serviceObject</span><span class="src-sym">,&nbsp;</span><span class="src-key">array&nbsp;</span><span class="src-var">$parameters</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//&nbsp;TODO:&nbsp;Implement&nbsp;accessGranted()&nbsp;method.</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-php">?&gt;</span></div></li>
+</ol></div></p><p>We need an array of denied roles. It will be provided by the voter-provider since it depends  on the secured method only. So this will be a property of the voter set at construction :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">DeniedRolesSAVoter&nbsp;</span><span class="src-key">implements&nbsp;</span><span class="src-id">FPC_IServiceAccessVoter&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">private&nbsp;</span><span class="src-var">$_deniedRoles</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">__construct</span><span class="src-sym">(</span><span class="src-key">array&nbsp;</span><span class="src-var">$deniedRoles</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//we&nbsp;could&nbsp;create&nbsp;an&nbsp;associative&nbsp;array&nbsp;to&nbsp;avoid&nbsp;the&nbsp;double&nbsp;loop</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//in&nbsp;the&nbsp;accessGranted&nbsp;method&nbsp;but&nbsp;let's&nbsp;keep&nbsp;things&nbsp;simple</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">_deniedRoles&nbsp;</span>=&nbsp;<span class="src-var">$deniedRoles</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-php">?&gt;</span></div></li>
+</ol></div></p><p>Not let's implements the accessGranted method :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">DeniedRolesSAVoter&nbsp;</span><span class="src-key">implements&nbsp;</span><span class="src-id">FPC_IServiceAccessVoter&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">function&nbsp;</span><span class="src-id">accessGranted</span><span class="src-sym">(</span><span class="src-id">FPC_IServiceAccessUser&nbsp;</span><span class="src-var">$user</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$serviceObject</span><span class="src-sym">,&nbsp;</span><span class="src-key">array&nbsp;</span><span class="src-var">$parameters</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$userRoles&nbsp;</span>=&nbsp;<span class="src-var">$user</span><span class="src-sym">-&gt;</span><span class="src-id">getRoles</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">foreach&nbsp;</span><span class="src-sym">(</span><span class="src-var">$userRoles&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$userRole</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">foreach&nbsp;</span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">_deniedRoles&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$deniedRole</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if&nbsp;</span><span class="src-sym">(</span><span class="src-var">$userRole&nbsp;</span>===&nbsp;<span class="src-var">$deniedRole</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-id">false</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-id">true</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;<span class="src-php">?&gt;</span></div></li>
+</ol></div></p><p>Ok, we are done with the voter, let's create the provider.  Since this is a provider that will use annotations, it might be useful to extends  the abstract class '<a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html">FPC_AbstractReflectionSAVoterProvider</a>' :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">DeniedRolesSAVoterProvider&nbsp;</span><span class="src-key">extends&nbsp;</span><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html">FPC_AbstractReflectionSAVoterProvider</a>&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">__construct</span><span class="src-sym">(</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id">parent</span><span class="src-sym">::</span><span class="src-id">__construct</span><span class="src-sym">(</span><span class="src-str">&quot;rolesDenied&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$serviceObject&nbsp;</span><span class="src-doc">the&nbsp;object&nbsp;representing&nbsp;the&nbsp;service</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$serviceName&nbsp;</span><span class="src-doc">the&nbsp;name&nbsp;of&nbsp;the&nbsp;service</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$methodName&nbsp;</span><span class="src-doc">the&nbsp;name&nbsp;of&nbsp;the&nbsp;method</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">array&nbsp;</span><span class="src-doc-var">$values&nbsp;</span><span class="src-doc">list&nbsp;of&nbsp;values&nbsp;after&nbsp;the&nbsp;$tag&nbsp;in&nbsp;the&nbsp;method&nbsp;comment</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@return&nbsp;</span><span class="src-doc-type">FPC_IServiceAccessVoter&nbsp;</span><span class="src-doc">a&nbsp;voter&nbsp;for&nbsp;this&nbsp;service/method</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">protected&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">handleValues</span><span class="src-sym">(</span><span class="src-var">$serviceObject</span><span class="src-sym">,&nbsp;</span><span class="src-var">$serviceName</span><span class="src-sym">,&nbsp;</span><span class="src-var">$methodName</span><span class="src-sym">,&nbsp;</span><span class="src-key">array&nbsp;</span><span class="src-var">$values</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//&nbsp;TODO:&nbsp;Implement&nbsp;handleValues()&nbsp;method.</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+</ol></div></p><p>At construction we have to define the annotation tag, <a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html">FPC_AbstractReflectionSAVoterProvider</a>  will then do all the work (parsing the documentation) and then call the abstract method 'handleValues'.  The parameters $values of the 'handleValues' method are the roles listed after the @rolesDenied annotation.  So let's finish the provider :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">DeniedRolesSAVoterProvider&nbsp;</span><span class="src-key">extends&nbsp;</span><a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_AbstractReflectionSAVoterProvider.html">FPC_AbstractReflectionSAVoterProvider</a>&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">__construct</span><span class="src-sym">(</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id">parent</span><span class="src-sym">::</span><span class="src-id">__construct</span><span class="src-sym">(</span><span class="src-str">&quot;rolesDenied&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$serviceObject&nbsp;</span><span class="src-doc">the&nbsp;object&nbsp;representing&nbsp;the&nbsp;service</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$serviceName&nbsp;</span><span class="src-doc">the&nbsp;name&nbsp;of&nbsp;the&nbsp;service</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$methodName&nbsp;</span><span class="src-doc">the&nbsp;name&nbsp;of&nbsp;the&nbsp;method</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">array&nbsp;</span><span class="src-doc-var">$values&nbsp;</span><span class="src-doc">list&nbsp;of&nbsp;values&nbsp;after&nbsp;the&nbsp;$tag&nbsp;in&nbsp;the&nbsp;method&nbsp;comment</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@return&nbsp;</span><span class="src-doc-type">FPC_IServiceAccessVoter&nbsp;</span><span class="src-doc">a&nbsp;voter&nbsp;for&nbsp;this&nbsp;service/method</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">protected&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">handleValues</span><span class="src-sym">(</span><span class="src-var">$serviceObject</span><span class="src-sym">,&nbsp;</span><span class="src-var">$serviceName</span><span class="src-sym">,&nbsp;</span><span class="src-var">$methodName</span><span class="src-sym">,&nbsp;</span><span class="src-key">array&nbsp;</span><span class="src-var">$values</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if&nbsp;</span><span class="src-sym">(</span><span class="src-id">count</span><span class="src-sym">(</span><span class="src-var">$values</span><span class="src-sym">)&nbsp;</span>&gt;&nbsp;<span class="src-num">0</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-key">new&nbsp;</span><span class="src-id">DeniedRolesSAVoter</span><span class="src-sym">(</span><span class="src-var">$values</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//no&nbsp;denied&nbsp;roles,&nbsp;so&nbsp;return&nbsp;a&nbsp;voter&nbsp;that&nbsp;always&nbsp;grants&nbsp;access.</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-key">new&nbsp;</span><a href="../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_AlloverSAVoter.html">FPC_AlloverSAVoter</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-php">?&gt;</span></div></li>
+</ol></div></p><p>And that's it.</p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Bastien Aracil</li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_ServiceAccess---ServiceAccess.php.html">/ServiceAccess/ServiceAccess.php</a> (line <span class="field">459</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+	<a name="sec-const-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constant Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Constants</span> (<a href="#sec-consts">details</a>)
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="const-summary">
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#CONFIG_USER_KEY" title="details" class="const-name">CONFIG_USER_KEY</a> = 					<span class="var-type"> &quot;userProvider&quot;</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#CONFIG_VOTER_PROVIDER_KEY" title="details" class="const-name">CONFIG_VOTER_PROVIDER_KEY</a> = 					<span class="var-type"> &quot;voterProvider&quot;</span>
+
+				</div>
+							</div>
+		</div>
+	</div>
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+									<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																				
+												<div class="method-definition">
+											<span class="method-result">ServiceAccess</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											([<span class="var-type"></span>&nbsp;<span class="var-name">$config</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#filterServiceObject" title="details" class="method-name">filterServiceObject</a>
+											(<span class="var-type">Object</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">String</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">String</span>&nbsp;<span class="var-name">$methodName</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$parameters</span>)
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																		<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">488</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Constructor of the plugin</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">ServiceAccess</span>
+		<span class="method-name">
+			__construct
+		</span>
+					([<span class="var-type"></span>&nbsp;<span class="var-name">$config</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$config</span><span class="var-description">: optional key/value pairs in an associative array. Used to override default configuration values.</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodfilterServiceObject" id="filterServiceObject"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">filterServiceObject</span> (line <span class="line-number">540</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Plugin hook. Called when the service object is created, just before the method call.</p>
+<p class="description"><p>From the $serviceName and the $methodName values, the plugin uses the  <a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_IServiceAccessVoterProvider.html">FPC_IServiceAccessVoterProvider</a> provided at configuration to find  the appropriate voter (see <a href="../FPC_AMFPHP_Plugins_ServiceAccess/voter/FPC_IServiceAccessVoter.html">FPC_IServiceAccessVoter</a>). This voter is  then used to determine the access status of the user. if the access is denied  a <a href="../FPC_AMFPHP_Plugins_ServiceAccess/ServiceAccessException.html">ServiceAccessException</a> is thrown else this method simply returns.</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			filterServiceObject
+		</span>
+					(<span class="var-type">Object</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">String</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">String</span>&nbsp;<span class="var-name">$methodName</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$parameters</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">Object</span>
+				<span class="var-name">$serviceObject</span><span class="var-description">: the instance of the service names $serviceName</span>			</li>
+					<li>
+				<span class="var-type">String</span>
+				<span class="var-name">$serviceName</span><span class="var-description">: the name of the service</span>			</li>
+					<li>
+				<span class="var-type">String</span>
+				<span class="var-name">$methodName</span><span class="var-description">: the name of the method of the service</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$parameters</span><span class="var-description">: the parameters of the called method as array</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+	<a name="sec-consts"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Constants</a> (<span class="disabled">details</span>)
+						
+			
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="constCONFIG_USER_KEY" id="CONFIG_USER_KEY"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">CONFIG_USER_KEY</span>
+			 = <span class="const-default"> &quot;userProvider&quot;</span>
+			(line <span class="line-number">470</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">The key used to get from the configuration the <a href="../FPC_AMFPHP_Plugins_ServiceAccess/FPC_IServiceAccessUser.html">FPC_IServiceAccessUser</a> used by the plugin</p>
+	
+	
+</div>
+<a name="constCONFIG_VOTER_PROVIDER_KEY" id="CONFIG_VOTER_PROVIDER_KEY"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">CONFIG_VOTER_PROVIDER_KEY</span>
+			 = <span class="const-default"> &quot;voterProvider&quot;</span>
+			(line <span class="line-number">465</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">The key used to get from the configuration the <a href="../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_IServiceAccessVoterProvider.html">FPC_IServiceAccessVoterProvider</a> used by the plugin</p>
+	
+	
+</div>
+						
+		</div>
+	</div>
+
+	<p class="notes" id="credit">
+		Documentation generated on Sun, 20 Nov 2011 02:03:16 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>
