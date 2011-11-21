@@ -27,12 +27,15 @@
         </p>
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">A voter that uses a method to get the access status of the service.</p>
-<p class="description"><p>This voter needs the following parameters (set at construction):</p><p>$serviceName : the name of the service the user is accessing to  $methodName : the name of the method the user is accessing to  $checkMethodName : the name of the method that will be used to check access to the service</p><p>When the method accessGranted is called, this voter call the $checkMethodName of the serviceObject with the given parameters :</p><p>$serviceName (from this voter)  $methodName (from this voter)  $user (from accessGranted method parameters)  $parameters (from accessGranted method parameters)</p><p>Thus, the signature of the $checkMethodName should be :</p><p></p></p>
+<p class="description"><p>This voter needs the following parameters (set at construction):</p><p>$serviceName : the name of the service the user is accessing to  $methodName : the name of the method the user is accessing to  $checkMethodName : the name of the method that will be used to check access to the service</p><p>When the method accessGranted is called, this voter call the $checkMethodName of the serviceObject with the given parameters :</p><p>$serviceName (from this voter)  $methodName (from this voter)  $user (from accessGranted method parameters)  $parameters (from accessGranted method parameters)</p><p>Thus, the signature of the $checkMethodName should be :</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">checkMethod</span><span class="src-sym">(</span><span class="src-var">$serviceName</span><span class="src-sym">,&nbsp;</span><span class="src-var">$methodName</span><span class="src-sym">,&nbsp;</span><span class="src-var">$user</span><span class="src-sym">,&nbsp;</span><span class="src-var">$parameters</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-comm">//do&nbsp;some&nbsp;checking&nbsp;and&nbsp;return&nbsp;true&nbsp;or&nbsp;false</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+</ol></div></p><p>the result of the method is returned by this voter.  If the $checkMethod does not exists, the access is denied</p><p>see : <ul><li><a href="../../FPC_AMFPHP_Plugins_ServiceAccess/provider/FPC_ReflectionMethodSAVoterProvider.html">FPC_ReflectionMethodSAVoterProvider</a></li></ul></p></p>
 	<ul class="tags">
 				<li><span class="field">author:</span> Bastien Aracil</li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_ServiceAccess---Providers---Voters---MethodSAVoter.php.html">/ServiceAccess/Providers/Voters/MethodSAVoter.php</a> (line <span class="field">67</span>)
+			Located in <a class="field" href="_ServiceAccess---Providers---Voters---MethodSAVoter.php.html">/ServiceAccess/Providers/Voters/MethodSAVoter.php</a> (line <span class="field">68</span>)
 		</p>
 		
 				
@@ -84,7 +87,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">83</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">84</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -121,7 +124,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">accessGranted</span> (line <span class="line-number">90</span>)
+		<span class="method-title">accessGranted</span> (line <span class="line-number">91</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -159,7 +162,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 20 Nov 2011 02:03:16 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Mon, 21 Nov 2011 02:39:40 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
