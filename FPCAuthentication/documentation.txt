@@ -83,8 +83,8 @@ configuration parameters (the values in parentheses indicate if the parameter is
 , and which interface the parameter must implement) :
 
 - 'secretProvider' (mandatory, FPCAuthentication_ISecretProvider) :
-This parameter is used to retrieve the user secret from its login.
-Below is a very simple example of implementation of such parameter :
+This parameter is used to retrieve the user secret from his login.
+Below is a very simple implementation of such parameter :
 
 class SimpleSecretProvider implements FPCAuthentication_ISecretProvider {
     /**
@@ -105,8 +105,7 @@ class SimpleSecretProvider implements FPCAuthentication_ISecretProvider {
     }
 }
 
-Common implementation would access a database to get the secret of the user.
-
+Common implementations would access a database to get the secret of the user.
 
 
 - 'rolesProvider' (optional, FPCAuthentication_IRolesProvider) :
@@ -131,7 +130,7 @@ class SimpleRolesProvider implements FPCAuthentication_IRolesProvider {
 }
 
 Even if this parameters is optional, the developer might want to change its default behaviour
-that is send an empty array, i.e. the user has no roles.
+that is tp send an empty array, i.e. the user has no roles.
 
 
 
@@ -168,4 +167,4 @@ This plugin is designed to easily work with the ServiceAccess plugin. In fact, i
 ServiceAccess will work out-of-the-box, no configuration will be needed for it and you will be able
 to use annotations to secure your services.
 
-TO COMPLETE
+TO BE COMPLETED
