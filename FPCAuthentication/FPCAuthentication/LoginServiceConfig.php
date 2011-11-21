@@ -82,6 +82,16 @@ class FPCAuthentication_LoginServiceConfig {
      */
     private $_defaultChallengeProvider;
 
+    /**
+     * Validate the configuration
+     *
+     * <ul>
+     *  <li> checks that mandatory parameters are not null </li>
+     *  <li> initializes optional parameters not set with default values </li>
+     * </ul>
+     *
+     * @return void
+     */
     public function validate() {
         $this->_secretProvider = $this->validateProperty($this->_secretProvider, null, FPCAuthentication::SECRET_PROVIDER_KEY, "FPCAuthentication_ISecretProvider");
         $this->_rolesProvider = $this->validateProperty($this->_rolesProvider, $this->_defaultRolesProvider, FPCAuthentication::ROLES_PROVIDER_KEY, "FPCAuthentication_IRolesProvider");

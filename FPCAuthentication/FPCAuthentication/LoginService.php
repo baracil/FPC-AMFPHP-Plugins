@@ -48,8 +48,8 @@ class FPCAuthentication_LoginService {
     }
 
     /**
-     * The direct method for authentication. Uses the login and a secret of a user
-     * to identify and to authenticate it.
+     * The method for direct authentication. Uses the login and a secret of a user
+     * to identify and to authenticate him.
      *
      * @param $login the login of the user trying to authenticated
      * @param $secret the secret of the user trying to authenticated
