@@ -1,34 +1,38 @@
 <?php
-/*
-    Copyright (c) 2011, Bastien Aracil
-    All rights reserved.
-    New BSD license. See http://en.wikipedia.org/wiki/Bsd_license
-
-    Redistribution and use in source and binary forms, with or without
-    modification, are permitted provided that the following conditions are met:
-       * Redistributions of source code must retain the above copyright
-         notice, this list of conditions and the following disclaimer.
-       * Redistributions in binary form must reproduce the above copyright
-         notice, this list of conditions and the following disclaimer in the
-         documentation and/or other materials provided with the distribution.
-       * The name of Bastien Aracil may not be used to endorse or promote products
-         derived from this software without specific prior written permission.
-
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    DISCLAIMED. IN NO EVENT SHALL BASTIEN ARACIL BE LIABLE FOR ANY
-    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+/**
+ *   @copyright Copyright (c) 2011, Bastien Aracil
+ *   All rights reserved.
+ *   New BSD license. See http://en.wikipedia.org/wiki/Bsd_license
+ *
+ *   Redistribution and use in source and binary forms, with or without
+ *   modification, are permitted provided that the following conditions are met:
+ *      * Redistributions of source code must retain the above copyright
+ *        notice, this list of conditions and the following disclaimer.
+ *      * Redistributions in binary form must reproduce the above copyright
+ *        notice, this list of conditions and the following disclaimer in the
+ *        documentation and/or other materials provided with the distribution.
+ *      * The name of Bastien Aracil may not be used to endorse or promote products
+ *        derived from this software without specific prior written permission.
+ *
+ *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ *   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ *   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ *   DISCLAIMED. IN NO EVENT SHALL BASTIEN ARACIL BE LIABLE FOR ANY
+ *   DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ *   (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ *   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *   @package FPC_AMFPHP_Plugins_FPCAuthentication
+ */
 
 /**
- * User: Bastien Aracil
- * Date: 04/11/11
+ *  Configuration data for {@link FPCAuthentication_LoginService}
+ *
+ *  @package FPC_AMFPHP_Plugins_FPCAuthentication
+ *  @author Bastien Aracil
  */
 class FPCAuthentication_LoginServiceConfig {
 
@@ -99,7 +103,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @param \FPCAuthentication_IBuilder $builder
+     * Set the builder for {@link FPCAuthentication_LoginService}
+     *
+     * @param FPCAuthentication_IBuilder $builder
      */
     public function setBuilder($builder)
     {
@@ -107,7 +113,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @return \FPCAuthentication_IBuilder
+     * The result builder for {@link FPCAuthentication_LoginService}
+     *
+     * @return FPCAuthentication_IBuilder
      */
     public function getBuilder()
     {
@@ -115,7 +123,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @param \FPCAuthentication_IBuilder $defaultBuilder
+     * Set the default builder for {@link FPCAuthentication_LoginService}
+     *
+     * @param FPCAuthentication_IBuilder $defaultBuilder
      */
     public function setDefaultBuilder($defaultBuilder)
     {
@@ -123,7 +133,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @param \FPCAuthentication_IRolesProvider $defaultRolesProvider
+     * Set the default roles provider for {@link FPCAuthentication_LoginService}
+     *
+     * @param FPCAuthentication_IRolesProvider $defaultRolesProvider
      */
     public function setDefaultRolesProvider($defaultRolesProvider)
     {
@@ -131,7 +143,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @param \FPCAuthentication_IRolesProvider $rolesProvider
+     * Set the roles provider for {@link FPCAuthentication_LoginService}
+     *
+     * @param FPCAuthentication_IRolesProvider $rolesProvider
      */
     public function setRolesProvider($rolesProvider)
     {
@@ -139,7 +153,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @return \FPCAuthentication_IRolesProvider
+     * The role provider for {@link FPCAuthentication_LoginService}
+     *
+     * @return FPCAuthentication_IRolesProvider
      */
     public function getRolesProvider()
     {
@@ -147,7 +163,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @param \FPCAuthentication_ISecretProvider $secretProvider
+     * The secret provider for {@link FPCAuthentication_LoginService}
+     * 
+     * @param FPCAuthentication_ISecretProvider $secretProvider
      */
     public function setSecretProvider($secretProvider)
     {
@@ -155,7 +173,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @return \FPCAuthentication_ISecretProvider
+     * The secret provider for {@link FPCAuthentication_LoginService}
+     *
+     * @return FPCAuthentication_ISecretProvider
      */
     public function getSecretProvider()
     {
@@ -163,7 +183,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @param \FPCAuthentication_IChallengeSolver $defaultChallengeSolver
+     * Set the default challenge solver for {@link FPCAuthentication_LoginService}
+     *
+     * @param FPCAuthentication_IChallengeSolver $defaultChallengeSolver
      */
     public function setDefaultChallengeSolver($defaultChallengeSolver)
     {
@@ -171,7 +193,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @return \FPCAuthentication_IChallengeSolver
+     * The default challenge solver for {@link FPCAuthentication_LoginService}
+     *
+     * @return FPCAuthentication_IChallengeSolver
      */
     public function getDefaultChallengeSolver()
     {
@@ -179,7 +203,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @param \FPCAuthentication_IChallengeSolver $challengeSolver
+     * Set the challenge solver for {@link FPCAuthentication_LoginService}
+     *
+     * @param FPCAuthentication_IChallengeSolver $challengeSolver
      */
     public function setChallengeSolver($challengeSolver)
     {
@@ -187,7 +213,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @return \FPCAuthentication_IChallengeSolver
+     * The challenge solver for {@link FPCAuthentication_LoginService}
+     *
+     * @return FPCAuthentication_IChallengeSolver
      */
     public function getChallengeSolver()
     {
@@ -195,7 +223,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @param \FPCAuthentication_IChallengeProvider $challengeProvider
+     * Set the challenge provider for {@link FPCAuthentication_LoginService}
+     *
+     * @param FPCAuthentication_IChallengeProvider $challengeProvider
      */
     public function setChallengeProvider($challengeProvider)
     {
@@ -203,7 +233,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @return \FPCAuthentication_IChallengeProvider
+     * The challenge provider for {@link FPCAuthentication_LoginService}
+     *
+     * @return FPCAuthentication_IChallengeProvider
      */
     public function getChallengeProvider()
     {
@@ -211,7 +243,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @param \FPCAuthentication_IChallengeProvider $defaultChallengeProvider
+     * Set the default challenge provider for {@link FPCAuthentication_LoginService}
+     *
+     * @param FPCAuthentication_IChallengeProvider $defaultChallengeProvider
      */
     public function setDefaultChallengeProvider($defaultChallengeProvider)
     {
@@ -219,7 +253,9 @@ class FPCAuthentication_LoginServiceConfig {
     }
 
     /**
-     * @return \FPCAuthentication_IChallengeProvider
+     * The default challenge provider for {@link FPCAuthentication_LoginService}
+     *
+     * @return FPCAuthentication_IChallengeProvider
      */
     public function getDefaultChallengeProvider()
     {
