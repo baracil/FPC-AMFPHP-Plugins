@@ -37,14 +37,15 @@
  * of the {@link FPC_CurrentUserLoginSAVoter}. The syntax is :
  *
  * <code>
- *  @isCurrentUserLogin [index[,loginProperty]]
+ *  /**
+ *   * @isCurrentUserLogin [index[,loginProperty]]
+ *   {@*}
  * </code>
  *
  * @package FPC_AMFPHP_Plugins_ServiceAccess
  * @subpackage provider
  * @author Bastien Aracil
  */
-
 class FPC_CurrentUserLoginSAVoterProvider extends FPC_AbstractReflectionSAVoterProvider implements FPC_IServiceAccessVoterProvider {
 
     const DEFAULT_IS_CURRENT_USER_LOGIN_TAG = "isCurrentUserLogin";

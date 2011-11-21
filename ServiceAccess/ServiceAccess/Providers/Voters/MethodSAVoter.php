@@ -54,6 +54,7 @@ require_once "IServiceAccessVoter.php";
  *   public function checkMethod($serviceName, $methodName, $user, $parameters) {
  *      //do some checking and return true or false
  *  }
+ * </code>
  *
  * the result of the method is returned by this voter.
  * If the $checkMethod does not exists, the access is denied
