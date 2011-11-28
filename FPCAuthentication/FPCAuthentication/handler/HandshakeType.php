@@ -36,17 +36,25 @@
 
 class FPCAuthentication_HandshakeType {
 
-    //sent by the client to start the handshake
+    /**
+     * Type of the message sent by the client to initiate the handshake.
+     */
     const CHALLENGE_REQUEST = "challengeRequest";
 
-    //sent by the server in response of a CHALLENGE_REQUEST
+    /**
+     * Type of the message sent by the server in response of a {@link FPCAuthentication_HandshakeType::CHALLENGE_REQUEST} message from the client.
+     */
     const CHALLENGE = "challenge";
 
-    //sent by the client in response of a CHALLENGE message from the server
+    /**
+     * Type of the message sent by the client in response of a {@link FPCAuthentication_HandshakeType::CHALLENGE} message from the server.
+     */
     const CHALLENGE_ANSWER = "challengeAnswer";
 
-    //sent by the server if the answer from the client is correct. When the client receive
-    //this message, it can assume it has been authenticated on the server.
+    /**
+     * Type of the message sent by the server in response of a {@link FPCAuthentication_HandshakeType::CHALLENGE_ANSWER} message from the client is correct.
+     * When the client receives this message, it can assume it has been authenticated on the server.
+     */
     const CHALLENGE_VALIDATION = "challengeValidation";
 
     /**

@@ -31,6 +31,8 @@
 /**
  * The default implementation of {@link FPCAuthentication_IRolesProvider}.
  *
+ * Returns an empty array, i.e. no role
+ *
  * @package FPC_AMFPHP_Plugins_FPCAuthentication
  * @author Bastien Aracil
  */

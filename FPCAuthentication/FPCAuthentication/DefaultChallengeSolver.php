@@ -31,7 +31,7 @@
 /**
  * The default implementation of {@link FPCAuthentication_IChallengeSolver}.
  *
- * Returns the SHA256 digest of the provided challenge appened with the provided secret
+ * Returns the SHA256 digest of the provided challenge appended with the provided secret
  *
  * @package FPC_AMFPHP_Plugins_FPCAuthentication
  * @author Bastien Aracil

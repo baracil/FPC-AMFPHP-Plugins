@@ -145,9 +145,9 @@ require_once "ClassLoader.php";
  *
  * <b>Limitations</b>
  *
- * The plugin intercepts any calls to the 'fpcAuthentication' service and redirect them to an instance of {@link FPCAuthentication_LoginService},
+ * The plugin intercepts any calls to the 'fpcAuthentication' service and it redirects them to an instance of {@link FPCAuthentication_LoginService},
  * so if you use the FPCAuthentication plugin you cannot have a service named 'fpcAuthentication' (actually you can but all the calls to it will be intercepted
- * by the plugin and most probably result in an error).
+ * by the plugin and most probably this will result in an error).
  *
  * <b>Direct authentication</b>
  *
@@ -155,12 +155,50 @@ require_once "ClassLoader.php";
  * (see {@link FPCAuthentication_LoginService::authenticate()})  with the login and the secret of
  * the user trying to authenticate.
  *
- * If the server accept the secret then the user is authenticated until the 'fpcAuthentication::logout'
+ * If the server validates the secret then the user is authenticated until the 'fpcAuthentication::logout'
  * method is called. Otherwise a FPCAuthentication_Exception is thrown.
  *
  * <b>Handshake authentication</b>
  *
- * TODO
+ * For handshake authentication, four messages are exchange between the client and the server. Each message has at least
+ * a type, a data property and a challenge property. The type (see {@link FPCAuthentication_HandshakeType})
+ * is a string that defines the kind of the message and the meaning of the data and challenge property. Below
+ * is the list of all the type :
+ * <ul>
+ * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE_REQUEST} : type of the message sent by the client to initiate the handshake authentication.</li>
+ * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE} : type of the message sent by the server as a response to a {@link FPCAuthentication_HandshakeType::CHALLENGE_REQUEST} message</li>
+ * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE_ANSWER} : type of the message sent by the client as a response to a {@link FPCAuthentication_HandshakeType::CHALLENGE} message</li>
+ * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE_VALIDATION} : type of the message sent by the server as a response to a {@link FPCAuthentication_HandshakeType::CHALLENGE_ANSWER} message</li>
+ * </ul>
+ *
+ * The data and challenge properties are BASE64 encoded in all messages. Below is the sequence of the messages.
+ *
+ * <pre>
+ *     -*- Client -*-                              -*- Server -*-
+ *  type      = challengeRequest
+ *  data      = login of the user      ----->
+ *  challenge = array of random bytes
+ *
+ *                                              type      = challenge
+ *                                              data      = answer to the challenge of
+ *                                     <-----               the previous message
+ *                                              challenge = array of random bytes
+ *
+ *  type = challengeAnswer
+ *  data = answer to the challenge of
+ *         the previous message        ----->
+ *  challenge = array of random bytes
+ *
+ *                                              type      = challengeValidation
+ *                                              data      = answer to the challenge of
+ *                                                          the previous message
+ *                                     <-----   challenge = array of random bytes
+ *                                              info      = information about the authenticated user
+ *
+ * </pre>
+ * When a message is received the client or the server validates the answer to the challenge of the previous message.
+ * The answer is computed with the {@link FPCAuthentication_IChallengeSolver} and should use the challenge and the secret
+ * of the user trying to authenticate.
  *
  * @package FPC_AMFPHP_Plugins_FPCAuthentication
  * @author Bastien Aracil
@@ -256,7 +294,7 @@ class FPCAuthentication {
 
     /**
      * Hook point to save the classFindInfo of the {@link FPCAuthentication_LoginService} to override
-     * the calls to the fpcAuthentication servce
+     * the calls to the fpcAuthentication service
      *
      * @param $serviceNames2ClassFindInfo
      * @return array
@@ -288,7 +326,7 @@ class FPCAuthentication {
         }
 
         if (!$allowedNotAuthenticated && !$this->isAuthenticated()) {
-            throw new FPCAuthentication_Exception("Call to $serviceName.$methodName is not allowed for not authenticated user");
+            throw new FPCAuthentication_Exception("Call to $serviceName.$methodName is allowed only for authenticated user");
         }
 
         return $serviceObject;

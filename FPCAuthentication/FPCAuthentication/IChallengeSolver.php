@@ -31,11 +31,11 @@
 /**
  * An interface that solve a challenge with a given secret.
  *
- * FPCAuthentication uses a implementation of this interface to solve the challenge. Any implementation
- * should be a one-way function (i.e. easy to compute, very hard to reverse) like digest operation (SHA256 ...)
+ * FPCAuthentication uses a implementation of this interface to solve the challenge (see {@link FPCAuthentication::CHALLENGE_SOLVER_KEY}.
+ * Any implementation should be a one-way function (i.e. easy to compute, very hard to reverse) like digest operation (SHA256 ...)
  * and should uses both the challenge and the secret.
  *
- * The Solver must be the same on the client side or the server and the client will never
+ * The Solver must be the same on the client side otherwise the server and the client will never
  * agree each other.
  *
  * @package FPC_AMFPHP_Plugins_FPCAuthentication

@@ -31,7 +31,7 @@
 /**
  * The default implementation of {@link FPCAuthentication_IBuilder}.
  *
- * Convert the {@link FPCAuthentication_Result} as an associative array.
+ * Converts the {@link FPCAuthentication_Result} as an associative array.
  *
  * @package FPC_AMFPHP_Plugins_FPCAuthentication
  * @author Bastien Aracil

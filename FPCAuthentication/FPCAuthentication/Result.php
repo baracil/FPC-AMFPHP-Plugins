@@ -42,7 +42,7 @@ class FPCAuthentication_Result {
     const FPC_LOGIN_RESULT_KEY = "FPCAuthenticationResult";
 
     /**
-     * Retrieve the FPCAuthentication result from the session. Create a empty
+     * Retrieves the FPCAuthentication result from the session. Create an empty one
      * if not found.
      *
      * @static
@@ -55,7 +55,7 @@ class FPCAuthentication_Result {
     }
 
     /**
-     * Retrieve the FPCAuthentication_Result from the session. Create an empty
+     * Retrieves the FPCAuthentication_Result from the session. Create an empty
      * one if not found or if the login of the retrieved result does not match
      * the one provided.
      *
