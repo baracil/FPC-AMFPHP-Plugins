@@ -143,6 +143,12 @@ require_once "ClassLoader.php";
  *
  * </ul>
  *
+ * <b>ServiceAccess plugin</b>
+ *
+ * By default, the ServiceAccess plugin is configured to use the login results of the FPCAuthentication plugin. This means that no configuration is needed
+ * for the ServiceAccess plugin if you use the FPCAuthentication plugin. You just need to enable it and you are good to use annotations to secure your methods.
+ * Check the documentation of the ServiceAccess for more information about the configuration of this plugin.
+ *
  * <b>Limitations</b>
  *
  * The plugin intercepts any calls to the 'fpcAuthentication' service and it redirects them to an instance of {@link FPCAuthentication_LoginService},

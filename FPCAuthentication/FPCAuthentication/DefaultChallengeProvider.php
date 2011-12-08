@@ -47,7 +47,7 @@ class FPCAuthentication_DefaultChallengeProvider implements FPCAuthentication_IC
     }
 
     /**
-     * @return a raw string of characters.
+     * @return string a raw string of characters.
      */
     function getChallenge()
     {
