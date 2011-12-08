@@ -163,42 +163,165 @@ require_once "ClassLoader.php";
  * For handshake authentication, four messages are exchange between the client and the server. Each message has at least
  * a type, a data property and a challenge property. The type (see {@link FPCAuthentication_HandshakeType})
  * is a string that defines the kind of the message and the meaning of the data and challenge property. Below
- * is the list of all the type :
+ * is the list of all the types :
  * <ul>
  * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE_REQUEST} : type of the message sent by the client to initiate the handshake authentication.</li>
- * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE} : type of the message sent by the server as a response to a {@link FPCAuthentication_HandshakeType::CHALLENGE_REQUEST} message</li>
- * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE_ANSWER} : type of the message sent by the client as a response to a {@link FPCAuthentication_HandshakeType::CHALLENGE} message</li>
- * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE_VALIDATION} : type of the message sent by the server as a response to a {@link FPCAuthentication_HandshakeType::CHALLENGE_ANSWER} message</li>
+ * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE} : type of the message sent by the server as a response to a FPCAuthentication_HandshakeType::CHALLENGE_REQUEST message</li>
+ * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE_ANSWER} : type of the message sent by the client as a response to a FPCAuthentication_HandshakeType::CHALLENGE message</li>
+ * <li>{@link FPCAuthentication_HandshakeType::CHALLENGE_VALIDATION} : type of the message sent by the server as a response to a FPCAuthentication_HandshakeType::CHALLENGE_ANSWER message</li>
  * </ul>
  *
- * The data and challenge properties are BASE64 encoded in all messages. Below is the sequence of the messages.
+ * The data and challenge properties are BASE64 encoded in all messages. Below is the sequence of the messages in case
+ * of a valid authentication.
  *
  * <pre>
  *     -*- Client -*-                              -*- Server -*-
- *  type      = challengeRequest
- *  data      = login of the user      ----->
- *  challenge = array of random bytes
- *
- *                                              type      = challenge
- *                                              data      = answer to the challenge of
- *                                     <-----               the previous message
- *                                              challenge = array of random bytes
- *
- *  type = challengeAnswer
- *  data = answer to the challenge of
- *         the previous message        ----->
- *  challenge = array of random bytes
- *
- *                                              type      = challengeValidation
- *                                              data      = answer to the challenge of
- *                                                          the previous message
- *                                     <-----   challenge = array of random bytes
- *                                              info      = information about the authenticated user
- *
+ *  - Gets the login and the secret of
+ *    the user (with a login form for instance)
+ *  - Sends the following message to the server
+ *        |type      = challengeRequest
+ *        |data      = login of the user
+ *        |challenge = array of random bytes
+ *                                          ---->
+ *                                                  - Retrieves the secret of the user
+ *                                                    from his login.
+ *                                                  - Solves the client challenge
+ *                                                  - Sends the following message to the client
+ *                                                        |type      = challenge
+ *                                                        |data      = answer to the client challenge
+ *                                                        |challenge = array of random bytes
+ *                                          <----
+ *  - Validates the challenge answer of
+ *    the server
+ *  - Solves the server challenge
+ *  - Sends the following message to the server
+ *        |type      = challengeAnswer
+ *        |data      = answer to the server challenge
+ *        |challenge = array of random bytes
+ *                                          ---->
+ *                                                  - Validates the challenge answer of the client
+ *                                                  - Solves the client challenge
+ *                                                  - Marks the user as authenticated
+ *                                                  - Sends the following message to the client
+ *                                                        |type      = challengeValidation
+ *                                                        |data      = answer to the client challenge
+ *                                                        |challenge = array of random bytes
+ *                                                        |info      = information about
+ *                                                        |            the authenticated user
+ *                                                  - Use the challenge property for key stretching
+ *                                                  - Log in the user
+ *                                          <----
+ *  - Uses the challenge property for key stretching
+ *  - Log in the user
  * </pre>
- * When a message is received the client or the server validates the answer to the challenge of the previous message.
- * The answer is computed with the {@link FPCAuthentication_IChallengeSolver} and should use the challenge and the secret
- * of the user trying to authenticate.
+ *
+ * The server retrieves the secret of a user with a {@link FPCAuthentication_ISecretProvider}.
+ *
+ * When a message is received the client or the server validates the answer to the challenge of the previous message
+ * with a {@link FPCAuthentication_IChallengeSolver}.
+ *
+ * Finally, array of random bytes are created by the server with a {@link FPCAuthentication_IRolesProvider}.
+ *
+ * To use this authentication mode, the client needs to manage all the client message
+ * and the handling of the server responses.
+ *
+ * <b> Using the FPCAuthentication Flex class </b>
+ *
+ * The FPCAuthentication plugin comes with a Flex FPCAuthentication class that can be used on the client side to ease
+ * the authentication process with this plugin. The user does not need to known anything about the protocol used
+ * by the plugin, he simply needs to call the 'authenticate' and the 'logout' methods of the FPCAuthentication class
+ * to authenticate and logout from the server.
+ *
+ * Below is a simple flex application that uses this method for a simple login form
+ *
+ * <code>
+ * <?xml version="1.0"?>
+ * <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+ *                xmlns:s="library://ns.adobe.com/flex/spark"
+ *                xmlns:fpcauthentication="net.femtoparsec.fpcauthentication.*"
+ *                currentState="logout"
+ *         >
+ *
+ *     <fx:Script><![CDATA[
+ *         import mx.controls.Alert;
+ *
+ *         import net.femtoparsec.fpcauthentication.AuthenticationEvent;
+ *         import net.femtoparsec.fpcauthentication.FPCAuthenticationMode;
+ *
+ *         /**
+ *          * Logout handler
+ *          {@*}
+ *         private function logoutHandler(event:AuthenticationEvent):void {
+ *             this.currentState = "logout";
+ *         }
+ *
+ *         /**
+ *          * Authentication error handler
+ *          {@*}
+ *         private function errorHandler(event:AuthenticationEvent):void {
+ *             this.currentState = "logout";
+ *             var message:String = event.error == null ? "??" : event.error.message;
+ *             Alert.show(message);
+ *         }
+ *
+ *         /**
+ *          * Authentication handler
+ *          {@*}
+ *         private function authenticationHandler(event:AuthenticationEvent):void {
+ *             this.currentState = "login";
+ *         }
+ *
+ *         private function loginButton_clickHandler(event:MouseEvent):void {
+ *             var login:String = this.login.text;
+ *             var secret:String = this.password.text;
+ *
+ *             fpcAuthentication.authenticate(login, secret);
+ *         }
+ *
+ *         private function logoutButton_clickHandler(event:MouseEvent):void {
+ *             fpcAuthentication.logout();
+ *         }
+ *         ]]></fx:Script>
+ *
+ *     <fx:Declarations>
+ *         <fpcauthentication:FPCAuthentication
+ *                      id="fpcAuthentication"
+ *                      endpoint="http://myserver/path_to_amfphp_index/index.php"
+ *                      showBusyCursor="true"
+ *                      destination="amfphp"
+ *                      mode="{FPCAuthenticationMode.HANDSHAKE}"
+ *                      logout="logoutHandler(event)"
+ *                      error="errorHandler(event)"
+ *                      authentication="authenticationHandler(event)"
+ *                 />
+ *     </fx:Declarations>
+ *
+ *
+ *     <s:states>
+ *         <s:State name="login"/>
+ *         <s:State name ="logout"/>
+ *     </s:states>
+ *
+ *     <s:VGroup includeIn="logout">
+ *         <s:Form>
+ *             <s:FormItem label="login :">
+ *                  <s:TextInput id="login" text="admin"/>
+ *             </s:FormItem>
+ *             <s:FormItem label="password :">
+ *                  <s:TextInput id="password" text="a"/>
+ *             </s:FormItem>
+ *         </s:Form>
+ *         <s:Button label="login" click="loginButton_clickHandler(event)"/>
+ *     </s:VGroup>
+ *
+ *     <s:VGroup includeIn="login">
+ *         <s:Label text="{'logged in as '+fpcAuthentication.authenticatedLogin}"/>
+ *         <s:Button label="logout" click="logoutButton_clickHandler(event)"/>
+ *     </s:VGroup>
+ *
+ * </s:Application>
+ *
+ * </code>
  *
  * @package FPC_AMFPHP_Plugins_FPCAuthentication
  * @author Bastien Aracil
