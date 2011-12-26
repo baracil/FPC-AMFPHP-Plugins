@@ -34,7 +34,7 @@ package net.femtoparsec.wordpress.model {
 import net.femtoparsec.wordpress.WordPressHolder;
 
 [RemoteClass(alias="FPCWordPress.model.User")]
-public class User extends WordPressHolder {
+public class User {//extends WordPressHolder {
 
     public var id:int;
 

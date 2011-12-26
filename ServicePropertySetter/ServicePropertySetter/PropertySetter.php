@@ -31,8 +31,6 @@
  * Date: 18/07/11
  */
 
-require_once "IPropertySetter.php";
-
 class FPC_PropertySetter implements FPC_IPropertySetter {
 
     function setProperty($object, $propertyName, $value)

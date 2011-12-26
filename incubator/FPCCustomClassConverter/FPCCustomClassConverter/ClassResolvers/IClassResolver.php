@@ -34,8 +34,6 @@
  * Interface used to resole information of a class from the explicitType value.
  */
 
-require_once "ClassInfo.php";
-
 interface FPC_IClassResolver
 {
 

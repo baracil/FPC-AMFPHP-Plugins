@@ -31,10 +31,12 @@
  * Date: 10/07/11
  */
 
-require_once "IPropertySetter.php";
-require_once "PropertySetter.php";
-require_once "PropertySettingInfo.php";
-require_once "ServicePropertySetterConfig.php";
-require_once "PropertySettingInfo.php";
-require_once "ServicePropertySetter.php";
+define("ServicePropertySetter_ROOTPATH",dirname(__FILE__).DIRECTORY_SEPARATOR);
+
+require_once ServicePropertySetter_ROOTPATH."IPropertySetter.php";
+require_once ServicePropertySetter_ROOTPATH."PropertySetter.php";
+require_once ServicePropertySetter_ROOTPATH."PropertySettingInfo.php";
+require_once ServicePropertySetter_ROOTPATH."ServicePropertySetterConfig.php";
+require_once ServicePropertySetter_ROOTPATH."PropertySettingInfo.php";
+require_once ServicePropertySetter_ROOTPATH."ServicePropertySetter.php";
 

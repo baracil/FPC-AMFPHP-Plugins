@@ -31,7 +31,7 @@
  * User: Bastien Aracil
  * Date: 21/07/11
  */
-require_once "ClassLoader.php";
+require_once dirname(__FILE__)."/ClassLoader.php";
 
 class TransactionManager {
 

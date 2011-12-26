@@ -40,8 +40,6 @@
  *
  */
 
-require_once "IClassResolver.php";
-
 class FPC_PackageClassResolver implements FPC_IClassResolver
 {
 

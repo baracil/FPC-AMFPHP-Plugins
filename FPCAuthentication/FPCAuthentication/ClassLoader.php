@@ -31,23 +31,33 @@
  * Date: 06/11/11
  */
 
+define( 'FPCAuthentication_ROOTPATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 
-require_once "ISecretProvider.php";
-require_once "IRolesProvider.php";
-require_once "IBuilder.php";
-require_once "IChallengeProvider.php";
-require_once "IChallengeSolver.php";
 
-require_once "LoginServiceConfig.php";
-require_once "Exception.php";
+require_once FPCAuthentication_ROOTPATH."ISecretProvider.php";
+require_once FPCAuthentication_ROOTPATH."IRolesProvider.php";
+require_once FPCAuthentication_ROOTPATH."IBuilder.php";
+require_once FPCAuthentication_ROOTPATH."IChallengeProvider.php";
+require_once FPCAuthentication_ROOTPATH."IChallengeSolver.php";
 
-require_once "handler/ClassLoader.php";
+require_once FPCAuthentication_ROOTPATH."LoginServiceConfig.php";
+require_once FPCAuthentication_ROOTPATH."Exception.php";
 
-require_once "DefaultRolesProvider.php";
-require_once "DefaultBuilder.php";
-require_once "DefaultChallengeProvider.php";
-require_once "DefaultChallengeSolver.php";
+//handler
+require_once FPCAuthentication_ROOTPATH."handler/HandshakeType.php";
+require_once FPCAuthentication_ROOTPATH."handler/HandshakeData.php";
+require_once FPCAuthentication_ROOTPATH."handler/HandshakeMessage.php";
 
-require_once "Result.php";
-require_once "LoginService.php";
-require_once "FPCAuthentication.php";
+require_once FPCAuthentication_ROOTPATH."handler/Handler.php";
+require_once FPCAuthentication_ROOTPATH."handler/InvalidTypeHandler.php";
+require_once FPCAuthentication_ROOTPATH."handler/ChallengeRequestHandler.php";
+require_once FPCAuthentication_ROOTPATH."handler/ChallengeAnswerHandler.php";
+
+require_once FPCAuthentication_ROOTPATH."DefaultRolesProvider.php";
+require_once FPCAuthentication_ROOTPATH."DefaultBuilder.php";
+require_once FPCAuthentication_ROOTPATH."DefaultChallengeProvider.php";
+require_once FPCAuthentication_ROOTPATH."DefaultChallengeSolver.php";
+
+require_once FPCAuthentication_ROOTPATH."Result.php";
+require_once FPCAuthentication_ROOTPATH."LoginService.php";
+require_once FPCAuthentication_ROOTPATH."FPCAuthentication.php";

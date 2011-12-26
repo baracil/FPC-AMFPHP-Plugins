@@ -28,8 +28,6 @@
  *   @package FPC_AMFPHP_Plugins_ServiceAccess
  */
 
-require_once "IServiceAccessUser.php";
-
 /**
  * User: Bastien Aracil
  * Date: 29/07/11

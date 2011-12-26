@@ -38,7 +38,7 @@
  *
  * Author : Bastien Aracil
  */
-require_once "ClassLoader.php";
+require_once dirname(__FILE__)."/ClassLoader.php";
 
 class FPCCustomClassConverter implements Amfphp_Core_Common_ISerializer
 {

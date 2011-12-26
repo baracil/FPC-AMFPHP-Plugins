@@ -29,8 +29,6 @@
  *   @subpackage voter
  */
 
-require_once "IServiceAccessVoter.php";
-
 /**
  *
  * A voter that uses a method to get the access status of the service.

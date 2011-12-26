@@ -36,8 +36,6 @@
  *
  */
 
-require_once "IClassResolver.php";
-
 class FPC_ChainedClassResolver implements FPC_IClassResolver
 {
 

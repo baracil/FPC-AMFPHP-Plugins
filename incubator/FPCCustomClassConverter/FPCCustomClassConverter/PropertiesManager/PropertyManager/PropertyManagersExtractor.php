@@ -34,9 +34,6 @@
  * Return a list of managers that manage public property and private/protected properties that have getter and setter
  */
 
-require_once "PublicPropertyManager.php";
-require_once "GSPropertyManager.php";
-
 class FPC_PropertyManagersExtractor implements FPC_IPropertyManagersExtractor {
 
     function extractPropertyManager($class)

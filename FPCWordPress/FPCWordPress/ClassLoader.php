@@ -28,14 +28,28 @@
  *   @package FPC_AMFPHP_Plugins_FPCWordPress
  */
 
-require_once "WordPressUtils.php";
+define("FPCWordPress_ROOTPATH",dirname(__FILE__) . DIRECTORY_SEPARATOR);
 
-require_once "model/ClassLoader.php";
-require_once "exception/ClassLoader.php";
+//model
+require_once FPCWordPress_ROOTPATH."model/Category.php";
+require_once FPCWordPress_ROOTPATH."model/User.php";
+require_once FPCWordPress_ROOTPATH."model/Post.php";
 
-require_once "dao/ClassLoader.php";
+//exception
+require_once FPCWordPress_ROOTPATH."exception/UnknownUserException.php";
+require_once FPCWordPress_ROOTPATH."exception/UnknownPostException.php";
+require_once FPCWordPress_ROOTPATH."exception/UnknownCategoryException.php";
 
-require_once "builder/ClassLoader.php";
+//dao
+require_once FPCWordPress_ROOTPATH."dao/IWordPressDAO.php";
+require_once FPCWordPress_ROOTPATH."dao/WordPressDAO.php";
 
-require_once "WordPressService.php";
+//builder
+require_once FPCWordPress_ROOTPATH."builder/AbstractBuilder.php";
+require_once FPCWordPress_ROOTPATH."builder/UserBuilder.php";
+require_once FPCWordPress_ROOTPATH."builder/PostBuilder.php";
+require_once FPCWordPress_ROOTPATH."builder/CategoryBuilder.php";
+
+require_once FPCWordPress_ROOTPATH."WordPressUtils.php";
+require_once FPCWordPress_ROOTPATH."WordPressService.php";
 ?>

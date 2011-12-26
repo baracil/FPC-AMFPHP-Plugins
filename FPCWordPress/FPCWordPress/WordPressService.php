@@ -46,10 +46,17 @@ class FPCWordPress_WordPressService {
     private $_rootPath;
 
     public function init($rootPath, $wordPressDAO) {
+        if (is_null($rootPath)) {
+            throw new Amfphp_Core_Exception("Invalid FPCWordPress configuration : the path to the WordPress installation is not initialized.");
+        }
         $this->_rootPath = $rootPath;
         $this->_wordPressDAO = $wordPressDAO;
 
         $wpLoad = $this->_rootPath . "/wp-load.php";
+
+        if (!file_exists($wpLoad)) {
+            throw new Amfphp_Core_Exception("Invalid FPCWordPress configuration : the file '$wpLoad' does not exist.");
+        }
 
         require_once $wpLoad;
     }

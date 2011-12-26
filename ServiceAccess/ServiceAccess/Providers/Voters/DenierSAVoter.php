@@ -29,8 +29,6 @@
  *   @subpackage voter
  */
 
-require_once "IServiceAccessVoter.php";
-
 /**
  *
  * A voter that denies access to any services.

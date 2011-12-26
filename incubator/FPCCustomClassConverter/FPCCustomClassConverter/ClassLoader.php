@@ -37,11 +37,41 @@
  * @package Amfphp_Core
  */
 
-include "ClassResolvers/ClassLoader.php";
-include "PropertiesManager/ClassLoader.php";
+define("FPCCustomClassConverter_ROOTPATH",dirname(__FILE__).DIRECTORY_SEPARATOR);
 
-require_once "CustomSerializer.php";
-require_once "FPCCustomClassConverter.php";
+
+//ClassResolvers
+require_once FPCCustomClassConverter_ROOTPATH."ClassResolvers/IClassResolver.php";
+require_once FPCCustomClassConverter_ROOTPATH."ClassResolvers/ClassInfo.php";
+require_once FPCCustomClassConverter_ROOTPATH."ClassResolvers/AbstractDictionaryClassResolver.php";
+require_once FPCCustomClassConverter_ROOTPATH."ClassResolvers/CachedClassResolver.php";
+require_once FPCCustomClassConverter_ROOTPATH."ClassResolvers/ChainedClassResolver.php";
+require_once FPCCustomClassConverter_ROOTPATH."ClassResolvers/DefaultClassResolver.php";
+require_once FPCCustomClassConverter_ROOTPATH."ClassResolvers/DictionaryClassRevolver.php";
+require_once FPCCustomClassConverter_ROOTPATH."ClassResolvers/PackagedClassResolver.php";
+require_once FPCCustomClassConverter_ROOTPATH."ClassResolvers/SmartClassResolver.php";
+
+//PropertiesManager
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/IPropertyManager.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/IPropertyManagersExtractor.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/IPropertiesManager.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/ISpecificPropertiesManager.php";
+
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/PropertyManager/PublicPropertyManager.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/PropertyManager/GSPropertyManager.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/PropertyManager/PropertyManagersExtractor.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/PropertyManager/CachedPropertyManagerExtractor.php";
+
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/SpecificPropertiesManager/ExceptionManager.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/SpecificPropertiesManager/PDOExceptionManager.php";
+
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/PublicPropertiesManager.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/ReflectionPropertiesManager.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/ChainedPropertiesManager.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/SpecificPropertiesManagers.php";
+require_once FPCCustomClassConverter_ROOTPATH."PropertiesManager/SmartPropertiesManager.php";
+
+require_once FPCCustomClassConverter_ROOTPATH."CustomSerializer.php";
 
 
 ?>

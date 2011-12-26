@@ -39,8 +39,6 @@
  *
  */
 
-require_once "IClassResolver.php";
-
 class FPC_CachedClassResolver extends FPC_AbstractDictionaryClassResolver implements FPC_IClassResolver
 {
 

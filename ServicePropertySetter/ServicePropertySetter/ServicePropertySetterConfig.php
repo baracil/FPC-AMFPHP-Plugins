@@ -31,9 +31,6 @@
  * Date: 18/07/11
  */
 
-require_once "PropertySetter.php";
-require_once "PropertySettingInfo.php";
-
 class FPC_ServicePropertySetterConfig
 {
     /**

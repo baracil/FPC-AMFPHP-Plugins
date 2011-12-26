@@ -28,7 +28,7 @@
  *   @package FPC_AMFPHP_Plugins_ServiceAccess
  */
 
-require_once "ClassLoader.php";
+require_once dirname(__FILE__)."/ClassLoader.php";
 
 /**
  * The main class of the ServiceAccess plugin.

@@ -31,7 +31,7 @@
  * Date: 10/07/11
  */
 
-require_once "ServicePropertySetterConfig.php";
+require_once dirname(__FILE__)."/ClassLoader.php";
 
 class ServicePropertySetter
 {

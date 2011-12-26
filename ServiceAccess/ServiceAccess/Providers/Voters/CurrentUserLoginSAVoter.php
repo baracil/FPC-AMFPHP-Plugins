@@ -29,8 +29,6 @@
  *   @subpackage voter
  */
 
-require_once "IServiceAccessVoter.php";
-
 /**
  *
  * A voter that grants access if a given property of a the parameters is equals to the current user login.

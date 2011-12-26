@@ -38,9 +38,6 @@
  *
  */
 
-require_once "AbstractDictionaryClassResolver.php";
-require_once "IClassResolver.php";
-
 class FPC_DictionaryClassRevolver extends FPC_AbstractDictionaryClassResolver implements FPC_IClassResolver
 {
 

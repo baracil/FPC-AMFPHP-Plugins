@@ -27,7 +27,7 @@
  *
  *   @package FPC_AMFPHP_Plugins_FPCWordPress
  */
-require_once "ClassLoader.php";
+require_once dirname(__FILE__)."/ClassLoader.php";
 
 /**
  * To configure the plugin, set the 'path' property of the plugin configuration array to the root path
@@ -69,9 +69,6 @@ class FPCWordPress {
             }
         }
 
-        if (is_null($this->_wordPressPath)) {
-            throw new Amfphp_Core_Exception("Invalid FPCWordPress configuration");
-        }
 
         $this->_wordPressDAO = new FPCWordPress_WordPressDAO();
     }

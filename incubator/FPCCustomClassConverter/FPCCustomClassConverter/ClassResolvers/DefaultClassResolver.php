@@ -36,8 +36,6 @@
  * AMFPHP (that's why the Default prefix)
  */
 
-require_once "IClassResolver.php";
-
 class FPC_DefaultClassResolver implements FPC_IClassResolver
 {
 

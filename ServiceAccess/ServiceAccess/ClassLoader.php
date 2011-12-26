@@ -32,13 +32,35 @@
  * User: Bastien Aracil
  * Date: 16/07/11
  */
-require_once "Providers/ClassLoader.php";
 
-require_once "IServiceAccessUser.php";
-require_once "ServiceAccessException.php";
-require_once "ServiceAccess.php";
-require_once "SessionServiceAccessUser.php";
-require_once "DefaultVoterProvider.php";
-require_once "FPCAuthenticationUser.php";
+define("ServiceAccess_ROOTPATH",dirname(__FILE__) . DIRECTORY_SEPARATOR);
+
+//providers/voters
+require_once ServiceAccess_ROOTPATH."Providers/Voters/IServiceAccessVoter.php";
+require_once ServiceAccess_ROOTPATH."Providers/Voters/AlloverSAVoter.php";
+require_once ServiceAccess_ROOTPATH."Providers/Voters/ComitySAVoters.php";
+require_once ServiceAccess_ROOTPATH."Providers/Voters/DenierSAVoter.php";
+require_once ServiceAccess_ROOTPATH."Providers/Voters/MethodSAVoter.php";
+require_once ServiceAccess_ROOTPATH."Providers/Voters/CurrentUserLoginSAVoter.php";
+require_once ServiceAccess_ROOTPATH."Providers/Voters/RolesSAVoter.php";
+
+//Providers
+require_once ServiceAccess_ROOTPATH."Providers/IServiceAccessVoterProvider.php";
+require_once ServiceAccess_ROOTPATH."Providers/AbstractReflectionSAVoterProvider.php";
+require_once ServiceAccess_ROOTPATH."Providers/CachedSAVoterProvider.php";
+require_once ServiceAccess_ROOTPATH."Providers/ComitySAVoterProvider.php";
+require_once ServiceAccess_ROOTPATH."Providers/MethodRolesSAVoterProvider.php";
+require_once ServiceAccess_ROOTPATH."Providers/ReflectionRolesSAVoterProvider.php";
+require_once ServiceAccess_ROOTPATH."Providers/ReflectionMethodSAVoterProvider.php";
+require_once ServiceAccess_ROOTPATH."Providers/CurrentUserLoginSAVoterProvider.php";
+require_once ServiceAccess_ROOTPATH."Providers/ProxySAVoterProvider.php";
+
+
+require_once ServiceAccess_ROOTPATH."IServiceAccessUser.php";
+require_once ServiceAccess_ROOTPATH."ServiceAccessException.php";
+require_once ServiceAccess_ROOTPATH."ServiceAccess.php";
+require_once ServiceAccess_ROOTPATH."SessionServiceAccessUser.php";
+require_once ServiceAccess_ROOTPATH."DefaultVoterProvider.php";
+require_once ServiceAccess_ROOTPATH."FPCAuthenticationUser.php";
 
 ?>

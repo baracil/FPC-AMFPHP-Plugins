@@ -32,8 +32,6 @@
  * Date: 19/07/11
  */
 
-require_once "IPropertiesManager.php";
-
 interface FPC_ISpecificPropertiesManager extends FPC_IPropertiesManager {
 
     /**
