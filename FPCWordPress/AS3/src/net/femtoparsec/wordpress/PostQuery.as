@@ -166,7 +166,7 @@ public class PostQuery extends WordPressHolder {
         return result;
     }
 
-    public function getPosts():WPAsyncToken {
+    public function findPosts():WPAsyncToken {
         return this.context.findPosts(createArguments());
     }
 
