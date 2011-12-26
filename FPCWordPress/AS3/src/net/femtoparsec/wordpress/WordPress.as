@@ -41,11 +41,11 @@ public class WordPress extends AbstractWordPress implements IWordPress {
     ExceptionBootStrap;
 
     /**
-     * Create a PostsQuery to ease the query of posts
+     * Create a PostQuery to ease the query of posts
      * @return
      */
-    public function createPostsQuery():PostsQuery {
-        return new PostsQuery(this);
+    public function createPostQuery():PostQuery {
+        return new PostQuery(this);
     }
 
     /**
@@ -53,7 +53,7 @@ public class WordPress extends AbstractWordPress implements IWordPress {
      * @return the posts matching the query arguments
      */
     public function findPosts(args:*):WPAsyncToken {
-        return this.call("findPosts", args);
+        return this.callOneArgument("findPosts", args);
     }
 
     /**

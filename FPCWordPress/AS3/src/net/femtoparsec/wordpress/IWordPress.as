@@ -35,7 +35,7 @@ import net.femtoparsec.wordpress.rpc.WPAsyncToken;
 
 public interface IWordPress {
 
-    function createPostsQuery():PostsQuery;
+    function createPostQuery():PostQuery;
 
     function findPosts(args:*):WPAsyncToken;
 

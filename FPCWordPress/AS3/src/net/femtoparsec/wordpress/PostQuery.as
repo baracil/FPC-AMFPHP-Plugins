@@ -43,7 +43,7 @@ import net.femtoparsec.wordpress.rpc.WPAsyncToken;
  * Technical class to easy the query of Posts
  *
  */
-public class PostsQuery extends WordPressHolder {
+public class PostQuery extends WordPressHolder {
 
     private var _numberposts:int = 5;
 
@@ -72,26 +72,26 @@ public class PostsQuery extends WordPressHolder {
     private var _post_status:* = EPostStatus.PUBLISH.value;
 
 
-    public function PostsQuery(context:IWordPress) {
+    public function PostQuery(context:IWordPress) {
         this.context = context;
     }
 
-    public function withNumberPosts(value:int = 5):PostsQuery {
+    public function withNumberPosts(value:int = 5):PostQuery {
         this._numberposts = value;
         return this;
     }
 
-    public function withOffset(offset:int = 0):PostsQuery {
+    public function withOffset(offset:int = 0):PostQuery {
         this._offset = offset;
         return this;
     }
 
-    public function withCategoryId(id:int = -1):PostsQuery {
+    public function withCategoryId(id:int = -1):PostQuery {
         this._category = id;
         return this;
     }
 
-    public function withCategory(category:Category = null):PostsQuery {
+    public function withCategory(category:Category = null):PostQuery {
         var id:int = -1;
         if (category != null) {
             id = category.id;
@@ -99,64 +99,64 @@ public class PostsQuery extends WordPressHolder {
         return this.withCategoryId(id);
     }
 
-    public function withOrderBy(orderBy:EOrderBy = null):PostsQuery {
+    public function withOrderBy(orderBy:EOrderBy = null):PostQuery {
         this._orderby = orderBy == null ? EOrderBy.DATE.value : orderBy.value;
         return this;
     }
 
-    public function withOrder(order:EOrder = null):PostsQuery {
+    public function withOrder(order:EOrder = null):PostQuery {
         this._order = order == null ? EOrder.DESC.value : order.value;
         return this;
     }
 
-    public function withInclude(postIds:Array):PostsQuery {
+    public function withInclude(postIds:Array):PostQuery {
         this._include = postIds;
         return this;
     }
 
-    public function withExclude(postIds:Array):PostsQuery {
+    public function withExclude(postIds:Array):PostQuery {
         this._exclude = postIds;
         return this;
     }
 
-    public function withMetaKey(key:String):PostsQuery {
+    public function withMetaKey(key:String):PostQuery {
         this._meta_key = key;
         return this;
     }
 
-    public function withMetaValue(value:String):PostsQuery {
+    public function withMetaValue(value:String):PostQuery {
         this._meta_value = value;
         return this;
     }
 
-    public function withPostType(...types):PostsQuery {
+    public function withPostType(...types):PostQuery {
         this._post_type = this.handleArray(types,  EPostType);
         return this;
     }
-    public function withPostStatus(...status):PostsQuery {
+    public function withPostStatus(...status):PostQuery {
         this._post_status = this.handleArray(status, EPostStatus);
         return this;
     }
 
-    public function withPostMimeType(type:String):PostsQuery {
+    public function withPostMimeType(type:String):PostQuery {
         this._post_mime_type = type;
         return this;
     }
 
-    public function withPostParentId(id:int = -1):PostsQuery {
+    public function withPostParentId(id:int = -1):PostQuery {
         this._post_parent = id;
         return this;
     }
 
-    public function withPostParent(post:Post = null):PostsQuery {
+    public function withPostParent(post:Post = null):PostQuery {
         return this.withPostParentId(post == null ? -1:post.id);
     }
 
-    private function handleArray(values:Array, type:Class):Array {
+    private function handleArray(values:Array, type:Class):* {
         var result:Array = [];
         for (var value:* in values) {
-            if (values is type) {
-                result = result.concat(value);
+            if (value is type) {
+                result = result.concat(value.value);
             }
         }
         switch (result.length) {
