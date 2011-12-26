@@ -30,10 +30,10 @@
 require_once "ClassLoader.php";
 
 /**
- * User: Bastien Aracil
- * Date: 18/12/11
+ * To configure the plugin, set the 'path' property of the plugin configuration array to the root path
+ * of the WordPress installation (the directory that contains the file 'wp-upload.php').
+ *
  */
-
 class FPCWordPress {
 
     /**
