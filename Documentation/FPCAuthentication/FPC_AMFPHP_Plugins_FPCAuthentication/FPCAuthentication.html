@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class FPCAuthentication</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class FPCAuthentication</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+											<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+						
+			</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">The main class of the FPCAuthentication plugin</p>
+<p class="description"><p><strong>Overview</strong></p><p>FPCAuthentication is an AMFPHP plugin that manages authentication of users with a login  and a password. The plugin offers two ways to authenticate, a basic and an elaborate one.</p><p>The basic method is a simple call to the server with the user login and its secret value  (generally a digest of a password) and the server grants or rejects the access according  to these two values. This method is simple but not 100% secured if not used over a secured  connection (a https connection) since message can be intercepted and even if a digest of  the password is sent, this digest is the password for the server.</p><p>The elaborate method is an exchange of 4 messages between the server and the client.  The secret of the user is never sent explicitly nor a direct digest of it. This method  allows the authentication of the user on the server and the authentication of the  server on the client side. Also, it provides a random password only known by the client  and the server and only valid as long as the user does not logout. This temporary password  can be used to send sensible data to the server without compromising the user password.</p><p><strong>Configuration</strong></p><p>The plugins has several configuration parameters but only one is mandatory, all the others have  default values that should be sufficient for most of the cases. Below is the list of the  configuration parameters (the values in parentheses indicate if the parameter is mandatory or not  , and which interface the parameter must implement) :</p><p><ul><li>'<strong>secretProvider</strong>' (mandatory, <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_ISecretProvider.html">FPCAuthentication_ISecretProvider</a>) : This parameter is used to retrieve the user secret from his login. Below is a very simple implementation of such parameter :
+
+ <div class="src-code"><ol><li><div class="src-line">&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">SimpleSecretProvider&nbsp;</span><span class="src-key">implements&nbsp;</span><span class="src-id">FPCAuthentication_ISecretProvider&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@abstract</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">string&nbsp;</span><span class="src-doc-var">$login&nbsp;</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@return&nbsp;</span><span class="src-doc-type">string&nbsp;</span><span class="src-doc">the&nbsp;secret&nbsp;of&nbsp;the&nbsp;user&nbsp;with&nbsp;the&nbsp;given&nbsp;login.&nbsp;The&nbsp;secret</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;is&nbsp;not&nbsp;necessarily&nbsp;the&nbsp;explicit&nbsp;password.&nbsp;The&nbsp;only&nbsp;constraint&nbsp;is&nbsp;that</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;is&nbsp;should&nbsp;be&nbsp;the&nbsp;same&nbsp;thing&nbsp;provided&nbsp;by&nbsp;the&nbsp;client&nbsp;(an&nbsp;operation&nbsp;might</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;then&nbsp;be&nbsp;mandatory&nbsp;between&nbsp;the&nbsp;user&nbsp;input&nbsp;and&nbsp;the&nbsp;call&nbsp;to&nbsp;the&nbsp;server).</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">function&nbsp;</span><span class="src-id">getSecret</span><span class="src-sym">(</span><span class="src-var">$login</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">switch&nbsp;</span><span class="src-sym">(</span><span class="src-var">$login</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">case&nbsp;</span><span class="src-str">&quot;admin&quot;&nbsp;</span>:&nbsp;<span class="src-key">return&nbsp;</span><span class="src-str">&quot;adminPassword&quot;</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">case&nbsp;</span><span class="src-str">&quot;user1&quot;&nbsp;</span>:&nbsp;<span class="src-key">return&nbsp;</span><span class="src-str">&quot;user1Password&quot;</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-id">null</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">}</span></div></li>
+</ol></div>
+
+ Common implementations would access a database to get the secret of the user.</li><li>'<strong>rolesProvider</strong>' (optional, <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_IRolesProvider.html">FPCAuthentication_IRolesProvider</a>) : This parameter is used to retrieve the
+ roles of a user. It is used only if the user is successfully authenticated. Below is a
+ simple implementation of this parameter :
+
+ <div class="src-code"><ol><li><div class="src-line">&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">SimpleRolesProvider&nbsp;</span><span class="src-key">implements&nbsp;</span><span class="src-id">FPCAuthentication_IRolesProvider&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Called&nbsp;only&nbsp;if&nbsp;the&nbsp;authentication&nbsp;succeed.</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@param&nbsp;</span><span class="src-doc-type">$login&nbsp;</span><span class="src-doc">login&nbsp;of&nbsp;the&nbsp;authenticated&nbsp;user</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span class="src-doc-coretag">@return&nbsp;</span><span class="src-doc-type">array&nbsp;</span><span class="src-doc">of&nbsp;string&nbsp;that&nbsp;defines&nbsp;the&nbsp;roles&nbsp;of&nbsp;the&nbsp;authenticated&nbsp;user</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">function&nbsp;</span><span class="src-id">getRoles</span><span class="src-sym">(</span><span class="src-var">$login</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">switch&nbsp;</span><span class="src-sym">(</span><span class="src-var">$login</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">case&nbsp;</span><span class="src-str">&quot;admin&quot;&nbsp;</span>:&nbsp;<span class="src-key">return&nbsp;</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">&quot;USER_INFO_EDITOR&quot;</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">&quot;ORDER_EDITOR&quot;</span><span class="src-sym">,&nbsp;</span><span class="src-str">&quot;INVOICE_EDITOR&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">case&nbsp;</span><span class="src-str">&quot;user1&quot;&nbsp;</span>:&nbsp;<span class="src-key">return&nbsp;</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">&quot;USER_INFO_VIEWER&quot;</span><span class="src-sym">,&nbsp;</span><span class="src-str">&quot;ORDER_VIEWER&quot;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-id">null</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">}</span></div></li>
+</ol></div>
+
+ Even if this parameter is optional, the developer might want to change its default behaviour
+ that is to send an empty array, i.e. the user has no roles.</li><li>'<strong>builder</strong>' (optional, <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_IBuilder.html">FPCAuthentication_IBuilder</a>) : The plugin saves some data during the authentication process and these data are used to create the
+ result returns by the authentication methods. The transformation of these data is done by this parameter.
+ The default builder (see below) should be enough but can be modified if more information is needed.
+
+ <div class="src-code"><ol><li><div class="src-line">&nbsp;<span class="src-key">class&nbsp;</span><a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_DefaultBuilder.html">FPCAuthentication_DefaultBuilder</a>&nbsp;<span class="src-key">implements&nbsp;</span><span class="src-id">FPCAuthentication_IBuilder&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">function&nbsp;</span><a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_DefaultBuilder.html#methodbuild">build</a><span class="src-sym">(</span><span class="src-id">FPCAuthentication_Result&nbsp;</span><span class="src-var">$result</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if&nbsp;</span><span class="src-sym">(</span><a href="http://www.php.net/is_null">is_null</a><span class="src-sym">(</span><span class="src-var">$result</span><span class="src-sym">))&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-id">null</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'login'&nbsp;</span>=&gt;&nbsp;<span class="src-var">$result</span><span class="src-sym">-&gt;</span><span class="src-id">getLogin</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'authenticated'&nbsp;</span>=&gt;&nbsp;<span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">getAuthenticated</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'roles'&nbsp;</span>=&gt;&nbsp;<span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">getRoles</span><span class="src-sym">(</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">}</span></div></li>
+</ol></div></li><li>'<strong>challengeProvider</strong>' (optional, <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_IChallengeProvider.html">FPCAuthentication_IChallengeProvider</a>) : Used by the plugin to create random challenge sent to the client.
+ The default provider (<a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_DefaultChallengeProvider.html">FPCAuthentication_DefaultChallengeProvider</a>) should be sufficient for most of the cases.</li><li>'<strong>challengeSolver</strong>' (optional, <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_IChallengeProvider.html">FPCAuthentication_IChallengeProvider</a>) : Used by the plugin to solve challenge
+ sent by the client. The default solver (<a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_DefaultChallengeSolver.html">FPCAuthentication_DefaultChallengeSolver</a>) should be sufficient. The solver
+ can be changed but must be exactly the same on the client and on the server.</li></ul></p><p><strong>ServiceAccess plugin</strong></p><p>By default, the ServiceAccess plugin is configured to use the login results of the FPCAuthentication plugin. This means that no configuration is needed  for the ServiceAccess plugin if you use the FPCAuthentication plugin. You just need to enable it and you are good to use annotations to secure your methods.  Check the documentation of the ServiceAccess for more information about the configuration of this plugin.</p><p><strong>Limitations</strong></p><p>The plugin intercepts any calls to the 'fpcAuthentication' service and it redirects them to an instance of <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_LoginService.html">FPCAuthentication_LoginService</a>,  so if you use the FPCAuthentication plugin you cannot have a service named 'fpcAuthentication' (actually you can but all the calls to it will be intercepted  by the plugin and most probably this will result in an error).</p><p><strong>Direct authentication</strong></p><p>For a direct authentication, the client needs to call the 'fpcAuthentication::authenticate' method  (see <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_LoginService.html#methodauthenticate">FPCAuthentication_LoginService::authenticate()</a>)  with the login and the secret of  the user trying to authenticate.</p><p>If the server validates the secret then the user is authenticated until the 'fpcAuthentication::logout'  method is called. Otherwise a FPCAuthentication_Exception is thrown.</p><p><strong>Handshake authentication</strong></p><p>For handshake authentication, four messages are exchange between the client and the server. Each message has at least  a type, a data property and a challenge property. The type (see <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/handler/FPCAuthentication_HandshakeType.html">FPCAuthentication_HandshakeType</a>)  is a string that defines the kind of the message and the meaning of the data and challenge property. Below  is the list of all the types :  <ul><li><a href="../FPC_AMFPHP_Plugins_FPCAuthentication/handler/FPCAuthentication_HandshakeType.html#constCHALLENGE_REQUEST">FPCAuthentication_HandshakeType::CHALLENGE_REQUEST</a> : type of the message sent by the client to initiate the handshake authentication.</li><li><a href="../FPC_AMFPHP_Plugins_FPCAuthentication/handler/FPCAuthentication_HandshakeType.html#constCHALLENGE">FPCAuthentication_HandshakeType::CHALLENGE</a> : type of the message sent by the server as a response to a FPCAuthentication_HandshakeType::CHALLENGE_REQUEST message</li><li><a href="../FPC_AMFPHP_Plugins_FPCAuthentication/handler/FPCAuthentication_HandshakeType.html#constCHALLENGE_ANSWER">FPCAuthentication_HandshakeType::CHALLENGE_ANSWER</a> : type of the message sent by the client as a response to a FPCAuthentication_HandshakeType::CHALLENGE message</li><li><a href="../FPC_AMFPHP_Plugins_FPCAuthentication/handler/FPCAuthentication_HandshakeType.html#constCHALLENGE_VALIDATION">FPCAuthentication_HandshakeType::CHALLENGE_VALIDATION</a> : type of the message sent by the server as a response to a FPCAuthentication_HandshakeType::CHALLENGE_ANSWER message</li></ul></p><p>The data and challenge properties are BASE64 encoded in all messages. Below is the sequence of the messages in case  of a valid authentication.</p><p><pre>     -*- Client -*-                              -*- Server -*-
+  - Gets the login and the secret of
+    the user (with a login form for instance)
+  - Sends the following message to the server
+        |type      = challengeRequest
+        |data      = login of the user
+        |challenge = array of random bytes
+                                          ---->
+                                                  - Retrieves the secret of the user
+                                                    from his login.
+                                                  - Solves the client challenge
+                                                  - Sends the following message to the client
+                                                        |type      = challenge
+                                                        |data      = answer to the client challenge
+                                                        |challenge = array of random bytes
+                                          <----
+  - Validates the challenge answer of
+    the server
+  - Solves the server challenge
+  - Sends the following message to the server
+        |type      = challengeAnswer
+        |data      = answer to the server challenge
+        |challenge = array of random bytes
+                                          ---->
+                                                  - Validates the challenge answer of the client
+                                                  - Solves the client challenge
+                                                  - Marks the user as authenticated
+                                                  - Sends the following message to the client
+                                                        |type      = challengeValidation
+                                                        |data      = answer to the client challenge
+                                                        |challenge = array of random bytes
+                                                        |info      = information about
+                                                        |            the authenticated user
+                                                  - Use the challenge property for key stretching
+                                                  - Log in the user
+                                          <----
+  - Uses the challenge property for key stretching
+  - Log in the user</pre></p><p>The server retrieves the secret of a user with a <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_ISecretProvider.html">FPCAuthentication_ISecretProvider</a>.</p><p>When a message is received the client or the server validates the answer to the challenge of the previous message  with a <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_IChallengeSolver.html">FPCAuthentication_IChallengeSolver</a>.</p><p>Finally, array of random bytes are created by the server with a <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_IRolesProvider.html">FPCAuthentication_IRolesProvider</a>.</p><p>To use this authentication mode, the client needs to manage all the client message  and the handling of the server responses.</p><p><strong>Using the FPCAuthentication Flex class</strong></p><p>The FPCAuthentication plugin comes with a Flex FPCAuthentication class that can be used on the client side to ease  the authentication process with this plugin. The user does not need to known anything about the protocol used  by the plugin, he simply needs to call the 'authenticate' and the 'logout' methods of the FPCAuthentication class  to authenticate and logout from the server.</p><p>Below is a simple flex application that uses this method for a simple login form</p><p><div class="src-code"><ol><li><div class="src-line">&nbsp;&lt;?<span class="src-id">xml&nbsp;version</span>=<span class="src-str">&quot;1.0&quot;</span><span class="src-php">?&gt;</span></div></li>
+<li><div class="src-line">&nbsp;&lt;s:Application&nbsp;xmlns:fx=&quot;http://ns.adobe.com/mxml/2009&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:s=&quot;library://ns.adobe.com/flex/spark&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:fpcauthentication=&quot;net.femtoparsec.fpcauthentication.*&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentState=&quot;logout&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fx:Script&gt;&lt;![CDATA[</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;mx.controls.Alert;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;net.femtoparsec.fpcauthentication.AuthenticationEvent;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;net.femtoparsec.fpcauthentication.FPCAuthenticationMode;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/**</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Logout&nbsp;handler</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;private&nbsp;function&nbsp;logoutHandler(event:AuthenticationEvent):void&nbsp;{</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.currentState&nbsp;=&nbsp;&quot;logout&quot;;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/**</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Authentication&nbsp;error&nbsp;handler</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;private&nbsp;function&nbsp;errorHandler(event:AuthenticationEvent):void&nbsp;{</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.currentState&nbsp;=&nbsp;&quot;logout&quot;;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;message:String&nbsp;=&nbsp;event.error&nbsp;==&nbsp;null&nbsp;?&nbsp;&quot;??&quot;&nbsp;:&nbsp;event.error.message;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alert.show(message);</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/**</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Authentication&nbsp;handler</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;private&nbsp;function&nbsp;authenticationHandler(event:AuthenticationEvent):void&nbsp;{</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.currentState&nbsp;=&nbsp;&quot;login&quot;;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;private&nbsp;function&nbsp;loginButton_clickHandler(event:MouseEvent):void&nbsp;{</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;login:String&nbsp;=&nbsp;this.login.text;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;secret:String&nbsp;=&nbsp;this.password.text;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fpcAuthentication.authenticate(login,&nbsp;secret);</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;private&nbsp;function&nbsp;logoutButton_clickHandler(event:MouseEvent):void&nbsp;{</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fpcAuthentication.logout();</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]&gt;&lt;/fx:Script&gt;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fx:Declarations&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fpcauthentication:FPCAuthentication</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id=&quot;fpcAuthentication&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpoint=&quot;http://myserver/path_to_amfphp_index/index.php&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showBusyCursor=&quot;true&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;destination=&quot;amfphp&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode=&quot;{FPCAuthenticationMode.HANDSHAKE}&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logout=&quot;logoutHandler(event)&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error=&quot;errorHandler(event)&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;authentication=&quot;authenticationHandler(event)&quot;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/fx:Declarations&gt;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:states&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:State&nbsp;name=&quot;login&quot;/&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:State&nbsp;name&nbsp;=&quot;logout&quot;/&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/s:states&gt;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:VGroup&nbsp;includeIn=&quot;logout&quot;&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:Form&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:FormItem&nbsp;label=&quot;login&nbsp;:&quot;&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:TextInput&nbsp;id=&quot;login&quot;&nbsp;text=&quot;admin&quot;/&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/s:FormItem&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:FormItem&nbsp;label=&quot;password&nbsp;:&quot;&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:TextInput&nbsp;id=&quot;password&quot;&nbsp;text=&quot;a&quot;/&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/s:FormItem&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/s:Form&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:Button&nbsp;label=&quot;login&quot;&nbsp;click=&quot;loginButton_clickHandler(event)&quot;/&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/s:VGroup&gt;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:VGroup&nbsp;includeIn=&quot;login&quot;&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:Label&nbsp;text=&quot;{'logged&nbsp;in&nbsp;as&nbsp;'+fpcAuthentication.authenticatedLogin}&quot;/&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s:Button&nbsp;label=&quot;logout&quot;&nbsp;click=&quot;logoutButton_clickHandler(event)&quot;/&gt;</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/s:VGroup&gt;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;&lt;/s:Application&gt;</div></li>
+</ol></div></p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Bastien Aracil</li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_FPCAuthentication---FPCAuthentication.php.html">/FPCAuthentication/FPCAuthentication.php</a> (line <span class="field">335</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+	<a name="sec-const-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constant Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Constants</span> (<a href="#sec-consts">details</a>)
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="const-summary">
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#BUILDER_KEY" title="details" class="const-name">BUILDER_KEY</a> = 					<span class="var-type"> &quot;builder&quot;</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#CHALLENGE_PROVIDER_KEY" title="details" class="const-name">CHALLENGE_PROVIDER_KEY</a> = 					<span class="var-type"> &quot;challengeProvider&quot;</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#CHALLENGE_SOLVER_KEY" title="details" class="const-name">CHALLENGE_SOLVER_KEY</a> = 					<span class="var-type"> &quot;challengeSolver&quot;</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#EMULATED_SERVICE_NAME" title="details" class="const-name">EMULATED_SERVICE_NAME</a> = 					<span class="var-type"> &quot;fpcAuthentication&quot;</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#FPC_COMMON_SECRET_KEY" title="details" class="const-name">FPC_COMMON_SECRET_KEY</a> = 					<span class="var-type"> &quot;FPCAuthenticationCommonSecret&quot;</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#FPC_LOGIN_CONFIG_KEY" title="details" class="const-name">FPC_LOGIN_CONFIG_KEY</a> = 					<span class="var-type"> &quot;FPCAuthenticationConfig&quot;</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#ROLES_PROVIDER_KEY" title="details" class="const-name">ROLES_PROVIDER_KEY</a> = 					<span class="var-type"> &quot;rolesProvider&quot;</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../media/images/Constant.png" alt=" " />
+					<a href="#SECRET_PROVIDER_KEY" title="details" class="const-name">SECRET_PROVIDER_KEY</a> = 					<span class="var-type"> &quot;secretProvider&quot;</span>
+
+				</div>
+							</div>
+		</div>
+	</div>
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+									<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																												
+												<div class="method-definition">
+											<span class="method-result">array</span>
+										<a href="#filterServiceNames2ClassFindInfo" title="details" class="method-name">filterServiceNames2ClassFindInfo</a>
+											(<span class="var-type">$serviceNames2ClassFindInfo</span>&nbsp;<span class="var-name">$serviceNames2ClassFindInfo</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#filterServiceObject" title="details" class="method-name">filterServiceObject</a>
+											(<span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">$serviceName</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">$methodName</span>&nbsp;<span class="var-name">$methodName</span>, <span class="var-type">$parameters</span>&nbsp;<span class="var-name">$parameters</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">FPCAuthentication</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											([<span class="var-type"></span>&nbsp;<span class="var-name">$config</span> = <span class="var-default">null</span>])
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																		<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="methodfilterServiceNames2ClassFindInfo" id="filterServiceNames2ClassFindInfo"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">filterServiceNames2ClassFindInfo</span> (line <span class="line-number">431</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Hook point to save the classFindInfo of the <a href="../FPC_AMFPHP_Plugins_FPCAuthentication/FPCAuthentication_LoginService.html">FPCAuthentication_LoginService</a> to override  the calls to the fpcAuthentication service</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			filterServiceNames2ClassFindInfo
+		</span>
+					(<span class="var-type">$serviceNames2ClassFindInfo</span>&nbsp;<span class="var-name">$serviceNames2ClassFindInfo</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">$serviceNames2ClassFindInfo</span>
+				<span class="var-name">$serviceNames2ClassFindInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodfilterServiceObject" id="filterServiceObject"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">filterServiceObject</span> (line <span class="line-number">447</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Hook point to set the configuration of the fpcAuthentication service or denied access to specific methods  if no user is authenticated.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> FPCAuthentication_Exception</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			filterServiceObject
+		</span>
+					(<span class="var-type">$serviceObject</span>&nbsp;<span class="var-name">$serviceObject</span>, <span class="var-type">$serviceName</span>&nbsp;<span class="var-name">$serviceName</span>, <span class="var-type">$methodName</span>&nbsp;<span class="var-name">$methodName</span>, <span class="var-type">$parameters</span>&nbsp;<span class="var-name">$parameters</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">$serviceObject</span>
+				<span class="var-name">$serviceObject</span>			</li>
+					<li>
+				<span class="var-type">$serviceName</span>
+				<span class="var-name">$serviceName</span>			</li>
+					<li>
+				<span class="var-type">$methodName</span>
+				<span class="var-name">$methodName</span>			</li>
+					<li>
+				<span class="var-type">$parameters</span>
+				<span class="var-name">$parameters</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">387</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">FPCAuthentication</span>
+		<span class="method-name">
+			__construct
+		</span>
+					([<span class="var-type"></span>&nbsp;<span class="var-name">$config</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$config</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+	<a name="sec-consts"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Constants</a> (<span class="disabled">details</span>)
+						
+			
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="constBUILDER_KEY" id="BUILDER_KEY"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">BUILDER_KEY</span>
+			 = <span class="const-default"> &quot;builder&quot;</span>
+			(line <span class="line-number">360</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">configuration key for the result builder</p>
+	
+	
+</div>
+<a name="constCHALLENGE_PROVIDER_KEY" id="CHALLENGE_PROVIDER_KEY"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">CHALLENGE_PROVIDER_KEY</span>
+			 = <span class="const-default"> &quot;challengeProvider&quot;</span>
+			(line <span class="line-number">365</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">configuration key for the challenge provider</p>
+	
+	
+</div>
+<a name="constCHALLENGE_SOLVER_KEY" id="CHALLENGE_SOLVER_KEY"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">CHALLENGE_SOLVER_KEY</span>
+			 = <span class="const-default"> &quot;challengeSolver&quot;</span>
+			(line <span class="line-number">355</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">configuration key for the challenge solver</p>
+	
+	
+</div>
+<a name="constEMULATED_SERVICE_NAME" id="EMULATED_SERVICE_NAME"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">EMULATED_SERVICE_NAME</span>
+			 = <span class="const-default"> &quot;fpcAuthentication&quot;</span>
+			(line <span class="line-number">340</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Name of the emulated service</p>
+	
+	
+</div>
+<a name="constFPC_COMMON_SECRET_KEY" id="FPC_COMMON_SECRET_KEY"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">FPC_COMMON_SECRET_KEY</span>
+			 = <span class="const-default"> &quot;FPCAuthenticationCommonSecret&quot;</span>
+			(line <span class="line-number">375</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">session key for the common secret key</p>
+	
+	
+</div>
+<a name="constFPC_LOGIN_CONFIG_KEY" id="FPC_LOGIN_CONFIG_KEY"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">FPC_LOGIN_CONFIG_KEY</span>
+			 = <span class="const-default"> &quot;FPCAuthenticationConfig&quot;</span>
+			(line <span class="line-number">370</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">session key for the loginService configuration</p>
+	
+	
+</div>
+<a name="constROLES_PROVIDER_KEY" id="ROLES_PROVIDER_KEY"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">ROLES_PROVIDER_KEY</span>
+			 = <span class="const-default"> &quot;rolesProvider&quot;</span>
+			(line <span class="line-number">350</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">configuration key for the role provider</p>
+	
+	
+</div>
+<a name="constSECRET_PROVIDER_KEY" id="SECRET_PROVIDER_KEY"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">SECRET_PROVIDER_KEY</span>
+			 = <span class="const-default"> &quot;secretProvider&quot;</span>
+			(line <span class="line-number">345</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">configuration key for the secret provider</p>
+	
+	
+</div>
+						
+		</div>
+	</div>
+
+	<p class="notes" id="credit">
+		Documentation generated on Thu, 08 Dec 2011 15:50:59 +0000 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>
