@@ -25,7 +25,7 @@
  *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *   @package FPC_AMFPHP_Plugins_ServiceAccess
+ *   @package FPC_AMFPHP_Plugins_FPCWordPress
  */
 require_once "ClassLoader.php";
 
