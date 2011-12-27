@@ -38,39 +38,18 @@ class FPCWordPress_WordPressService {
     /**
      * @var FPCWordPress_IWordPressDAO
      */
-    private $_wordPressDAO;
-
-    /**
-     * @var string
-     */
-    private $_rootPath;
-
-    public function init($rootPath, $wordPressDAO) {
-        if (is_null($rootPath)) {
-            throw new Amfphp_Core_Exception("Invalid FPCWordPress configuration : the path to the WordPress installation is not initialized.");
-        }
-        $this->_rootPath = $rootPath;
-        $this->_wordPressDAO = $wordPressDAO;
-
-        $wpLoad = $this->_rootPath . "/wp-load.php";
-
-        if (!file_exists($wpLoad)) {
-            throw new Amfphp_Core_Exception("Invalid FPCWordPress configuration : the file '$wpLoad' does not exist.");
-        }
-
-        require_once $wpLoad;
-    }
+    public $wordPressDAO;
 
     public function getCategories() {
-        return $this->_wordPressDAO->getCategories();
+        return $this->wordPressDAO->getCategories();
     }
 
     public function findPosts($arguments) {
-        return $this->_wordPressDAO->findPosts($arguments);
+        return $this->wordPressDAO->findPosts($arguments);
     }
 
     public function getUser($userId) {
-        return $this->_wordPressDAO->getUser($userId);
+        return $this->wordPressDAO->getUser($userId);
     }
 
     private function extractId($id) {

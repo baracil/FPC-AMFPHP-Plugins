@@ -91,13 +91,25 @@ class FPCWordPress {
     public function filterServiceObject($serviceObject, $serviceName, $methodName, $parameters) {
 
         if ($serviceName == self::EMULATED_SERVICE_NAME) {
-            $this->setConfiguration($serviceObject);
+            $this->configureService($serviceObject);
         }
         return $serviceObject;
     }
 
 
-    private function setConfiguration(FPCWordPress_WordPressService $service) {
-        $service->init($this->_wordPressPath,$this->_wordPressDAO);
+    private function configureService(FPCWordPress_WordPressService $service) {
+        if (is_null($this->_wordPressPath)) {
+            throw new Amfphp_Core_Exception("Invalid FPCWordPress configuration : the path to the WordPress installation is not initialized.");
+        }
+        $wpLoad = $this->_wordPressPath . "/wp-load.php";
+
+        if (!file_exists($wpLoad)) {
+            throw new Amfphp_Core_Exception("Invalid FPCWordPress configuration : the file '$wpLoad' does not exist.");
+        }
+
+        require_once $wpLoad;
+
+        $service->wordPressDAO = $this->_wordPressDAO;
+
     }
 }
