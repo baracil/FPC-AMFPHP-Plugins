@@ -41,11 +41,7 @@ class FPCAuthentication_LoginService {
      *
      * @var FPCAuthentication_LoginServiceConfig $config
      */
-    private $_config;
-
-    public function __construct($config = null) {
-        $this->_config = $config;
-    }
+    public $config;
 
     /**
      * The method for direct authentication. Uses the login and a secret of a user
@@ -59,12 +55,12 @@ class FPCAuthentication_LoginService {
         $result = FPCAuthentication_Result::getLoginResult($login);
 
         //get the expected secret from the given login
-        $expectedSecret = $this->_config->getSecretProvider()->getSecret($login);
+        $expectedSecret = $this->config->getSecretProvider()->getSecret($login);
 
         if ($expectedSecret == $secret) {
             //expected and provided secret match. The authentication is successful
             //retrieve the roles and update the authentication result with them
-            $roles = $this->_config->getRolesProvider()->getRoles($login);
+            $roles = $this->config->getRolesProvider()->getRoles($login);
             $result->updateOnSuccess($roles);
         }
         else {
@@ -85,7 +81,7 @@ class FPCAuthentication_LoginService {
         //save the secret as common key in the session
         $_SESSION[FPCAuthentication::FPC_COMMON_SECRET_KEY] = $secret;
 
-        return $this->_config->getBuilder()->build($result);
+        return $this->config->getBuilder()->build($result);
     }
 
     /**
@@ -103,7 +99,7 @@ class FPCAuthentication_LoginService {
         $decodedChallenge = base64_decode($challenge);
 
         //retrieve the handler for the given type
-        $handler = FPCAuthentication_Handler::getHandler($type, $this->_config);
+        $handler = FPCAuthentication_Handler::getHandler($type, $this->config);
 
         //handle the message
         $msg = $handler->handle($decodedData, $decodedChallenge);
@@ -123,26 +119,6 @@ class FPCAuthentication_LoginService {
         FPCAuthentication_Result::clear();
         FPCAuthentication_HandshakeData::clear();
         unset($_SESSION[FPCAuthentication::FPC_COMMON_SECRET_KEY]);
-    }
-
-    /**
-     * Set the configuration data of the LoginService
-     *
-     * @param FPCAuthentication_LoginServiceConfig $config
-     */
-    public function setConfig($config)
-    {
-        $this->_config = $config;
-    }
-
-    /**
-     * Return the configuration data of the LoginService
-     *
-     * @return FPCAuthentication_LoginServiceConfig
-     */
-    public function getConfig()
-    {
-        return $this->_config;
     }
 
 }
