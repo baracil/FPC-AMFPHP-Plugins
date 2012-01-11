@@ -416,7 +416,6 @@ class FPCAuthentication {
             }
         }
 
-        $this->loginServiceConfig->validate();
         $this->loginServiceClassInfo = new Amfphp_Core_Common_ClassFindInfo(dirname(__FILE__)."/LoginService.php","FPCAuthentication_LoginService");
 
     }
@@ -462,7 +461,8 @@ class FPCAuthentication {
     }
 
     private function setConfiguration(FPCAuthentication_LoginService $service) {
-        $service->setConfig($this->loginServiceConfig);
+        $this->loginServiceConfig->validate();
+        $service->config = $this->loginServiceConfig;
     }
 
     private function allowedNotAuthenticated($serviceName, $methodName)
