@@ -99,7 +99,7 @@ class FPCCustomClassConverter implements Amfphp_Core_Common_ISerializer
 
     public function filterSerializer($handler, $contentType)
     {
-        if (!$contentType || $contentType == self::CONTENT_TYPE) {
+        if (!is_null($contentType) && $contentType == self::CONTENT_TYPE) {
             return $this;
         }
     }
