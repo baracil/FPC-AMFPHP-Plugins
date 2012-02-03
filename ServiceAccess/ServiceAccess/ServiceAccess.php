@@ -512,13 +512,6 @@ class ServiceAccess
             $this->_user = new FPC_FPCAuthenticationUser();
         }
 
-        if (!($this->_user instanceof FPC_IServiceAccessUser)) {
-            throw new Exception("Invalid configuration for plugin ServiceAccess : userProvider must implement FPC_IServiceAccessUser ");
-        }
-
-        if (!($this->_voterProvider instanceof FPC_IServiceAccessVoterProvider)) {
-            throw new Exception("Invalid configuration for plugin ServiceAccess : voterProvider must implement FPC_IServiceAccessVoterProvider ");
-        }
 
     }
 
@@ -540,6 +533,8 @@ class ServiceAccess
     public function filterServiceObject($serviceObject, $serviceName, $methodName, $parameters)
     {
 
+        $this->validateConfiguration();
+
         $voter = $this->_voterProvider->getVoter($serviceObject, $serviceName, $methodName);
         $user = $this->_user;
 
@@ -554,4 +549,14 @@ class ServiceAccess
         }
     }
 
+
+    private function validateConfiguration() {
+        if (!($this->_user instanceof FPC_IServiceAccessUser)) {
+            throw new Exception("Invalid configuration for plugin ServiceAccess : userProvider must implement FPC_IServiceAccessUser ");
+        }
+
+        if (!($this->_voterProvider instanceof FPC_IServiceAccessVoterProvider)) {
+            throw new Exception("Invalid configuration for plugin ServiceAccess : voterProvider must implement FPC_IServiceAccessVoterProvider ");
+        }
+    }
 }
