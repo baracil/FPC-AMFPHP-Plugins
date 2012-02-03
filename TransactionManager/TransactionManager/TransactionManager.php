@@ -31,7 +31,7 @@
  * User: Bastien Aracil
  * Date: 21/07/11
  */
-require_once dirname(__FILE__)."/ClassLoader.php";
+require_once dirname(__FILE__) . "/ClassLoader.php";
 
 class TransactionManager {
 
@@ -58,27 +58,33 @@ class TransactionManager {
                 }
             }
         }
-
-        if (is_null($this->databaseManager)) {
-            throw new Exception("Invalid null configuration for plugin TransactionManager");
-        }
-
     }
 
     public function filterDeserializedRequest($deserializedRequest) {
-        $this->databaseManager->startProcess();
+        if (!is_null($this->databaseManager)) {
+            $this->databaseManager->startProcess();
+        }
         return $deserializedRequest;
     }
 
     public function filterExceptionHandler($handler, $contentType)
     {
-        $this->databaseManager->handleException();
+        if (!is_null($this->databaseManager)) {
+            $this->databaseManager->handleException();
+        }
         return $handler;
     }
 
     public function filterDeserializedResponse($deserializedResponse) {
-        $this->databaseManager->endProcess();
+        if (!is_null($this->databaseManager)) {
+            $this->databaseManager->endProcess();
+        }
         return $deserializedResponse;
     }
 
+    private function validateConfiguration() {
+        if (is_null($this->databaseManager)) {
+            throw new Exception("Invalid null configuration for plugin TransactionManager");
+        }
+    }
 }

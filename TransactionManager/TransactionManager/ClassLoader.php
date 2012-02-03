@@ -35,11 +35,11 @@
 define("TransactionManager_ROOTPATH",dirname(__FILE__).DIRECTORY_SEPARATOR);
 
 //managers
-require_once TransactionManager_ROOTPATH."managers/ITransactionManager.php";
-require_once TransactionManager_ROOTPATH."managers/MySQLTransactionManager.php";
-require_once TransactionManager_ROOTPATH."managers/PDOTransactionManager.php";
-require_once TransactionManager_ROOTPATH."managers/NotORMTransactionManager.php";
+require_once TransactionManager_ROOTPATH . "managers/ITransactionManager.php";
+require_once TransactionManager_ROOTPATH . "managers/MySQLTransactionManager.php";
+require_once TransactionManager_ROOTPATH . "managers/PDOTransactionManager.php";
+require_once TransactionManager_ROOTPATH . "managers/NotORMTransactionManager.php";
 
-require_once TransactionManager_ROOTPATH."IDataBaseManager.php";
-require_once TransactionManager_ROOTPATH."RollbackableDatabaseManager.php";
-require_once TransactionManager_ROOTPATH."TransactionManager.php";
+require_once TransactionManager_ROOTPATH . "IDataBaseManager.php";
+require_once TransactionManager_ROOTPATH . "RollbackableDatabaseManager.php";
+require_once TransactionManager_ROOTPATH . "TransactionManager.php";

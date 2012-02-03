@@ -4,8 +4,17 @@ For ant help or feature request, please use the forum : http://www.femtoparsec.n
 
 Below is a summary of the available plugins :
 
-ServiceAccess : a plugin to secure access to PHP services easily.
+* FPCWordPress : a plugin to query WordPress from Flex. It includes a AS3 implementation
+                 to simplify the query from the client side
 
-ServicePropertySetter : a plugin to centralize the setting of shared properties between services.
+* FPCAuthentication : a plugin to ease the authentication of clients. This plugin includes an AS3
+                      implementation to simplify the authentication process on the client side.
 
-The plugins found in the 'incubator' directory are compatible with a future version of AMFPHP or they need a modified version of AMFPHP to work. So you should use them if you are OK with changing some lines in the AMFPHP code. The needed changes are listed in the file 'incubator/needed_changes.txt'.
+* ServiceAccess : a plugin to secure access to PHP services easily. By default, use the authentication result of
+                  the FPCAuthentication plugin to make things even easier
+
+* ServicePropertySetter : a plugin to centralize the setting of shared properties between services.
+
+* FPCCustomClassConverter : a plugin that improves the way AMFPHP translates Flex to/from PHP classes.
+
+* TransactionManager : a plugin to handle Db transactions

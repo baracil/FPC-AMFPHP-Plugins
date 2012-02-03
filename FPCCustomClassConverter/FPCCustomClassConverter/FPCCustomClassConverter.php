@@ -38,7 +38,7 @@
  *
  * Author : Bastien Aracil
  */
-require_once dirname(__FILE__)."/ClassLoader.php";
+require_once dirname(__FILE__) . "/ClassLoader.php";
 
 class FPCCustomClassConverter implements Amfphp_Core_Common_ISerializer
 {
@@ -74,7 +74,12 @@ class FPCCustomClassConverter implements Amfphp_Core_Common_ISerializer
 
         if (is_null($this->classResolver)) {
             $resolver = new FPC_SmartClassResolver();
-            $resolver->addDefaultRootPath(Amfphp_ROOTPATH . "/Services/Vo/");
+            if (defined("Amfphp_ROOTPATH")) {
+                $resolver->addDefaultRootPath(Amfphp_ROOTPATH . "/Services/Vo/");
+            }
+            else if (defined("AMFPHP_ROOTPATH")) {
+                $resolver->addDefaultRootPath(AMFPHP_ROOTPATH . "/Services/Vo/");
+            }
             $this->classResolver = $resolver;
         }
 
