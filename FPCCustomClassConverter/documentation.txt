@@ -1,4 +1,3 @@
-
 FPCCustomClassConverter, Bastien Aracil 2011 (femtoparsec.net)
 
 
@@ -43,11 +42,21 @@ V1.0-DRAFT - 10/2011 current - Creation of the document.
 * Overview *
 ************
 
-FPCCustomClassConverter is an AMFPHP plugin that improves the mechanism of VO class resolution from the explicitType value. For instance with a minimal configuration the plugin can manage package like explicitType value. For instance if explicitType is equal to "ne.femtoparsec.model.MyVoClass", the plugin will search the folder "<ROOT>/net/femtoparsec/model" for the file "MyVoClass.php" (<ROOT> is a parameter of the plugin).
+FPCCustomClassConverter is an AMFPHP plugin that improves the mechanism of VO
+class resolution from the explicitType value. For instance with a minimal
+configuration the  plugin can manage package  like explicitType value.
+For instance if explicitType is equal to "net.femtoparsec.model.MyVoClass",
+the plugin will search the folder "<ROOT>/net/femtoparsec/model" for
+the file "MyVoClass.php" (<ROOT> is a parameter of the plugin).
 
-The plugin can also be configured to behave like the original CustomClassConverter.
+The plugin can also be configured to behave like the original
+CustomClassConverter.
 
-The plugin also modifies the way the properties to serialized are determined. The original version simply serializes public properties of PHP VO. This plugin do the same and also serialized private properties with getter and setter. It is also possible to serialize custom property for specific object that are not VO object (or not controlled by the develloper).
+The plugin also modifies the way the properties to serialized are determined.
+The original version simply serializes public properties of PHP VO. This plugin
+do the same and also serialized private properties with getter and setter. 
+It is also possible to serialize custom property for specific object that are
+not VO object (or not controlled by the develloper).
 
 *****************
 * Compatibility *
@@ -61,23 +70,32 @@ v1.0              |     v2.0.1 (not released yet)
 * Installation *
 ****************
 
-The installation consists in copying to the plugin directory of AMFPHP the directory 'FPCCustomClassConverter' at the same level than this file (not the directory including this file). You also need to disable the original 'CustomClassConverter' plugin (see the configuration section)
+The installation consists in copying to the plugin directory of AMFPHP the
+directory 'FPCCustomClassConverter' at the same level than this file
+(not the directory including this file). You also need to disable the original
+'CustomClassConverter' plugin (see the configuration section)
 
 *****************
 * Configuration *
 *****************
 
-You first need to disable the original CustomClassConverter plugin. The plugin needs two parameters. Each one as its one default value. Below are the configuration key and the expected value
+You first need to disable the original CustomClassConverter plugin.
+The plugin needs two parameters. Each one as its one default value.
+Below are the configuration key and the expected value
 
 - "classResolver" : an object implementing FPC_IClassResolver
 - "propertiesManager" : an object implementing FPC_IPropertiesManager
 
 Both parameters have default value :
 
-- "classResolver" : a FPC_SmartClassResolver instance that reproduces the behaviour of the original CustomClassConverter plugin
-- "propertiesManager' : a FPC_SmartPropertiesManager that serializes public properties and private one if they have a setter and a getter.
+- "classResolver" : a FPC_SmartClassResolver instance that reproduces the behaviour of
+                    the original CustomClassConverter plugin
 
-It is recommended to use the 'FPC_SmartClassResolver' and 'FPC_SmartPropertiesManager', but your are free to use your own 'FPC_IClassResolver' and 'FPC_IPropertiesManager'.
+- "propertiesManager' : a FPC_SmartPropertiesManager that serializes public properties 
+                        and private ones if they have a setter and a getter.
+
+It is recommended to use the 'FPC_SmartClassResolver' and 'FPC_SmartPropertiesManager',
+but your are free to use your own 'FPC_IClassResolver' and 'FPC_IPropertiesManager'.
 
 So the recommended basic configuration should be :
 
@@ -108,14 +126,20 @@ $gateway->output();
 * FPC_IClassResolver and provider implementations *
 ***************************************************
 
-The plugin uses a FPC_IClassResolver to get from the explicitType value information about the corresponding PHP VO object. The interface has only one method that takes the explicitType value has argument and returns a FPC_ClassInfo object or null if the resolution
-could not be performed.
+The plugin uses a FPC_IClassResolver to get from the explicitType value
+information about the corresponding PHP VO object. The interface has only
+one method that takes the explicitType value has argument and returns
+a FPC_ClassInfo object or null if the resolution could not be performed.
 
-The FPC_ClassInfo object contains, among other, two important information i) the file path to the PHP file that defines the VO and the class name of the VO. These are the information used to create the VO object.
+The FPC_ClassInfo object contains, among other, two important information
+i) the file path to the PHP file that defines the VO and ii) the class name of
+the VO. These are the information used to create the VO object.
 
-FPCCustomClassConverter provides several FPC_IClassResolver implementation. Below is the list :
+FPCCustomClassConverter provides several FPC_IClassResolver implementation.
+Below is the list :
 
-  * FPC_DefaultClassResolver : this resolver reproduce the default behaviour of AMFPHP. It uses an array of root path as argument
+  * FPC_DefaultClassResolver : this resolver reproduce the default behaviour of AMFPHP. 
+                               It uses an array of root path as argument
 
 
 
