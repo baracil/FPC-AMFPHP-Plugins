@@ -1,4 +1,3 @@
-
 ServicePropertySetter, Bastien Aracil 2011 (femtoparsec.net)
 
 
@@ -43,11 +42,15 @@ V1.0  - 10/2011 current - Creation of the document.
 * Overview *
 ************
 
-Since service classes are created internally by AMFPHP it is not possible to pass (at construction or with setters) parameters to services.
+Since service classes are created internally by AMFPHP it is not possible to pass (at construction or with setters)
+parameters to services.
 
-With ServicePropertySetter, it is now possible. This plugin can be used to centralize configuration parameters and dispatch them to the services.
+With ServicePropertySetter, it is now possible. This plugin can be used to centralize configuration parameters
+and dispatch them to the services.
 
-For instance, if services need a connection to a database by using a PDO object, instead of creating one in each services, only one can be created in a configuration file and passed to the services with this plugin : no need to have a database configuration (or an include file) in each services.
+For instance, if services need a connection to a database by using a PDO object, instead of creating one in each
+services, only one can be created in a configuration file and passed to the services with this plugin : 
+no need to have a database configuration (or an include file) in each services.
 
 
 *****************
@@ -63,14 +66,17 @@ v1.0              |     v2.0
 * Installation *
 ****************
 
-The installation consists in copying to the plugin directory of AMFPHP the directory 'ServicePropertySetter' at the same level than this file (not the directory including this file).
+The installation consists in copying to the plugin directory of AMFPHP the directory 'ServicePropertySetter'
+at the same level than this file (not the directory including this file).
 
 
 *****************
 * Configuration *
 *****************
 
-The plugin has one configuration parameter (if not specified, the plugin does nothing). The configuration parameter key is 'config' and the value must be a 'FPC_ServicePropertySetterConfig' object. Basically, the plugin configuration should be something like that :
+The plugin has one configuration parameter (if not specified, the plugin does nothing).
+The configuration parameter key is 'config' and the value must be a 'FPC_ServicePropertySetterConfig' object.
+Basically, the plugin configuration should be something like that :
 
     $SPSConfig = new FPC_ServicePropertySetterConfig();
 
@@ -84,7 +90,8 @@ The plugin has one configuration parameter (if not specified, the plugin does no
     $gateway->output();
 
 
-For instance, if the services uses PDO to connect to a database, the connection can be configured in one place and then dispatches to all the services that needs it :
+For instance, if the services uses PDO to connect to a database, the connection can be configured in one place
+and then dispatches to all the services that needs it :
 
     $SPSConfig = new FPC_ServicePropertySetterConfig();
 
@@ -109,17 +116,21 @@ For instance, if the services uses PDO to connect to a database, the connection 
     $gateway->output();
 
 
-MyService1 and MyService2 should have a setter for the property 'pdo' : a method with one parameter called 'setPdo' (the first letter of the property is capitalized), i.e. something like that :
+MyService1 and MyService2 should have a setter for the property 'pdo' : a method called 'setPdo' with one parameter 
+(the first letter of the property is capitalized), i.e. something like that :
 
     private $_pdo;
     public function setPdo($pdo) {
      $this->_pdo = $pdo
     }
 
-Then, before a method of the service MyService1 (or 2) is executed the 'pdo' setter will be called and then the property $this->_pdo will be set to be used in the called method.
+Then, before a method of the service MyService1 (or 2) is executed the 'pdo' setter will be called
+and then the property $this->_pdo will be set to be used in the called method.
 
 
-Moreover, after all properties set by this plugin for a service, the plugin will call the method 'afterPropertiesSet' if it exists in the service. That can be useful to perform rendez-vous between properties.
+Moreover, after all properties set by this plugin are initialized for a service, 
+the plugin will call the method 'afterPropertiesSet' if it exists in the service. 
+That can be useful to perform rendez-vous between properties.
 
 
 *********
