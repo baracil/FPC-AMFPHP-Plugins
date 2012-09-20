@@ -1,4 +1,3 @@
-
 TransactionManager, Bastien Aracil 2011 (femtoparsec.net)
 
 
@@ -43,9 +42,12 @@ V1.0-draft  - 10/2011 current - Creation of the document.
 * Overview *
 ************
 
-TransactionManager is an AMFPHP plugin that manages database transaction. Before a service is call, a transaction is started. If an exception is thrown by the service, the transaction is rollbacked otherwise the transaction is committed.
+TransactionManager is an AMFPHP plugin that manages database transaction. Before a service is called, 
+a transaction is started. If an exception is thrown by the service, the transaction is rollbacked otherwise
+the transaction is committed.
 
-This works only if the used database extension is global for all service. The plugin ServicePropertySetter can be useful for that.
+This works only if the used database extension is global for all service. The plugin ServicePropertySetter
+can be useful for that.
 
 *****************
 * Compatibility *
@@ -59,7 +61,8 @@ v1.0              |     v2.0.1 (not released yet)
 * Installation *
 ****************
 
-The installation consists in copying to the plugin directory of AMFPHP the directory 'ServiceAccess' at the same level than this file (not the directory including this file).
+The installation consists in copying to the plugin directory of AMFPHP the directory 'TransactionManager'
+at the same level than this file (not the directory including this file).
 
 *****************
 * Configuration *
